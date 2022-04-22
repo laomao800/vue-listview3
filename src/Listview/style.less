@@ -1,0 +1,34 @@
+.lv__wrapper {
+  display: flex;
+  flex-direction: column;
+
+  .el-table .el-table__body tr.el-table__row.row--selected td {
+    background-color: #ffd;
+  }
+
+  .el-table th.el-table__cell {
+    background: #f5f7fa;
+  }
+
+  .el-table-column--single-selection .el-radio__label {
+    display: none;
+  }
+
+  // Element-ui overwrite
+  .el-pagination {
+    &.is-background {
+      .btn-next,
+      .btn-prev,
+      .el-pager li {
+        margin: 0 8px 0 0;
+      }
+      .el-select .el-input {
+        margin: 0;
+      }
+    }
+  }
+  .el-table--border .el-table-column--selection .cell {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+}
