@@ -38,7 +38,7 @@ const filterButtons = shallowRef([
     type: 'success',
     icon: CirclePlus,
     text: '添加',
-    click: () =>
+    onClick: () =>
       ElMessage({
         message: '添加',
         grouping: true,
@@ -79,17 +79,17 @@ const filterButtons = shallowRef([
     text: '下拉按钮',
     trigger: 'click',
     splitButton: true,
-    click: () => ElMessage('下拉按钮'),
+    onClick: () => ElMessage('下拉按钮'),
     children: [
       {
         text: '菜单1',
         icon: CirclePlus,
-        click: () => ElMessage('菜单1'),
+        onClick: () => ElMessage('菜单1'),
       },
       {
         text: '菜单2',
         icon: Remove,
-        click: () => ElMessage('菜单2'),
+        onClick: () => ElMessage('菜单2'),
       },
     ],
   },

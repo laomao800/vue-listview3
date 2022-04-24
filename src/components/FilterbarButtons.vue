@@ -5,7 +5,7 @@ import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { isPlainObject, isFunction } from 'lodash-es'
 import vNode from './VNode'
-import { hasRenderFn } from '@/utils'
+import { hasRenderFn, warn } from '@/utils'
 import {
   FilterButton,
   FilterButtonHasChildren,
@@ -26,8 +26,34 @@ function isDropdownButton(item: any): item is FilterButtonHasChildren {
   return isPlainObject(item) && Array.isArray(item.children)
 }
 
-function applyClick(clickListener: FilterButton['click'], $event: MouseEvent) {
-  return isFunction(clickListener) && clickListener($event)
+function normalizeButton(
+  button: FilterButton | FilterButtonHasChildren | FilterButtonHasRender
+) {
+  const { click, icon: _icon, children: _children, ...buttonAttrs } = button
+  const icon = _icon ? <el-icon>{h(_icon)}</el-icon> : null
+
+  let onClick = button.onClick
+  if (click) {
+    warn(
+      `[Migration][filterButtons]: 'click' will remove in next minor version, use 'onClick' instead.`,
+      button
+    )
+    onClick = button.click
+  }
+
+  const children = Array.isArray(_children)
+    ? button.children.map(normalizeButton)
+    : []
+
+  return {
+    text: button.text || '',
+    children,
+    buttonAttrs: {
+      icon,
+      onClick,
+      ...buttonAttrs,
+    },
+  }
 }
 
 export default defineComponent({
@@ -62,59 +88,42 @@ export default defineComponent({
     },
 
     renderSingleButton(button: FilterButton) {
-      return (
-        <el-button
-          type={button.type}
-          plain={button.plain}
-          icon={button.icon}
-          onClick={($event: MouseEvent) => applyClick(button.click, $event)}
-        >
-          {button.text}
-        </el-button>
-      )
+      const { text, buttonAttrs } = normalizeButton(button)
+      return <el-button {...buttonAttrs}>{text}</el-button>
     },
 
     renderDropdownButton(button: FilterButtonHasChildren) {
+      const { text, children, buttonAttrs } = normalizeButton(button)
       return h(
         ElDropdown,
         {
-          type: button.type,
-          splitButton: button.splitButton,
+          ...buttonAttrs,
           trigger: 'click',
           placement: 'bottom',
-          onClick: ($event: MouseEvent) => applyClick(button.click, $event),
         },
         {
-          default: () =>
-            button.splitButton ? (
-              [button.icon, button.text]
+          default: () => {
+            const content = []
+            buttonAttrs.icon && content.push(buttonAttrs.icon)
+            content.push(<span>{text}</span>)
+
+            return buttonAttrs.splitButton ? (
+              content
             ) : (
-              <el-button
-                type={button.type}
-                icon={button.icon}
-                onClick={($event: MouseEvent) =>
-                  applyClick(button.click, $event)
-                }
-              >
-                {button.text}
+              <el-button {...buttonAttrs}>
+                {content}
                 <el-icon class="el-icon--right">
                   <ArrowDown />
                 </el-icon>
               </el-button>
-            ),
+            )
+          },
           dropdown: () => (
             <ElDropdownMenu>
-              {button.children.map((child) => (
-                <ElDropdownItem
-                  {...{
-                    onClick: ($event: MouseEvent) =>
-                      applyClick(child.click, $event),
-                  }}
-                >
-                  {child.icon && <i class={child.icon} />}
-                  {child.text}
-                </ElDropdownItem>
-              ))}
+              {children.map((child) => {
+                const { text, buttonAttrs } = child
+                return <ElDropdownItem {...buttonAttrs}>{text}</ElDropdownItem>
+              })}
             </ElDropdownMenu>
           ),
         }
