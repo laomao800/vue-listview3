@@ -1,10 +1,3 @@
-<template>
-  <div class="lv__field">
-    <InnerContent />
-    <InnerLabel />
-  </div>
-</template>
-
 <script lang="tsx" setup>
 import type { FilterField, FilterFieldHasRender } from '~/types'
 import type { PropType } from 'vue'
@@ -77,9 +70,18 @@ import { allFieldComponents } from './fields/index'
 export default defineComponent({
   name: 'FilterbarField',
 
+  components: { ...allFieldComponents },
+
   mixins: [storeProviderMixin],
 
-  components: { ...allFieldComponents },
+  render() {
+    return (
+      <div class="lv__field">
+        {this.InnerContent}
+        {this.InnerLabel}
+      </div>
+    )
+  },
 })
 </script>
 

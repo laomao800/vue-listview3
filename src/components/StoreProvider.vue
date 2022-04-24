@@ -25,13 +25,13 @@ export default defineComponent({
   // @ts-ignore
   abstract: true,
 
-  inheritAttrs: false,
-
   provide(): any {
     return {
       lvStore: this,
     }
   },
+
+  inheritAttrs: false,
 
   props: {
     // Data request
@@ -65,9 +65,11 @@ export default defineComponent({
     usePage: { type: [Object, Boolean], default: true },
     pageSize: { type: Number, default: 20 },
     pageSizes: { type: Array, default: () => [20, 50, 100] },
-    pageProps: { type: Object },
-    pagePosition: { type: String },
+    pageProps: { type: Object, default: () => ({}) },
+    pagePosition: { type: String, default: 'left' },
   },
+
+  emits: ['update:selection', 'root-emit'],
 
   data(): any {
     return {

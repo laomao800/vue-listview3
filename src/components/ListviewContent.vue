@@ -29,7 +29,7 @@
           align="center"
           class-name="el-table-column--selection el-table-column--single-selection"
         >
-          <template slot-scope="{ row, $index }">
+          <template #default="{ row, $index }">
             <el-radio
               :value="selection.indexOf(row) > -1 ? '' : null"
               :disabled="
@@ -38,7 +38,7 @@
                   : false
               "
               label
-              @click.native.stop.prevent="
+              @click.stop.prevent="
                 ($event) => handleRowClick(row, null, $event)
               "
             />
@@ -56,8 +56,8 @@
 
       <v-node
         v-for="(column, index) in tableColumns"
-        :node="renderTableColumn(column)"
         :key="`col${index}`"
+        :node="renderTableColumn(column)"
       />
     </el-table>
   </div>
@@ -77,11 +77,11 @@ import MessageBlock from '@/components/MessageBlock.vue'
 export default {
   name: 'ListviewContent',
 
-  inheritAttrs: false,
+  components: { VNode, MessageBlock },
 
   mixins: [storeProviderMixin],
 
-  components: { VNode, MessageBlock },
+  inheritAttrs: false,
 
   props: {
     tableColumns: { type: Array, default: () => [] },
