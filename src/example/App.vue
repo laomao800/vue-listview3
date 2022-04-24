@@ -1,5 +1,6 @@
 <template>
   <ListviewComponent
+    v-model:selection="selection"
     header-title="演示列表1"
     :header-nav="['菜单1', { text: '菜单2' }]"
     request-url="/mock.json"
@@ -8,7 +9,6 @@
     :filter-fields="filterFields"
     :filter-model="filterModel"
     :table-columns="tableColumns"
-    :selection="selection"
     :page-props="{ pagerCount: 5 }"
   >
     <template #footer-left>footer-left</template>
