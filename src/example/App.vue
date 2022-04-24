@@ -18,6 +18,7 @@
 <script setup lang="tsx">
 import { ref, unref, shallowRef } from 'vue'
 import { ElMessage } from 'element-plus'
+import 'element-plus/es/components/badge/style/css'
 import 'element-plus/es/components/message/style/css'
 import { CirclePlus, Remove } from '@element-plus/icons-vue'
 import { create as createListview } from '@/'
@@ -37,7 +38,12 @@ const filterButtons = shallowRef([
     type: 'success',
     icon: CirclePlus,
     text: '添加',
-    click: () => ElMessage('添加'),
+    click: () =>
+      ElMessage({
+        message: '添加',
+        grouping: true,
+        type: 'success',
+      }),
   },
   () => (
     <el-button
@@ -46,13 +52,19 @@ const filterButtons = shallowRef([
       type="danger"
       onClick={() => {
         if (unref(selection).length < 1) {
-          ElMessage.error('请至少选择一条数据')
+          ElMessage({
+            message: '请至少选择一条数据',
+            grouping: true,
+            type: 'error',
+          })
         } else {
           loadingSelection.value = true
           setTimeout(() => {
-            ElMessage.success(
-              JSON.stringify(unref(selection).map((row) => row.id))
-            )
+            ElMessage({
+              message: JSON.stringify(unref(selection).map((row) => row.id)),
+              grouping: true,
+              type: 'success',
+            })
             loadingSelection.value = false
           }, 500)
         }

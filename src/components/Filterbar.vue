@@ -106,14 +106,14 @@ const CaretTop = markRaw(_CaretTop)
 export default {
   name: 'ListviewFilterbar',
 
-  mixins: [storeProviderMixin],
-
-  inheritAttrs: false,
-
   components: {
     FilterbarButtons,
     FilterbarFields,
   },
+
+  mixins: [storeProviderMixin],
+
+  inheritAttrs: false,
 
   props: {
     filterbarFoldable: {

@@ -1,6 +1,8 @@
 <script lang="tsx">
 import type { PropType } from 'vue'
-import { isVNode, defineComponent } from 'vue'
+import { isVNode, defineComponent, h } from 'vue'
+import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
+import { ArrowDown } from '@element-plus/icons-vue'
 import { isPlainObject, isFunction } from 'lodash-es'
 import vNode from './VNode'
 import { hasRenderFn } from '@/utils'
@@ -73,42 +75,49 @@ export default defineComponent({
     },
 
     renderDropdownButton(button: FilterButtonHasChildren) {
-      return (
-        <el-dropdown
-          type={button.type}
-          split-button={button.splitButton}
-          trigger="click"
-          placement="bottom"
-          onClick={($event: MouseEvent) => applyClick(button.click, $event)}
-        >
-          {button.splitButton ? (
-            [button.icon && <i class={button.icon} />, button.text]
-          ) : (
-            <el-button
-              type={button.type}
-              icon={button.icon}
-              onClick={($event: MouseEvent) => applyClick(button.click, $event)}
-            >
-              {button.text}
-              <i class="el-icon-arrow-down el-icon--right" />
-            </el-button>
-          )}
-          <el-dropdown-menu slot="dropdown">
-            {button.children.map((child) => (
-              <el-dropdown-item
-                {...{
-                  nativeOn: {
-                    click: ($event: MouseEvent) =>
-                      applyClick(child.click, $event),
-                  },
-                }}
+      return h(
+        ElDropdown,
+        {
+          type: button.type,
+          splitButton: button.splitButton,
+          trigger: 'click',
+          placement: 'bottom',
+          onClick: ($event: MouseEvent) => applyClick(button.click, $event),
+        },
+        {
+          default: () =>
+            button.splitButton ? (
+              [button.icon, button.text]
+            ) : (
+              <el-button
+                type={button.type}
+                icon={button.icon}
+                onClick={($event: MouseEvent) =>
+                  applyClick(button.click, $event)
+                }
               >
-                {child.icon && <i class={child.icon} />}
-                {child.text}
-              </el-dropdown-item>
-            ))}
-          </el-dropdown-menu>
-        </el-dropdown>
+                {button.text}
+                <el-icon class="el-icon--right">
+                  <ArrowDown />
+                </el-icon>
+              </el-button>
+            ),
+          dropdown: () => (
+            <ElDropdownMenu>
+              {button.children.map((child) => (
+                <ElDropdownItem
+                  {...{
+                    onClick: ($event: MouseEvent) =>
+                      applyClick(child.click, $event),
+                  }}
+                >
+                  {child.icon && <i class={child.icon} />}
+                  {child.text}
+                </ElDropdownItem>
+              ))}
+            </ElDropdownMenu>
+          ),
+        }
       )
     },
   },
