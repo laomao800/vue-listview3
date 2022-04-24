@@ -14,7 +14,7 @@ export default {
     return {
       defaultProps: {
         clearable: true,
-        style: { width: '120px' },
+        style: { width: '160px' },
       },
     }
   },

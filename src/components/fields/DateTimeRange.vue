@@ -14,7 +14,7 @@ export default {
     return {
       defaultProps: {
         clearable: true,
-        style: { width: '360px' },
+        style: { width: '380px' },
         type: 'datetimerange',
         startPlaceholder: '开始日期',
         endPlaceholder: '结束日期',
