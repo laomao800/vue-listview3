@@ -3,7 +3,6 @@ import type { FilterField, FilterFieldHasRender } from '~/types'
 import type { PropType } from 'vue'
 import {
   defineComponent,
-  defineProps,
   computed,
   inject,
   unref,
@@ -19,6 +18,7 @@ import { getFieldComponent } from './fields/index'
 const props = defineProps({
   field: {
     type: [Object, Function] as PropType<FilterField>,
+    default: () => ({}),
   },
 })
 
