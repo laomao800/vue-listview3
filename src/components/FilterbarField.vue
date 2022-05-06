@@ -1,14 +1,8 @@
 <script lang="tsx" setup>
 import type { FilterField, FilterFieldHasRender } from '~/types'
-import type { PropType } from 'vue'
-import {
-  defineComponent,
-  computed,
-  inject,
-  unref,
-  isVNode,
-  Transition,
-} from 'vue'
+import type { PropType, VNode } from 'vue'
+
+import { computed, inject, unref, h, isVNode, Transition } from 'vue'
 import hasValues from 'has-values'
 import { isFunction } from 'lodash-es'
 import { hasRenderFn, get } from '@/utils'
@@ -23,13 +17,14 @@ const props = defineProps({
 })
 
 const field = props?.field || {}
-const lvStore = inject('lvStore')
+// TODO: types lvStore
+const lvStore = inject<any>('lvStore')
 const showLabelRef = computed(() => {
   const value = get(lvStore.filterModel, field.model)
   // hasValues(null) -> true
   return value !== null && hasValues(value)
 })
-let InnerLabel = null
+let InnerLabel: VNode | null = null
 let InnerContent = null
 
 InnerLabel = field?.label ? (
@@ -64,6 +59,7 @@ if (isFunction(field)) {
 </script>
 
 <script lang="tsx">
+import { defineComponent } from 'vue'
 import storeProviderMixin from '@/mixins/storeProviderMixin'
 import { allFieldComponents } from './fields/index'
 
