@@ -146,11 +146,14 @@ export default defineComponent({
     const updateLayout = debounce(_updateWrapperLayout, 0, { leading: true })
     const resetFilter = () => unref<any>(filterbarRef)?.handleFilterReset.call()
     const search = (keepInPage: boolean) =>
-      unref<any>(storeProviderRef).search(keepInPage)
+      unref<any>(storeProviderRef)?.search(keepInPage)
     const setContentMessage = (text: string, type: string, cleanData = false) =>
-      unref<any>(storeProviderRef).setContentMessage(text, type, cleanData)
+      unref<any>(storeProviderRef)?.setContentMessage(text, type, cleanData)
 
     return {
+      storeProviderRef,
+      layoutRef,
+      filterbarRef,
       mergedAttrs,
       headerComponent,
       filterbarComponent,
