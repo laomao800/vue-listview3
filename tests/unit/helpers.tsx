@@ -50,3 +50,11 @@ export const mockDataList = Array(10)
 export function removeElCascaderHtmlId(html: string) {
   return html.replace(/id="cascader-menu-\d+-\d+"/, '')
 }
+
+export function mountWithEl(c: any, o: Parameters<typeof mount>[1] = {}) {
+  const plugins = o?.global?.plugins || []
+  return mount(c, {
+    ...o,
+    global: { plugins: [ElementPlus, ...plugins] },
+  })
+}

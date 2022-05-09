@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ElementPlus from 'element-plus'
 import mitt from 'mitt'
-import { createListviewWrapper, wait } from '../helpers'
+import { createListviewWrapper, wait, mountWithEl } from '../helpers'
 import Filterbar from '@/components/Filterbar.vue'
 
 const lvStore: any = { filterModel: {} }
@@ -11,8 +11,7 @@ const DATE2 = new Date('2021/06/01 09:30:00')
 
 describe('Filterbar layout', () => {
   it('filterbarFold', () => {
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: { filterbarFold: false },
     })
@@ -23,8 +22,7 @@ describe('Filterbar layout', () => {
     ).toBe(false)
   })
   it('filterbarFoldable', () => {
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: { filterbarFoldable: false },
     })
@@ -44,8 +42,7 @@ describe('Filter buttons', () => {
       { type: 'warning', icon: 'el-icon-star-off', text: 'warning' },
       { type: 'danger', icon: 'el-icon-delete', text: 'danger' },
     ]
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: { filterButtons },
     })
@@ -56,8 +53,7 @@ describe('Filter buttons', () => {
   })
 
   it('dropdown', () => {
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: {
         filterButtons: [
@@ -96,8 +92,7 @@ describe('Filter buttons', () => {
         ],
       },
     ]
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: { filterButtons },
     })
@@ -120,8 +115,7 @@ describe('Filter buttons', () => {
       () => <div class="function-type">text</div>,
       <div class="jsx-type">text</div>,
     ]
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: { filterButtons },
     })
@@ -132,8 +126,7 @@ describe('Filter buttons', () => {
 
 describe('Filter fields', () => {
   it('Field label render', () => {
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: {
         searchButton: false,
@@ -148,8 +141,7 @@ describe('Filter fields', () => {
 
   it('Fields render', () => {
     const lvStore: any = { filterModel: {} }
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: {
         filterFields: [
@@ -189,8 +181,7 @@ describe('Filter fields', () => {
   })
 
   it('Invalid fields render', () => {
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: {
         filterFields: [{ type: 'text_x' }, { type: 'number_x' }],
@@ -201,8 +192,7 @@ describe('Filter fields', () => {
 
   it('Group fields render', () => {
     const lvStore: any = { filterModel: {} }
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: {
         filterFields: [
@@ -218,8 +208,7 @@ describe('Filter fields', () => {
 
   it('Filter fields set value', () => {
     const lvStore: any = { filterModel: {} }
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: {
         filterFields: [
@@ -274,8 +263,7 @@ describe('Filter fields', () => {
       () => <input class="function-type" />,
       <input class="vnode-type" />,
     ]
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: { filterFields },
     })
@@ -335,8 +323,7 @@ describe('Filter fields default value', () => {
       cascader: [1, 2, 3, 4],
     },
   }
-  const wrapper = mount(Filterbar, {
-    global: { plugins: [ElementPlus] },
+  const wrapper = mountWithEl(Filterbar, {
     provide: { lvStore },
     propsData: {
       filterFields: [
@@ -390,8 +377,7 @@ describe('Filter fields options resolve', () => {
   ]
 
   it('array', async () => {
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: {
         filterFields: [
@@ -410,8 +396,7 @@ describe('Filter fields options resolve', () => {
   })
 
   it('promise', async () => {
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: {
         filterFields: [
@@ -438,8 +423,7 @@ describe('Filter fields options resolve', () => {
   })
 
   it('function return array', async () => {
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: {
         filterFields: [
@@ -458,8 +442,7 @@ describe('Filter fields options resolve', () => {
   })
 
   it('function return promise', async () => {
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: {
         filterFields: [
@@ -486,8 +469,7 @@ describe('Filter fields options resolve', () => {
   })
 
   it('invalid options', async () => {
-    const wrapper = mount(Filterbar, {
-      global: { plugins: [ElementPlus] },
+    const wrapper = mountWithEl(Filterbar, {
       provide: { lvStore },
       propsData: {
         filterFields: [{ type: 'select', model: 'select', options: 'options' }],
