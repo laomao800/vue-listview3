@@ -1,6 +1,11 @@
 import type { FilterField } from '~/types'
 import { isPlainObject, isEmpty, isFunction, isNil } from 'lodash-es'
 import { get } from '@/utils'
+import { default as _parseSize } from '@laomao800/parse-size-with-unit'
+
+export function parseSize(...args: Parameters<typeof _parseSize>) {
+  return _parseSize(...args) || void 0
+}
 
 /**
  * 根据映射表设置的结构提取数据并返回一个新对象

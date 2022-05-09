@@ -1,5 +1,5 @@
 import { create } from './create'
-import { Listview } from './index.component'
+import { Listview, ListviewContainer } from './index.component'
 
 export default Listview
-export { create, Listview }
+export { create, Listview, ListviewContainer }

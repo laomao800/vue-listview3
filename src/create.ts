@@ -33,8 +33,12 @@ const create = (options: Record<string, any> = {}) => {
   options = isPlainObject(options) ? options : {}
   const { replaceComponents = {}, ..._options } = options
 
+  /**
+   * `extends` workwround:
+   * https://github.com/quasarframework/quasar/discussions/8761
+   */
   return defineComponent({
-    extends: _Listview,
+    ...(_Listview as any),
     data() {
       return {
         presetProps__: pick(_options, allowPresetProps),

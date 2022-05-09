@@ -1,6 +1,19 @@
 <script lang="tsx">
-import Vue from 'vue'
-import parseSize from '@laomao800/parse-size-with-unit'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  inject,
+  onMounted,
+  ref,
+  nextTick,
+  unref,
+  onBeforeUnmount,
+  onActivated,
+  onDeactivated,
+} from 'vue'
+import { pick } from 'lodash-es'
+import { parseSize } from '@/utils'
 import storeProviderMixin from '@/mixins/storeProviderMixin'
 
 function isDom(item: any): item is Element {
@@ -12,6 +25,8 @@ function getIntStyleValue(el: Element, prototype: string) {
 }
 
 function getElBottomOffset(el: Element) {
+  if (!el) return 0
+
   const bottomOffset =
     getIntStyleValue(el, 'padding-bottom') +
     getIntStyleValue(el, 'margin-bottom') +
@@ -19,151 +34,156 @@ function getElBottomOffset(el: Element) {
   return bottomOffset
 }
 
-export default {
+export default defineComponent({
   name: 'ListviewLayout',
 
-  inheritAttrs: false,
-
   mixins: [storeProviderMixin],
+
+  inheritAttrs: false,
 
   props: {
     height: { type: [String, Number], default: null },
     fullHeight: { type: Boolean, default: true },
   },
 
-  data(): {
-    wrapperHeight: null | number | string
-  } {
-    return {
-      wrapperHeight: null,
-    }
-  },
+  emits: ['update-layout'],
 
-  computed: {
-    contentHeight: {
+  setup(props, { slots, emit, expose }) {
+    const vm = getCurrentInstance()?.proxy
+
+    // TODO: types
+    const lvStore = inject<any>('lvStore')
+    const scopeProps = pick(lvStore, [
+      'contentHeight',
+      'contentLoading',
+      'contentData',
+      'filterModel',
+      'contentMessage',
+    ])
+
+    const wrapperRef = ref<Element | null>(null)
+    const contentRef = ref<Element | null>(null)
+    const wrapperHeight = ref<number | string | null>(null)
+    const contentHeight = computed({
       get() {
-        return this.lvStore.contentHeight
+        return lvStore.contentHeight
       },
       set(newVal: number) {
-        this.lvStore.contentHeight = newVal
+        lvStore.contentHeight = newVal
       },
-    },
-    contentLoading(): boolean {
-      return this.lvStore.contentLoading
-    },
-    bottomOffset(): number {
-      return getElBottomOffset(this.$el)
-    },
-  },
+    })
+    const contentLoading = computed(() => !!lvStore.contentLoading)
+    const bottomOffset = computed<number>(() =>
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      getElBottomOffset(unref(wrapperRef)!)
+    )
 
-  mounted() {
-    this._init()
-  },
+    const _init = () => {
+      props.fullHeight && window.addEventListener('resize', updateLayout)
+    }
+    const _cleanup = () => window.removeEventListener('resize', updateLayout)
 
-  beforeDestroy() {
-    this._cleanup()
-  },
+    async function updateLayout() {
+      updateWrapperHeight()
+      // 非全屏情况下，内部内容高度需等待外部渲染后再执行计算
+      await nextTick()
+      updateContentHeight()
+      emit('update-layout')
+    }
 
-  activated() {
-    this.updateLayout()
-    this._init()
-  },
-
-  deactivated() {
-    this._cleanup()
-  },
-
-  methods: {
-    _init() {
-      this.fullHeight && window.addEventListener('resize', this.updateLayout)
-    },
-    _cleanup() {
-      window.removeEventListener('resize', this.updateLayout)
-    },
-
-    updateLayout() {
-      this.updateWrapperHeight()
-      this.$nextTick(() => {
-        // 非全屏情况下，内部内容高度需等待外部渲染后再执行计算
-        this.updateContentHeight()
-        this.$emit('update-layout')
-      })
-    },
-
-    updateWrapperHeight() {
-      if (this.height) {
-        this.wrapperHeight = this.height
-      } else if (this.fullHeight) {
-        const wrapOffsetTop = this.$el.getBoundingClientRect().top
-        this.wrapperHeight = window.innerHeight - wrapOffsetTop
+    function updateWrapperHeight() {
+      if (props.height) {
+        wrapperHeight.value = props.height
+      } else if (props.fullHeight) {
+        const wrapOffsetTop =
+          unref(wrapperRef)?.getBoundingClientRect().top || 0
+        wrapperHeight.value = window.innerHeight - wrapOffsetTop
       } else {
-        this.wrapperHeight = null
+        wrapperHeight.value = null
       }
-    },
+    }
 
-    updateContentHeight() {
+    function updateContentHeight() {
+      const height = props.height
       let maxHeight
-      if (this.height) {
-        if (/\d+%/.test(String(this.height))) {
-          maxHeight = this.$el.getBoundingClientRect().height
+      if (height) {
+        if (/\d+%/.test(String(height))) {
+          maxHeight = vm?.$el.getBoundingClientRect().height
         } else {
-          maxHeight = parseInt(String(this.height), 10)
+          maxHeight = parseInt(String(height), 10)
         }
-      } else if (this.fullHeight) {
-        maxHeight = this.wrapperHeight as number
+      } else if (props.fullHeight) {
+        maxHeight = unref(wrapperHeight) as number
       }
 
-      if (maxHeight && isDom(this.$refs.content)) {
-        const footerHeight = this.getSlotHeight('footer')
+      if (maxHeight && isDom(contentRef)) {
+        const footerHeight = getSlotHeight('footer')
+        const contentTop = unref(contentRef)?.getBoundingClientRect().top || 0
         const contentOffsetTop =
-          this.$refs.content.getBoundingClientRect().top -
-          this.$el.getBoundingClientRect().top
-        const contentHeight =
-          maxHeight - contentOffsetTop - this.bottomOffset - footerHeight
-        this.contentHeight = contentHeight
+          contentTop - vm?.$el.getBoundingClientRect().top
+        contentHeight.value =
+          maxHeight - contentOffsetTop - unref(bottomOffset) - footerHeight
       }
-    },
+    }
 
-    getSlotHeight(name: string): number {
-      const slot = this.$refs[name] as Element
+    function getSlotHeight(name: string): number {
+      const slot = vm?.$refs[name] as Element
       return slot ? slot.getBoundingClientRect().height : 0
-    },
+    }
 
-    renderSlot(name: string, scopeProps = {}, attrs = {}) {
+    function renderSlot(name: string, attrs = {}) {
       return (
-        this.$slots[name] && (
-          <div class={`lv__${name}-wrapper`} ref={name} {...attrs}>
-            {(this.$slots as any)[name](scopeProps)}
+        slots[name] && (
+          <div class={`lv__${name}-wrapper`} ref={`${name}Ref`} {...attrs}>
+            {(slots as any)[name](scopeProps)}
           </div>
         )
       )
-    },
-  },
-
-  render() {
-    const scopeProps = {
-      contentHeight: this.lvStore.contentHeight,
-      contentLoading: this.lvStore.contentLoading,
-      contentData: this.lvStore.contentData,
-      filterModel: this.lvStore.filterModel,
-      contentMessage: this.lvStore.internalContentMessage,
     }
 
-    return (
+    onMounted(() => {
+      updateLayout()
+      _init()
+    })
+
+    onBeforeUnmount(() => {
+      _cleanup()
+    })
+
+    onActivated(() => {
+      updateLayout()
+      _init()
+    })
+
+    onDeactivated(() => {
+      _cleanup()
+    })
+
+    expose({
+      scopeProps,
+      wrapperHeight,
+      contentHeight,
+      contentLoading,
+      bottomOffset,
+      renderSlot,
+    })
+
+    return () => (
       <div
-        style={{ height: parseSize(this.wrapperHeight) }}
+        ref="wrapperRef"
+        style={{ height: parseSize(unref(wrapperHeight)) }}
         class="lv__wrapper"
       >
-        {this.renderSlot('header')}
-        {this.renderSlot('filterbar')}
-        <div class="lv__body-wrapper" v-loading={this.contentLoading}>
-          {this.renderSlot('content', scopeProps)}
-          {this.renderSlot('footer')}
+        {renderSlot('header')}
+        {renderSlot('filterbar')}
+        <div class="lv__body-wrapper" v-loading={unref(contentLoading)}>
+          {renderSlot('content')}
+          {renderSlot('footer')}
         </div>
       </div>
     )
   },
-}
+})
 </script>
 
 <style>

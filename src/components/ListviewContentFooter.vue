@@ -67,15 +67,19 @@ export default {
     return (
       <div class="lv__footer">
         <div class="lv__footer-left">
-          {this.$slots['footer-left'] ||
-            (this.pagePosition !== 'right' && pagination)}
+          {this.$slots['footer-left']
+            ? this.$slots['footer-left']()
+            : this.pagePosition !== 'right' && pagination}
         </div>
 
-        <div class="lv__footer-center">{this.$slots['footer-center']}</div>
+        <div class="lv__footer-center">
+          {this.$slots['footer-center'] && this.$slots['footer-center']()}
+        </div>
 
         <div class="lv__footer-right">
-          {this.$slots['footer-right'] ||
-            (this.pagePosition === 'right' && pagination)}
+          {this.$slots['footer-right']
+            ? this.$slots['footer-right']()
+            : this.pagePosition === 'right' && pagination}
         </div>
       </div>
     )
