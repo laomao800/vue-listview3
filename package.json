@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint src --fix",
+    "lint": "eslint ./src/**/*.{ts,js,vue} --fix",
     "test": "vitest",
     "coverage": "vitest run --coverage"
   },

@@ -1,6 +1,6 @@
 <script lang="tsx">
 import type { PropType } from 'vue'
-import { defineComponent, computed, unref, h } from 'vue'
+import { defineComponent } from 'vue'
 import {
   WarningFilled,
   InfoFilled,

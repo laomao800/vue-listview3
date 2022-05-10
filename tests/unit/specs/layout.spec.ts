@@ -207,3 +207,6 @@ describe('listview container', () => {
     expect(wrapper.find('div.lv__wrapper').exists()).toBe(true)
   })
 })
+
+// TODO:
+describe.skip('slots')

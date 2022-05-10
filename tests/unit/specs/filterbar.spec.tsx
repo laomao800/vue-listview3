@@ -267,7 +267,6 @@ describe('Filter fields', () => {
       provide: { lvStore },
       propsData: { filterFields },
     })
-
     expect(wrapper.find('.lv__field input.object-type').exists()).toBe(true)
     expect(wrapper.find('.lv__field input.function-type').exists()).toBe(true)
     // FIXME:

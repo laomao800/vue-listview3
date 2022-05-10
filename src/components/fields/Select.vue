@@ -2,8 +2,8 @@
   <el-select
     v-model="value"
     v-bind="mergedProps"
-    v-on="mergedEvents"
     :loading="loading"
+    v-on="mergedEvents"
   >
     <el-option
       v-for="(option, index) in options"

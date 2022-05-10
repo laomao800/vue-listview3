@@ -5,7 +5,7 @@
     v-on="mergedEvents"
     @blur="onBlur"
   >
-    <template v-for="(slot, key) in componentSlots" :slot="key">
+    <template v-for="(slot, key) in componentSlots" #[key]>
       <v-node v-if="isVNode(slot)" :key="key" :node="slot" />
       <template v-else>{{ slot }}</template>
     </template>
