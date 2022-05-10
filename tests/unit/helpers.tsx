@@ -4,23 +4,17 @@ import ElementPlus from 'element-plus'
 import { ListviewProps } from '~/types'
 import { Listview } from '@/index'
 
-function successWrap(data: any) {
-  return {
-    success: true,
-    result: data,
-  }
-}
-
 export async function createListviewWrapper(
   propsData: Partial<ListviewProps> = {}
 ) {
   const requestSpy = vi.fn(() =>
-    Promise.resolve(
-      successWrap({
+    Promise.resolve({
+      success: true,
+      result: {
         items: mockDataList,
         total_count: 40,
-      })
-    )
+      },
+    })
   )
 
   // const Listview = { render }

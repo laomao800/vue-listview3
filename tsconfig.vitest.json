@@ -1,6 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.node.json",
-  "include": ["vitest.setup.ts"],
+  "include": ["vitest.setup.ts", "tests/**/*.ts"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "composite": true,
