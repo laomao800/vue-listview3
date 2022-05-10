@@ -3,26 +3,24 @@
     v-model:selection="selection"
     header-title="演示列表1"
     :header-nav="['菜单1', { text: '菜单2' }]"
-    request-url="/mock.json"
+    request-url="/mock/list"
     request-method="post"
     :filter-buttons="filterButtons"
     :filter-fields="filterFields"
     :filter-model="filterModel"
     :table-columns="tableColumns"
     :page-props="{ pagerCount: 5 }"
-  >
-    <template #footer-left>footer-left</template>
-  </ListviewComponent>
+  ></ListviewComponent>
 </template>
 
 <script setup lang="tsx">
+import mitt from 'mitt'
 import { ref, unref, shallowRef } from 'vue'
 import { ElMessage } from 'element-plus'
 import 'element-plus/es/components/badge/style/css'
 import 'element-plus/es/components/message/style/css'
 import { CirclePlus, Remove } from '@element-plus/icons-vue'
-import { create as createListview } from '@/'
-
+import { create as createListview, ListviewContainer } from '@/'
 const ListviewComponent = createListview({})
 
 const selection = ref([])
@@ -31,6 +29,7 @@ const loadingSelection = ref(false)
 const filterModel = ref({
   hidden: 'hidden',
   multipleSelect: [],
+  selectField: '',
 })
 
 const filterButtons = shallowRef([
@@ -95,7 +94,24 @@ const filterButtons = shallowRef([
   },
 ])
 
+const emitter = mitt<any>()
+;(window as any).emitter = emitter
+
 const filterFields = shallowRef([
+  {
+    type: 'select',
+    model: 'selectField',
+    options: [],
+    effect: ({ vm, filterModel }: any) => {
+      emitter.on('custom-update-input', (value: string) => {
+        filterModel.selectField = value
+        vm.options = [
+          { label: value, value },
+          { label: 'other-label', value: 'other-value' },
+        ]
+      })
+    },
+  },
   {
     type: 'select',
     model: 'searchType',
@@ -333,17 +349,14 @@ const tableColumns = shallowRef([
   { label: '零售价格', prop: 'sale_price' },
   {
     label: '折扣率',
-
     formatter: (row) => row.discount.toFixed(2),
   },
   {
     label: '折后价',
-
     formatter: (row) => (row.discount * row.sale_price).toFixed(2),
   },
   {
     label: '折扣时间',
-
     children: [
       { label: '折扣开始', prop: 'date', align: 'center' },
       { label: '折扣结束', prop: 'date', align: 'center' },
@@ -352,7 +365,6 @@ const tableColumns = shallowRef([
   { label: '数量', prop: 'quantity' },
   {
     label: '是否启用',
-
     render: (prop) => {
       if (prop.row.enable) {
         return <div style="color:#67c23a">启用</div>
@@ -365,7 +377,6 @@ const tableColumns = shallowRef([
   { label: '创建时间', prop: 'date' },
   {
     label: '最后修改',
-
     children: [
       { label: '修改人', prop: 'seller' },
       { label: '修改时间', prop: 'date' },
