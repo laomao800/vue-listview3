@@ -110,8 +110,8 @@ export default defineComponent({
   },
 
   methods: {
-    $rootEmitProxy(rootEvent: string, ...args: any[]) {
-      this.$emit('root-emit', rootEvent, this, ...args)
+    $rootEmitProxy(rootEventName: string, ...args: any[]) {
+      this.$emit('root-emit', rootEventName, this, ...args)
     },
 
     search(keepInPage = false) {

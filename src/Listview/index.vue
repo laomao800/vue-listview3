@@ -103,7 +103,15 @@ export default defineComponent({
     // modelValue: { type: Array, default: () => [] },
   },
 
-  emits: ['root-emit'],
+  emits: [
+    'filter-submit',
+    'filter-reset',
+    'before-request',
+    'request-valid-error',
+    'request-success',
+    'requested',
+    'request-error',
+  ],
 
   setup(props, { emit }) {
     const storeProviderRef = ref(null)
@@ -141,7 +149,8 @@ export default defineComponent({
       unref<any>(filterbarRef)?.updateLayout?.call()
     const handleUpdateLayout = () => nextTick().then(_updateFilterLayout)
     const handleFilterFold = () => nextTick().then(_updateWrapperLayout)
-    const handleRootEmit = (...args: any[]) => emit('root-emit', ...args)
+    const handleRootEmit = (rootEventName: string, ...args: any[]) =>
+      emit(rootEventName, ...args)
 
     const updateLayout = debounce(_updateWrapperLayout, 0, { leading: true })
     const resetFilter = () => unref<any>(filterbarRef)?.handleFilterReset.call()
