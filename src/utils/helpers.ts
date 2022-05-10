@@ -112,3 +112,15 @@ export function resolveOptions(
   }
   return optionsPromise
 }
+
+const objectToString = Object.prototype.toString
+export const toDisplayString = (val: unknown): string => {
+  return val == null
+    ? ''
+    : Array.isArray(val) ||
+      (isPlainObject(val) &&
+        ((val as any).toString === objectToString ||
+          !isFunction((val as any).toString)))
+    ? JSON.stringify(val, null, 2)
+    : String(val)
+}

@@ -13,11 +13,16 @@ import {
   isFunction,
   isPlainObject,
   isString,
-  isError,
   merge,
   pickBy,
 } from 'lodash-es'
-import { warn, dataMapping, isValidFieldValue, ensurePromise } from '@/utils'
+import {
+  warn,
+  dataMapping,
+  isValidFieldValue,
+  ensurePromise,
+  toDisplayString,
+} from '@/utils'
 
 export default defineComponent({
   name: 'StoreProvider',
@@ -201,9 +206,7 @@ export default defineComponent({
             ? resolveErrorMessageFn(error)
             : error
         } catch (e) {}
-        errorMessage = isError(errorMessage)
-          ? errorMessage.toString()
-          : errorMessage
+        errorMessage = toDisplayString(errorMessage)
         this.setContentMessage(errorMessage, 'error')
         // 清空列表内容
         this.cleanContentData()
@@ -269,11 +272,7 @@ export default defineComponent({
     },
 
     setContentMessage(text = '', type = null, cleanData = false) {
-      if (text === null) {
-        this.internalContentMessage = { text: null, type: null }
-      } else {
-        this.internalContentMessage = { text, type }
-      }
+      this.internalContentMessage = { text, type }
       cleanData && this.cleanContentData()
     },
   },
