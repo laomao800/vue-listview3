@@ -1,6 +1,6 @@
 <script lang="tsx">
 import type { VNode } from 'vue'
-import { defineComponent } from 'vue'
+import { defineComponent, KeepAlive } from 'vue'
 import ListviewHeader from '@/components/ListviewHeader.vue'
 import { get } from '@/utils'
 
@@ -75,11 +75,11 @@ export default defineComponent({
         </div>
 
         <div class="lvc__content">
-          <keep-alive>
+          <KeepAlive>
             {this.childViews.map((item, index) =>
               index === this.activeTab ? item : null
             )}
-          </keep-alive>
+          </KeepAlive>
         </div>
       </div>
     )
