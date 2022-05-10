@@ -89,26 +89,27 @@ describe('Create config', () => {
 })
 
 describe('Replace component', () => {
-  const CustomFilterbar = defineComponent(
-    markRaw({
-      render: () => h('div', { class: 'custom-filter' }, 'CustomFilterbar'),
-    })
-  )
-  const CustomContent = defineComponent(
-    markRaw({
-      render: () => h('div', { class: 'custom-content' }, 'CustomContent'),
-    })
-  )
+  const createComponent = (name: string) =>
+    defineComponent(
+      markRaw({
+        render: () => h('div', { class: `custom-${name}` }, name),
+      })
+    )
+
   const Listview = createListview({
     replaceComponents: {
-      filterbar: CustomFilterbar,
-      content: CustomContent,
+      header: createComponent('header'),
+      filterbar: createComponent('filterbar'),
+      content: createComponent('content'),
+      footer: createComponent('footer'),
     },
   })
 
   it('replaceComponents', async () => {
     const { wrapper } = await createListviewWrapper({}, Listview)
-    expect(wrapper.find('div.custom-filter').exists()).toBe(true)
+    expect(wrapper.find('div.custom-header').exists()).toBe(true)
+    expect(wrapper.find('div.custom-filterbar').exists()).toBe(true)
     expect(wrapper.find('div.custom-content').exists()).toBe(true)
+    expect(wrapper.find('div.custom-footer').exists()).toBe(true)
   })
 })
