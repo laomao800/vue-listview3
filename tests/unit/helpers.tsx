@@ -5,7 +5,8 @@ import { ListviewProps } from '~/types'
 import { Listview } from '@/index'
 
 export async function createListviewWrapper(
-  propsData: Partial<ListviewProps> = {}
+  propsData: Partial<ListviewProps> = {},
+  component = Listview
 ) {
   const requestSpy = vi.fn(() =>
     Promise.resolve({
@@ -17,7 +18,7 @@ export async function createListviewWrapper(
     })
   )
 
-  const wrapper = mount(Listview, {
+  const wrapper = mount(component, {
     global: { plugins: [ElementPlus] },
     propsData: {
       requestHandler: requestSpy,
