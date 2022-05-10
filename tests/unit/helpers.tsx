@@ -17,8 +17,6 @@ export async function createListviewWrapper(
     })
   )
 
-  // const Listview = { render }
-
   const wrapper = mount(Listview, {
     global: { plugins: [ElementPlus] },
     propsData: {

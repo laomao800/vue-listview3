@@ -1,5 +1,4 @@
 <script lang="tsx">
-import Vue from 'vue'
 import { isNil } from 'lodash-es'
 import storeProviderMixin from '@/mixins/storeProviderMixin'
 

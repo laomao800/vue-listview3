@@ -1,6 +1,5 @@
 <script lang="tsx">
 import type { PropType } from 'vue'
-import Vue from 'vue'
 import {
   WarningFilled,
   InfoFilled,
@@ -21,8 +20,12 @@ export default {
   props: {
     type: {
       type: String as PropType<IconType>,
+      default: 'warning',
     },
-    text: {},
+    text: {
+      type: String,
+      default: '',
+    },
   },
 
   render() {
