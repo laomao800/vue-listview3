@@ -1,4 +1,3 @@
-import { VueWrapper } from '@vue/test-utils'
 import { describe, it, expect } from 'vitest'
 import { createListviewWrapper, mockDataList, wait } from '../helpers'
 
@@ -31,7 +30,7 @@ describe('Request params', () => {
 
     wrapper
       .findAllComponents({ name: 'ElInput' })
-      .forEach((w: VueWrapper) => w.vm.$emit('blur', new FocusEvent('test')))
+      .forEach((w: any) => w.vm.$emit('blur', new FocusEvent('test')))
 
     await vm.search()
 
