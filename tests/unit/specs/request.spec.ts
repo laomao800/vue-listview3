@@ -1,3 +1,4 @@
+import { VueWrapper } from '@vue/test-utils'
 import { describe, it, expect } from 'vitest'
 import { createListviewWrapper, mockDataList, wait } from '../helpers'
 
@@ -30,7 +31,7 @@ describe('Request params', () => {
 
     wrapper
       .findAllComponents({ name: 'ElInput' })
-      .forEach((w) => w.vm.$emit('blur'))
+      .forEach((w: VueWrapper) => w.vm.$emit('blur', new FocusEvent('test')))
 
     await vm.search()
 
@@ -70,15 +71,12 @@ describe('Request params', () => {
   it('request', async () => {
     const { wrapper } = await createListviewWrapper({
       requestHandler: undefined,
-      requestUrl: '/mock/listview',
+      requestUrl: '/mock/list',
     })
     await wait(400)
     const storeRef = wrapper.findComponent({
       ref: 'storeProviderRef',
     }).componentVM
-
-    console.log(storeRef.contentData)
-
     expect(storeRef).toHaveProperty('contentData.total', 800)
   })
 })
@@ -131,7 +129,7 @@ describe('分页参数', () => {
       pageSize: 2,
     })
     const $pagination = wrapper.findComponent({ name: 'ElPagination' })
-    $pagination.vm.$emit('size-change', 3)
+    $pagination.vm.$emit('update:page-size', 3)
     const store = wrapper.findComponent({ name: 'StoreProvider' })
     expect(store.vm.$data.currentPageSize).toBe(3)
   })
@@ -144,7 +142,7 @@ describe('分页参数', () => {
     const newCurPage = 18
     wrapper
       .findComponent({ name: 'ElPagination' })
-      .vm.$emit('current-change', newCurPage)
+      .vm.$emit('update:current-page', newCurPage)
     await vm.search(true)
     expect(storeVm.currentPage).toBe(newCurPage)
     await vm.search()
