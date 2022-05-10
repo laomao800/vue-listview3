@@ -21,5 +21,8 @@ export default defineConfig({
     transformMode: {
       web: [/\.[jt]sx$/],
     },
+    coverage: {
+      reportsDirectory: path.resolve(__dirname, 'tests/unit/coverage'),
+    },
   },
 })
