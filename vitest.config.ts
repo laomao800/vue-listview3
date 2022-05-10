@@ -2,16 +2,12 @@
 
 import path from 'path'
 import { defineConfig } from 'vite'
-import Vue from '@vitejs/plugin-vue'
-import VueJsx from '@vitejs/plugin-vue-jsx'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import DefineOptions from 'unplugin-vue-define-options/vite'
 
 export default defineConfig({
-  plugins: [Vue(), VueJsx(), DefineOptions()],
-  optimizeDeps: {
-    disabled: true,
-    exclude: ['*.css'],
-  },
+  plugins: [vue(), vueJsx(), DefineOptions()],
   resolve: {
     alias: {
       '~': path.resolve(__dirname),
