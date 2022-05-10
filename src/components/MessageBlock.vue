@@ -1,5 +1,6 @@
 <script lang="tsx">
 import type { PropType } from 'vue'
+import { defineComponent, computed, unref, h } from 'vue'
 import {
   WarningFilled,
   InfoFilled,
@@ -14,7 +15,7 @@ const iconMap = {
 
 type IconType = keyof typeof iconMap
 
-export default {
+export default defineComponent({
   name: 'MessageBlock',
 
   props: {
@@ -23,29 +24,30 @@ export default {
       default: 'warning',
     },
     text: {
-      type: String,
+      type: [String, Object],
       default: '',
     },
   },
 
-  render() {
+  setup(props) {
     const className = {
       lv__message: true,
-      [`lv__message--${this.type}`]: this.type,
+      [`lv__message--${props.type}`]: props.type,
     }
-    const Icon = iconMap[this.type] || iconMap['warning']
-    return (
+    const Icon = iconMap[props.type] || iconMap['warning']
+
+    return () => (
       <span class={className}>
         <span class="lv__message-icon">
           <el-icon>
             <Icon />
           </el-icon>
         </span>
-        <span class="lv__message-text">{this.text}</span>
+        <span class="lv__message-text">{props.text || ''}</span>
       </span>
     )
   },
-}
+})
 </script>
 
 <style lang="less">
