@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
+import { mount as _mount, MountingOptions } from '@vue/test-utils'
 
 declare module '@vue/test-utils' {
   import { DefineComponent } from 'vue'
-  import { MountingOptions } from '@vue/test-utils'
 
   // eslint-disable-next-line
   const component: DefineComponent<{}, {}, any>
@@ -10,5 +10,5 @@ declare module '@vue/test-utils' {
   export declare function mount(
     c: component,
     options?: MountingOptions
-  ): VueWrapper<any>
+  ): ReturnType<typeof _mount>
 }
