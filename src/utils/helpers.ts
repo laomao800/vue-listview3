@@ -1,4 +1,5 @@
-import type { FilterField } from '~/types'
+import type { FilterField, LvStore } from '~/types'
+import { inject } from 'vue'
 import { isPlainObject, isEmpty, isFunction, isNil } from 'lodash-es'
 import { get } from '@/utils'
 import { default as _parseSize } from '@laomao800/parse-size-with-unit'
@@ -124,3 +125,5 @@ export const toDisplayString = (val: unknown): string => {
     ? JSON.stringify(val, null, 2)
     : String(val)
 }
+
+export const useLvStore = (): LvStore => inject<LvStore>('lvStore')

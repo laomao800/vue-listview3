@@ -1,89 +1,72 @@
 <script lang="tsx">
+import { defineComponent, unref, computed } from 'vue'
 import { isNil } from 'lodash-es'
-import storeProviderMixin from '@/mixins/storeProviderMixin'
+import { useLvStore } from '../utils'
 
-export default {
+export default defineComponent({
   name: 'ListviewContentFooter',
-
-  mixins: [storeProviderMixin],
 
   inheritAttrs: false,
 
-  computed: {
-    usePage() {
-      return this.lvStore.usePage
-    },
-    pagePosition() {
-      return this.lvStore.pagePosition
-    },
-    currentPage: {
-      get() {
-        return this.lvStore.currentPage
-      },
-      set(val: number) {
-        this.lvStore.currentPage = val
-      },
-    },
-    currentPageSize: {
-      get() {
-        return this.lvStore.currentPageSize
-      },
-      set(val: number) {
-        this.lvStore.currentPageSize = val
-      },
-    },
-    mergedAttrs(): any {
-      let total = this.lvStore.contentData.total
+  setup(_, { slots }) {
+    const lvStore = useLvStore()
+    const usePage = computed(() => lvStore.usePage)
+    const pagePosition = computed(() => lvStore.pagePosition)
+    const currentPage = computed({
+      get: () => lvStore.currentPage,
+      set: (val: number) => (lvStore.currentPage = val),
+    })
+    const currentPageSize = computed({
+      get: () => lvStore.currentPageSize,
+      set: (val: number) => (lvStore.currentPageSize = val),
+    })
+    const mergedAttrs = computed(() => {
+      let total = lvStore.contentData.total
       total = isNil(total) ? 0 : total
       return {
-        pageSize: this.currentPageSize,
-        pageSizes: this.lvStore.pageSizes,
+        pageSize: unref(currentPageSize),
+        pageSizes: lvStore.pageSizes,
         background: true,
         layout: 'total, sizes, prev, pager, next, jumper',
-        ...this.lvStore.pageProps,
+        ...lvStore.pageProps,
         total,
-        currentPage: this.currentPage,
-        'onUpdate:currentPage': this.handleCurrentChange,
-        'onUpdate:pageSize': this.handleSizeChange,
+        currentPage: unref(currentPage),
+        'onUpdate:currentPage': (pageSize: number) => {
+          currentPageSize.value = pageSize
+          currentPage.value = 1
+        },
+        'onUpdate:pageSize': (page: number) => {
+          currentPage.value = page
+        },
       }
-    },
-  },
+    })
 
-  methods: {
-    handleSizeChange(pageSize: number) {
-      this.currentPageSize = pageSize
-      this.currentPage = 1
-    },
-    handleCurrentChange(currentPage: number) {
-      this.currentPage = currentPage
-    },
-  },
+    const _renderSlot = (name: string) => slots[name] && slots[name]()
+    const _renderPager = (position: string) =>
+      unref(usePage) &&
+      unref(pagePosition) === position && (
+        <el-pagination
+          {...unref(mergedAttrs)}
+          ref="pagination"
+          class="lv__pager"
+        />
+      )
 
-  render() {
-    const pagination = this.usePage && (
-      <el-pagination {...this.mergedAttrs} ref="pagination" class="lv__pager" />
-    )
-    return (
+    return () => (
       <div class="lv__footer">
         <div class="lv__footer-left">
-          {this.$slots['footer-left']
-            ? this.$slots['footer-left']()
-            : this.pagePosition !== 'right' && pagination}
+          {_renderSlot('footer-left') || _renderPager('left')}
         </div>
 
-        <div class="lv__footer-center">
-          {this.$slots['footer-center'] && this.$slots['footer-center']()}
-        </div>
+        <div class="lv__footer-center">{_renderSlot('footer-center')}</div>
 
         <div class="lv__footer-right">
-          {this.$slots['footer-right']
-            ? this.$slots['footer-right']()
-            : this.pagePosition === 'right' && pagination}
+          {_renderSlot('footer-right') || _renderPager('right')}
         </div>
       </div>
     )
   },
-}
+})
 </script>
 
 <style lang="less">
