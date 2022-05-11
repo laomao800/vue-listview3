@@ -1,6 +1,6 @@
 <script lang="tsx">
 import type { VNode } from 'vue'
-import { defineComponent, KeepAlive } from 'vue'
+import { defineComponent, KeepAlive, ref, unref, computed } from 'vue'
 import ListviewHeader from '@/components/ListviewHeader.vue'
 import { get } from '@/utils'
 
@@ -15,10 +15,6 @@ function getListviewTitle(node: VNode, defaultTitle = '') {
 export default defineComponent({
   name: 'ListviewContainer',
 
-  components: {
-    ListviewHeader,
-  },
-
   props: {
     headerTitle: { type: String, default: '' },
     headerNav: { type: Array, default: () => [] },
@@ -26,48 +22,42 @@ export default defineComponent({
     tabPosition: { type: String, default: 'left' },
   },
 
-  data() {
-    return {
-      activeTab: 0,
-    }
-  },
+  setup(props) {
+    const activeTab = ref(0)
 
-  computed: {
-    childViews(): VNode[] {
+    const childViews = computed<VNode[]>(() => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const _children = this.$slots?.default!()
       return _children.map((item, index) => {
         item.key = `view-${index}`
         return item
       })
-    },
-    tabTitles(): string[] {
-      return this.childViews.map((node) => getListviewTitle(node, '未命名'))
-    },
-  },
+    })
+    const tabTitles = computed<string[]>(() =>
+      unref(childViews).map((node) => getListviewTitle(node, '未命名'))
+    )
 
-  render() {
-    return (
+    return () => (
       <div class="lvc__wrapper">
-        <listview-header
-          header-title={this.headerTitle}
-          header-nav={this.headerNav}
+        <ListviewHeader
+          header-title={props.headerTitle}
+          header-nav={props.headerNav}
         />
         <div
           class={{
             lvc__tabs: true,
-            'lvc__tabs--line': this.type === 'line',
-            'lvc__tabs--card': this.type !== 'line',
-            'lvc__tabs--center': this.tabPosition === 'center',
+            'lvc__tabs--line': props.type === 'line',
+            'lvc__tabs--card': props.type !== 'line',
+            'lvc__tabs--center': props.tabPosition === 'center',
           }}
         >
-          {this.tabTitles.map((title, index) => (
+          {unref(tabTitles).map((title, index) => (
             <div
               class={{
                 lvc__tab: true,
-                'lvc__tab--active': index === this.activeTab,
+                'lvc__tab--active': index === unref(activeTab),
               }}
-              onClick={() => (this.activeTab = index)}
+              onClick={() => (activeTab.value = index)}
             >
               <span>{title}</span>
             </div>
@@ -77,7 +67,7 @@ export default defineComponent({
         <div class="lvc__content">
           <KeepAlive>
             {this.childViews.map((item, index) =>
-              index === this.activeTab ? item : null
+              index === unref(activeTab) ? item : null
             )}
           </KeepAlive>
         </div>
