@@ -1,64 +1,13 @@
-<script lang="tsx" setup>
-import type { FilterField, FilterFieldHasRender } from '~/types'
+<script lang="tsx">
+import type { FilterField, FilterFieldHasRender, LvStore } from '~/types'
 import type { PropType, VNode } from 'vue'
 
-import { computed, inject, unref, h, isVNode, Transition } from 'vue'
+import { computed, inject, unref, isVNode, Transition } from 'vue'
 import hasValues from 'has-values'
 import { isFunction } from 'lodash-es'
 import { hasRenderFn, get } from '@/utils'
 import vNode from './VNode'
 import { getFieldComponent } from './fields/index'
-
-const props = defineProps({
-  field: {
-    type: [Object, Function] as PropType<FilterField>,
-    default: () => ({}),
-  },
-})
-
-const field = props?.field || {}
-// TODO: types lvStore
-const lvStore = inject<any>('lvStore')
-const showLabelRef = computed(() => {
-  const value = get(lvStore.filterModel, field.model)
-  // hasValues(null) -> true
-  return value !== null && hasValues(value)
-})
-let InnerLabel: VNode | null = null
-let InnerContent = null
-
-InnerLabel = field?.label ? (
-  <Transition name="lv__field-label-trans">
-    {unref(showLabelRef) && <div class="lv__field-label">{field.label}</div>}
-  </Transition>
-) : null
-
-if (isFunction(field)) {
-  const fieldVm = field()
-  InnerContent = <vNode node={fieldVm} />
-} else if (hasRenderFn<FilterFieldHasRender>(field)) {
-  const fieldVm = field.render()
-  InnerContent = <vNode node={fieldVm} />
-} else if (isVNode(field)) {
-  InnerContent = <vNode node={field} />
-} else {
-  const FieldComponent = getFieldComponent(field?.type) as any
-  if (FieldComponent) {
-    InnerContent = (
-      <el-form-item>
-        <FieldComponent
-          {...{
-            field,
-            style: field?.width ? { width: `${field?.width}px` } : null,
-          }}
-        />
-      </el-form-item>
-    )
-  }
-}
-</script>
-
-<script lang="tsx">
 import { defineComponent } from 'vue'
 import storeProviderMixin from '@/mixins/storeProviderMixin'
 import { allFieldComponents } from './fields/index'
@@ -70,11 +19,59 @@ export default defineComponent({
 
   mixins: [storeProviderMixin],
 
-  render() {
-    return (
+  props: {
+    field: {
+      type: [Object, Function] as PropType<FilterField>,
+      default: () => ({}),
+    },
+  },
+
+  setup(props) {
+    const field = props.field || {}
+    const lvStore = inject<LvStore>('lvStore')
+    const showLabelRef = computed(() => {
+      const value = get(lvStore.filterModel, field.model)
+      // hasValues(null) -> true
+      return value !== null && hasValues(value)
+    })
+    let InnerLabel: VNode | null = null
+    let InnerContent = null
+
+    InnerLabel = field?.label ? (
+      <Transition name="lv__field-label-trans">
+        {unref(showLabelRef) && (
+          <div class="lv__field-label">{field.label}</div>
+        )}
+      </Transition>
+    ) : null
+
+    if (isFunction(field)) {
+      const fieldVm = field()
+      InnerContent = <vNode node={fieldVm} />
+    } else if (hasRenderFn<FilterFieldHasRender>(field)) {
+      const fieldVm = field.render()
+      InnerContent = <vNode node={fieldVm} />
+    } else if (isVNode(field)) {
+      InnerContent = <vNode node={field} />
+    } else {
+      const FieldComponent = getFieldComponent(field?.type) as any
+      if (FieldComponent) {
+        InnerContent = (
+          <el-form-item>
+            <FieldComponent
+              {...{
+                field,
+                style: field?.width ? { width: `${field?.width}px` } : null,
+              }}
+            />
+          </el-form-item>
+        )
+      }
+    }
+    return () => (
       <div class="lv__field">
-        {this.InnerContent}
-        {this.InnerLabel}
+        {InnerContent}
+        {InnerLabel}
       </div>
     )
   },
