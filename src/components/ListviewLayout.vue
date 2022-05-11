@@ -1,10 +1,31 @@
+<template>
+  <div
+    ref="wrapperRef"
+    :style="{ height: parseSize(wrapperHeight) }"
+    class="lv__wrapper"
+  >
+    <div ref="headerRef" class="lv__header-wrapper">
+      <slot name="header" v-bind="scopeProps" />
+    </div>
+    <div ref="filterbarRef" class="lv__filterbar-wrapper">
+      <slot name="filterbar" v-bind="scopeProps" />
+    </div>
+    <div v-loading="contentLoading" class="lv__body-wrapper">
+      <div ref="contentRef" class="lv__content-wrapper">
+        <slot name="content" v-bind="scopeProps" />
+      </div>
+      <div ref="footerRef" class="lv__footer-wrapper">
+        <slot name="footer" v-bind="scopeProps" />
+      </div>
+    </div>
+  </div>
+</template>
+
 <script lang="tsx">
-import type { LvStore } from '~/types'
 import {
   computed,
   defineComponent,
   getCurrentInstance,
-  inject,
   onMounted,
   ref,
   nextTick,
@@ -14,8 +35,7 @@ import {
   onDeactivated,
 } from 'vue'
 import { pick } from 'lodash-es'
-import { parseSize } from '@/utils'
-import storeProviderMixin from '@/mixins/storeProviderMixin'
+import { parseSize, useLvStore } from '@/utils'
 
 function isDom(item: any): item is Element {
   return item instanceof Element
@@ -38,8 +58,6 @@ function getElBottomOffset(el: Element) {
 export default defineComponent({
   name: 'ListviewLayout',
 
-  mixins: [storeProviderMixin],
-
   inheritAttrs: false,
 
   props: {
@@ -49,10 +67,10 @@ export default defineComponent({
 
   emits: ['update-layout'],
 
-  setup(props, { slots, emit, expose }) {
+  setup(props, { emit }) {
     const vm = getCurrentInstance()?.proxy
 
-    const lvStore = inject<LvStore>('lvStore')
+    const lvStore = useLvStore()
     const scopeProps = pick(lvStore, [
       'contentHeight',
       'contentLoading',
@@ -78,12 +96,14 @@ export default defineComponent({
       getElBottomOffset(unref(wrapperRef)!)
     )
 
-    const _init = () => {
+    const _initListener = () => {
       props.fullHeight && window.addEventListener('resize', updateLayout)
     }
-    const _cleanup = () => window.removeEventListener('resize', updateLayout)
+    const _cleanupListener = () =>
+      window.removeEventListener('resize', updateLayout)
 
     async function updateLayout() {
+      await nextTick()
       updateWrapperHeight()
       // 非全屏情况下，内部内容高度需等待外部渲染后再执行计算
       await nextTick()
@@ -116,8 +136,8 @@ export default defineComponent({
         maxHeight = unref(wrapperHeight) as number
       }
 
-      if (maxHeight && isDom(contentRef)) {
-        const footerHeight = getSlotHeight('footer')
+      if (maxHeight && isDom(unref(contentRef))) {
+        const footerHeight = getSlotHeight('footerRef')
         const contentTop = unref(contentRef)?.getBoundingClientRect().top || 0
         const contentOffsetTop =
           contentTop - vm?.$el.getBoundingClientRect().top
@@ -131,57 +151,60 @@ export default defineComponent({
       return slot ? slot.getBoundingClientRect().height : 0
     }
 
-    function renderSlot(name: string, attrs = {}) {
-      return (
-        slots[name] && (
-          <div class={`lv__${name}-wrapper`} ref={`${name}Ref`} {...attrs}>
-            {(slots as any)[name](scopeProps)}
-          </div>
-        )
-      )
-    }
+    // function renderSlot(name: string, attrs = {}) {
+    //   return (
+    //     slots[name] && (
+    //       <div class={`lv__${name}-wrapper`} ref={`${name}Ref`} {...attrs}>
+    //         {(slots as any)[name](scopeProps)}
+    //       </div>
+    //     )
+    //   )
+    // }
 
     onMounted(() => {
       updateLayout()
-      _init()
+      _initListener()
     })
 
     onBeforeUnmount(() => {
-      _cleanup()
+      _cleanupListener()
     })
 
     onActivated(() => {
       updateLayout()
-      _init()
+      _initListener()
     })
 
     onDeactivated(() => {
-      _cleanup()
+      _cleanupListener()
     })
 
-    expose({
+    return {
+      parseSize,
+      wrapperRef,
+      contentRef,
       scopeProps,
       wrapperHeight,
       contentHeight,
       contentLoading,
       bottomOffset,
-      renderSlot,
-    })
+      // renderSlot,
+    }
 
-    return () => (
-      <div
-        ref="wrapperRef"
-        style={{ height: parseSize(unref(wrapperHeight)) }}
-        class="lv__wrapper"
-      >
-        {renderSlot('header')}
-        {renderSlot('filterbar')}
-        <div class="lv__body-wrapper" v-loading={unref(contentLoading)}>
-          {renderSlot('content')}
-          {renderSlot('footer')}
-        </div>
-      </div>
-    )
+    // return () => (
+    //   <div
+    //     ref="wrapperRef"
+    //     style={{ height: parseSize(unref(wrapperHeight)) }}
+    //     class="lv__wrapper"
+    //   >
+    //     {renderSlot('header')}
+    //     {renderSlot('filterbar')}
+    //     <div class="lv__body-wrapper" v-loading={unref(contentLoading)}>
+    //       {renderSlot('content')}
+    //       {renderSlot('footer')}
+    //     </div>
+    //   </div>
+    // )
   },
 })
 </script>
