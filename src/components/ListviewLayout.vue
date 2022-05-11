@@ -1,4 +1,5 @@
 <script lang="tsx">
+import type { LvStore } from '~/types'
 import {
   computed,
   defineComponent,
@@ -51,8 +52,7 @@ export default defineComponent({
   setup(props, { slots, emit, expose }) {
     const vm = getCurrentInstance()?.proxy
 
-    // TODO: types
-    const lvStore = inject<any>('lvStore')
+    const lvStore = inject<LvStore>('lvStore')
     const scopeProps = pick(lvStore, [
       'contentHeight',
       'contentLoading',

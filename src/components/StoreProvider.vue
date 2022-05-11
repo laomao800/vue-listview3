@@ -1,12 +1,7 @@
-<template>
-  <el-config-provider :locale="locale">
-    <slot />
-  </el-config-provider>
-</template>
-
 <script lang="tsx">
 import { defineComponent } from 'vue'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+import { ElConfigProvider } from 'element-plus'
 import axios, { AxiosRequestConfig } from 'axios'
 import {
   cloneDeep,
@@ -27,10 +22,9 @@ import {
 export default defineComponent({
   name: 'StoreProvider',
 
-  // @ts-ignore
   abstract: true,
 
-  provide(): any {
+  provide() {
     return {
       lvStore: this,
     }
@@ -76,9 +70,16 @@ export default defineComponent({
 
   emits: ['update:selection', 'root-emit'],
 
-  data(): any {
+  setup(props, { slots }) {
+    return () => (
+      <ElConfigProvider locale={zhCn}>
+        {slots.default && slots.default()}
+      </ElConfigProvider>
+    )
+  },
+
+  data() {
     return {
-      locale: zhCn,
       contentHeight: null,
       contentLoading: false,
       selection: [],
