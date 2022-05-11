@@ -1,5 +1,6 @@
 {
   "references": [
+    // { "path": "./tsconfig.node.json" },
     { "path": "./tsconfig.web.json" },
     { "path": "./tsconfig.vite-config.json" },
     { "path": "./tsconfig.vitest.json" }

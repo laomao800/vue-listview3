@@ -30,9 +30,5 @@
     "example/**/*",
     "tests/**/*",
     "public/mockServiceWorker.js"
-  ],
-  "references": [
-    { "path": "./tsconfig.node.json" },
-    { "path": "./tsconfig.vitest.json" }
   ]
 }

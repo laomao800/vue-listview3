@@ -1,7 +1,7 @@
 <script lang="tsx">
 import { defineComponent, unref, computed } from 'vue'
 import { isNil } from 'lodash-es'
-import { useLvStore } from '../utils'
+import { useLvStore } from '@/utils'
 
 export default defineComponent({
   name: 'ListviewContentFooter',
@@ -41,7 +41,7 @@ export default defineComponent({
       }
     })
 
-    const _renderSlot = (name: string) => slots[name] && slots[name]()
+    const _renderSlot = (name: string) => slots[name]?.()
     const _renderPager = (position: string) =>
       unref(usePage) &&
       unref(pagePosition) === position && (
