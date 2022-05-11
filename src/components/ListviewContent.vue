@@ -31,7 +31,7 @@
         >
           <template #default="{ row, $index }">
             <el-radio
-              :value="selection.indexOf(row) > -1 ? '' : null"
+              :model-value="selection.indexOf(row) > -1 ? '' : false"
               :disabled="
                 selectionColumn.selectable
                   ? !selectionColumn.selectable.call(null, row, $index)
@@ -65,7 +65,7 @@
 
 <script lang="tsx">
 import type { Slots } from 'vue'
-import { h } from 'vue'
+import { defineComponent, h } from 'vue'
 import { isPlainObject, isFunction, mapKeys, kebabCase, merge } from 'lodash-es'
 import parseSize from '@laomao800/parse-size-with-unit'
 import { ElTableColumn } from 'element-plus'
@@ -74,7 +74,7 @@ import { nodeParents } from '@/utils'
 import VNode from '@/components/VNode'
 import MessageBlock from '@/components/MessageBlock.vue'
 
-export default {
+export default defineComponent({
   name: 'ListviewContent',
 
   components: { VNode, MessageBlock },
@@ -229,7 +229,7 @@ export default {
         }
         // 单选效果每次选择前清空 el-table 内部的存储值
         if (this.selectionColumn.type === 'single') {
-          ;(this.$refs.contentTable as any).store.states.selection = []
+          ;(this.$refs.contentTable as any).clearSelection()
         }
         ;(this.$refs.contentTable as any).toggleRowSelection(row)
       }
@@ -242,20 +242,20 @@ export default {
       return this.selection.indexOf(rowData.row) > -1 ? 'row--selected' : ''
     },
   },
-}
+})
 </script>
 
 <style lang="less">
 .lv__content {
   overflow: auto;
 
-  .el-table__empty-text {
-    width: auto;
-    max-width: 50%;
-    position: fixed;
-    top: 50vh;
-    left: 50vw;
-    transform: translate(-50%, -50%);
-  }
+  // .el-table__empty-text {
+  //   width: auto;
+  //   max-width: 50%;
+  //   position: fixed;
+  //   top: 50vh;
+  //   left: 50vw;
+  //   transform: translate(-50%, -50%);
+  // }
 }
 </style>

@@ -27,8 +27,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "example/**/*",
-    "tests/**/*",
-    "public/mockServiceWorker.js"
+    "tests/**/*"
   ],
   "references": [
     { "path": "./tsconfig.node.json" },

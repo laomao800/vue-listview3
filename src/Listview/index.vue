@@ -1,81 +1,91 @@
 <template>
   <StoreProvider
-    ref="storeProvider"
+    ref="storeProviderRef"
     v-bind="mergedAttrs"
-    @root-emit="(...args) => $emit.bind(this)(...args)"
+    @root-emit="handleRootEmit"
   >
     <ListviewLayout
-      ref="layout"
+      ref="layoutRef"
       v-bind="mergedAttrs"
-      @update-layout="_handleUpdateLayout"
+      @update-layout="handleUpdateLayout"
     >
       <template #header>
-        <component :is="_header" v-bind="mergedAttrs" />
+        <component :is="headerComponent" v-bind="mergedAttrs" />
       </template>
       <template #filterbar>
         <component
-          :is="_filterbar"
-          ref="filterbar"
+          :is="filterbarComponent"
+          ref="filterbarRef"
           v-bind="mergedAttrs"
-          @fold-change="_handleFilterFold"
+          @fold-change="handleFilterFold"
         >
-          <slot slot="filterbar-top" name="filterbar-top" />
-          <slot slot="filterbar-bottom" name="filterbar-bottom" />
-          <slot slot="filterbar-left" name="filterbar-left" />
-          <slot slot="filterbar-right" name="filterbar-right" />
-          <slot slot="prepend-more" name="prepend-more" />
-          <slot slot="append-more" name="append-more" />
-          <slot slot="prepend-submit" name="prepend-submit" />
-          <slot slot="append-submit" name="append-submit" />
+          <template v-if="$slots['filterbar-top']" #filterbar-top>
+            <slot name="filterbar-top" />
+          </template>
+          <template v-if="$slots['filterbar-bottom']" #filterbar-bottom>
+            <slot name="filterbar-bottom" />
+          </template>
+          <template v-if="$slots['filterbar-left']" #filterbar-left>
+            <slot name="filterbar-left" />
+          </template>
+          <template v-if="$slots['filterbar-right']" #filterbar-right>
+            <slot name="filterbar-right" />
+          </template>
+          <template v-if="$slots['prepend-more']" #prepend-more>
+            <slot name="prepend-more" />
+          </template>
+          <template v-if="$slots['append-more']" #append-more>
+            <slot name="append-more" />
+          </template>
+          <template v-if="$slots['prepend-submit']" #prepend-submit>
+            <slot name="prepend-submit" />
+          </template>
+          <template v-if="$slots['append-submit']" #append-submit>
+            <slot name="append-submit" />
+          </template>
         </component>
       </template>
       <template #content="props">
         <slot v-bind="props">
-          <component :is="_content" v-bind="mergedAttrs" />
+          <component :is="contentComponent" v-bind="mergedAttrs" />
         </slot>
       </template>
       <template #footer>
-        <component :is="_footer" v-bind="mergedAttrs">
-          <!-- <template #footer-left>
+        <component :is="footerComponent" v-bind="mergedAttrs">
+          <template v-if="$slots['footer-left']" #footer-left>
             <slot name="footer-left" />
-          </template> -->
-          <slot slot="footer-left" name="footer-left" />
-          <slot slot="footer-center" name="footer-center" />
-          <slot slot="footer-right" name="footer-right" />
+          </template>
+          <template v-if="$slots['footer-center']" #footer-center>
+            <slot name="footer-center" />
+          </template>
+          <template v-if="$slots['footer-right']" #footer-right>
+            <slot name="footer-right" />
+          </template>
         </component>
       </template>
     </ListviewLayout>
   </StoreProvider>
 </template>
 
-<!-- <script setup lang="tsx">
-import { computed } from 'vue'
-
-const props = defineProps({
-  modelValue: { type: Array, default: () => [] },
-})
-const emit = defineEmits(['update:modelValue'])
-
-const selection = computed({
-  get() {
-    return props.modelValue
-  },
-  set(value) {
-    emit('update:modelValue', value)
-  },
-})
-</script> -->
-
 <script lang="tsx">
-import { defineComponent, DefineComponent } from 'vue'
+import type { Component } from 'vue'
+import {
+  defineComponent,
+  ref,
+  unref,
+  computed,
+  getCurrentInstance,
+  nextTick,
+  useAttrs,
+} from 'vue'
 import { debounce, isPlainObject } from 'lodash-es'
+import { get } from '@/utils'
 import StoreProvider from '@/components/StoreProvider.vue'
 import ListviewLayout from '@/components/ListviewLayout.vue'
 import ListviewHeader from '@/components/ListviewHeader.vue'
 import Filterbar from '@/components/Filterbar.vue'
 import ListviewContent from '@/components/ListviewContent.vue'
 import ListviewContentFooter from '@/components/ListviewContentFooter.vue'
-import { get } from '@/utils'
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
@@ -88,70 +98,84 @@ export default defineComponent({
 
   inheritAttrs: false,
 
-  computed: {
-    mergedAttrs(): Record<string, any> {
-      const preset = (this as any).presetProps__
-      return isPlainObject(preset) ? { ...preset, ...this.$attrs } : this.$attrs
-    },
-    _header() {
-      return this._getReplaceComponent('header', ListviewHeader)
-    },
-    _filterbar() {
-      return this._getReplaceComponent('filterbar', Filterbar)
-    },
-    _content() {
-      return this._getReplaceComponent('content', ListviewContent)
-    },
-    _footer() {
-      return this._getReplaceComponent('footer', ListviewContentFooter)
-    },
+  props: {
+    // modelValue: { type: Array, default: () => [] },
   },
 
-  mounted() {
-    this.$nextTick(() => this.updateLayout())
-  },
+  emits: [
+    'filter-submit',
+    'filter-reset',
+    'before-request',
+    'request-valid-error',
+    'request-success',
+    'requested',
+    'request-error',
+  ],
 
-  methods: {
-    search(keepInPage: boolean) {
-      return (this.$refs.storeProvider as any).search(keepInPage)
-    },
-    resetFilter() {
-      ;(this.$refs.filterbar as any).handleFilterReset()
-    },
-    setContentMessage(text: string, type: string, cleanData = false) {
-      ;(this.$refs.storeProvider as any).setContentMessage(
-        text,
-        type,
-        cleanData
-      )
-    },
-    updateLayout: debounce(
-      function () {
-        // @ts-ignore
-        this._updateWrapperLayout()
-      },
-      0,
-      { leading: true }
-    ),
-    _updateWrapperLayout() {
-      try {
-        ;(this.$refs.layout as any).updateLayout()
-      } catch (e) {}
-    },
-    _updateFilterLayout() {
-      try {
-        ;(this.$refs.filterbar as any).updateLayout()
-      } catch (e) {}
-    },
-    _handleUpdateLayout() {
-      this.$nextTick().then(() => this._updateFilterLayout())
-    },
-    _handleFilterFold() {
-      this.$nextTick().then(() => this._updateWrapperLayout())
-    },
-    _getReplaceComponent(name: string, defaultComp: DefineComponent) {
-      return get((this as any).replaceComponents__, name, defaultComp)
-    },
+  setup(props, { emit }) {
+    const storeProviderRef = ref(null)
+    const layoutRef = ref(null)
+    const filterbarRef = ref(null)
+    const _cur = getCurrentInstance()
+    const attrs = useAttrs()
+
+    function _getReplaceComponent(name: string, defaultComp: Component) {
+      const _r: Record<string, any> =
+        (_cur?.data?.replaceComponents__ as any) || {}
+      return _r ? get(_r, name, defaultComp) : defaultComp
+    }
+
+    const mergedAttrs = computed<Record<string, any>>(() => {
+      const _r: Record<string, any> = (_cur?.data?.presetProps__ as any) || {}
+      return isPlainObject(_r) ? { ..._r, ...attrs } : attrs
+    })
+    const headerComponent = computed(() =>
+      _getReplaceComponent('header', ListviewHeader)
+    )
+    const filterbarComponent = computed(() =>
+      _getReplaceComponent('filterbar', Filterbar)
+    )
+    const contentComponent = computed(() =>
+      _getReplaceComponent('content', ListviewContent)
+    )
+    const footerComponent = computed(() =>
+      _getReplaceComponent('footer', ListviewContentFooter)
+    )
+
+    const _updateWrapperLayout = () =>
+      unref<any>(layoutRef)?.updateLayout?.call()
+    const _updateFilterLayout = () =>
+      unref<any>(filterbarRef)?.updateLayout?.call()
+    const handleUpdateLayout = () => nextTick().then(_updateFilterLayout)
+    const handleFilterFold = () => nextTick().then(_updateWrapperLayout)
+    const handleRootEmit = (rootEventName: string, ...args: any[]) =>
+      emit(rootEventName, ...args)
+
+    const updateLayout = debounce(_updateWrapperLayout, 0, { leading: true })
+    const resetFilter = () => unref<any>(filterbarRef)?.handleFilterReset.call()
+    const search = (keepInPage: boolean) =>
+      unref<any>(storeProviderRef)?.search(keepInPage)
+    const setContentMessage = (text: string, type: string, cleanData = false) =>
+      unref<any>(storeProviderRef)?.setContentMessage(text, type, cleanData)
+
+    return {
+      storeProviderRef,
+      layoutRef,
+      filterbarRef,
+      mergedAttrs,
+      headerComponent,
+      filterbarComponent,
+      contentComponent,
+      footerComponent,
+      handleUpdateLayout,
+      handleFilterFold,
+      handleRootEmit,
+
+      updateLayout,
+      resetFilter,
+      search,
+      setContentMessage,
+    }
   },
 })
 </script>

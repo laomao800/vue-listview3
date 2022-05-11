@@ -2,8 +2,8 @@
   <el-form
     :inline="true"
     :class="['lv__filterbar', { 'lv__filterbar--fold': isFold }]"
-    @submit.native.prevent
-    @keydown.native.enter="handleSubmit"
+    @submit.prevent
+    @keydown.enter="handleSubmit"
   >
     <div v-if="$slots['filterbar-top']" class="lv__filterbar-top">
       <slot name="filterbar-top" />
@@ -148,6 +148,8 @@ export default {
       }),
     },
   },
+
+  emits: ['fold-change'],
 
   data() {
     return {

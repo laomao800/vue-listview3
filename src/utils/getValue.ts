@@ -66,7 +66,7 @@ function stringToPath(string: string) {
 
 export default function get(
   object: Record<string, any>,
-  path: string,
+  path: string[] | string,
   defaultValue?: any
 ) {
   const result = object == null ? undefined : baseGet(object, path)

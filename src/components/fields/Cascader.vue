@@ -2,9 +2,9 @@
   <el-cascader
     v-model="value"
     v-bind="mergedProps"
-    v-on="mergedEvents"
     :options="options"
     :loading="loading"
+    v-on="mergedEvents"
   />
 </template>
 

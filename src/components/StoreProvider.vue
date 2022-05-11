@@ -1,31 +1,30 @@
-<template>
-  <el-config-provider :locale="locale">
-    <slot />
-  </el-config-provider>
-</template>
-
 <script lang="tsx">
 import { defineComponent } from 'vue'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+import { ElConfigProvider } from 'element-plus'
 import axios, { AxiosRequestConfig } from 'axios'
 import {
   cloneDeep,
   isFunction,
   isPlainObject,
   isString,
-  isError,
   merge,
   pickBy,
 } from 'lodash-es'
-import { warn, dataMapping, isValidFieldValue, ensurePromise } from '@/utils'
+import {
+  warn,
+  dataMapping,
+  isValidFieldValue,
+  ensurePromise,
+  toDisplayString,
+} from '@/utils'
 
 export default defineComponent({
   name: 'StoreProvider',
 
-  // @ts-ignore
   abstract: true,
 
-  provide(): any {
+  provide() {
     return {
       lvStore: this,
     }
@@ -71,9 +70,16 @@ export default defineComponent({
 
   emits: ['update:selection', 'root-emit'],
 
-  data(): any {
+  setup(props, { slots }) {
+    return () => (
+      <ElConfigProvider locale={zhCn}>
+        {slots.default && slots.default()}
+      </ElConfigProvider>
+    )
+  },
+
+  data() {
     return {
-      locale: zhCn,
       contentHeight: null,
       contentLoading: false,
       selection: [],
@@ -110,8 +116,8 @@ export default defineComponent({
   },
 
   methods: {
-    $rootEmitProxy(rootEvent: string, ...args: any[]) {
-      this.$emit('root-emit', rootEvent, this, ...args)
+    $rootEmitProxy(rootEventName: string, ...args: any[]) {
+      this.$emit('root-emit', rootEventName, this, ...args)
     },
 
     search(keepInPage = false) {
@@ -201,9 +207,7 @@ export default defineComponent({
             ? resolveErrorMessageFn(error)
             : error
         } catch (e) {}
-        errorMessage = isError(errorMessage)
-          ? errorMessage.toString()
-          : errorMessage
+        errorMessage = toDisplayString(errorMessage)
         this.setContentMessage(errorMessage, 'error')
         // 清空列表内容
         this.cleanContentData()
@@ -269,11 +273,7 @@ export default defineComponent({
     },
 
     setContentMessage(text = '', type = null, cleanData = false) {
-      if (text === null) {
-        this.internalContentMessage = { text: null, type: null }
-      } else {
-        this.internalContentMessage = { text, type }
-      }
+      this.internalContentMessage = { text, type }
       cleanData && this.cleanContentData()
     },
   },
