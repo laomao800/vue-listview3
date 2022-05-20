@@ -18,9 +18,10 @@
 </template>
 
 <script>
+import { defineComponent, computed } from 'vue'
 import { isPlainObject } from 'lodash-es'
 
-export default {
+export default defineComponent({
   name: 'ListviewHeader',
 
   inheritAttrs: false,
@@ -30,12 +31,12 @@ export default {
     headerNav: { type: Array, default: () => [] },
   },
 
-  computed: {
-    internalNav() {
+  setup(props) {
+    const internalNav = computed(() => {
       const validNav = []
-      this.headerNav.forEach((nav) => {
+      props.headerNav.forEach((nav) => {
         let text, to
-        if (typeof nav === 'string' && !!nav) {
+        if (typeof nav === 'string') {
           text = nav
         } else if (isPlainObject(nav)) {
           text = nav.text
@@ -46,9 +47,11 @@ export default {
         }
       })
       return validNav
-    },
+    })
+
+    return { internalNav }
   },
-}
+})
 </script>
 
 <style lang="less">
