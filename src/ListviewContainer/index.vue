@@ -22,12 +22,12 @@ export default defineComponent({
     tabPosition: { type: String, default: 'left' },
   },
 
-  setup(props) {
+  setup(props, { slots }) {
     const activeTab = ref(0)
 
     const childViews = computed<VNode[]>(() => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const _children = this.$slots?.default!()
+      const _children = slots.default && slots.default()
       return _children.map((item, index) => {
         item.key = `view-${index}`
         return item
