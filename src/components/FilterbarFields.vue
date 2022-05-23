@@ -1,6 +1,6 @@
 <script lang="tsx">
 import type { FilterField } from '~/types'
-import type { VNode, PropType } from 'vue'
+import { VNode, PropType, ref, defineComponent } from 'vue'
 import { isVNode } from 'vue'
 import { isFunction } from 'lodash-es'
 import { hasOwn, error } from '@/utils'
@@ -29,7 +29,7 @@ function isValidFieldConfig(field: any) {
 
 let uid = 0
 
-export default {
+export default defineComponent({
   name: 'FilterbarFields',
 
   props: {
@@ -39,48 +39,45 @@ export default {
     },
   },
 
-  data() {
-    return {
-      fieldRefs: [],
-    }
-  },
+  setup(props, { expose }) {
+    const fieldRefs = ref<any[]>([])
 
-  methods: {
-    renderFieldsGroup(group: FilterField[] = []) {
+    function renderFieldsGroup(group: FilterField[] = []) {
       const subFieldsVm: VNode[] = []
       group.forEach((subField) => {
-        const vm = this.renderField(subField)
+        const vm = renderField(subField)
         vm && subFieldsVm.push(vm)
       })
       return subFieldsVm.length > 0 ? (
         <div class="lv__field-group">{subFieldsVm}</div>
       ) : null
-    },
-    renderField(field = {} as FilterField) {
+    }
+
+    function renderField(field = {} as FilterField) {
       if (!isValidFieldConfig(field)) return null
 
       const key = field.key || field.model || `unnamed-field-${uid++}`
       return (
         <FilterbarField
-          {...{ ref: (ref) => this.fieldRefs.push(ref), key, field }}
+          {...{ ref: (ref: any) => fieldRefs.value.push(ref), key, field }}
         />
       )
-    },
-  },
+    }
 
-  render() {
-    return (
+    expose({
+      fieldRefs,
+    })
+
+    return () => (
       <div class="lv__fields-wrapper">
-        {this.fields.map((item) =>
+        {props.fields.map((item) =>
           // 仅对第一层嵌套的 array 作组合
-          Array.isArray(item)
-            ? this.renderFieldsGroup(item)
-            : this.renderField(item)
+          Array.isArray(item) ? renderFieldsGroup(item) : renderField(item)
         )}
       </div>
     )
   },
-}
+})
 </script>
 
 <style lang="less">
