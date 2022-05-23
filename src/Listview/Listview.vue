@@ -1,9 +1,5 @@
 <template>
-  <StoreProvider
-    ref="storeProviderRef"
-    v-bind="mergedAttrs"
-    @root-emit="handleRootEmit"
-  >
+  <StoreProvider ref="storeProviderRef" v-bind="mergedAttrs" @root-emit="$emit">
     <ListviewLayout
       ref="layoutRef"
       v-bind="mergedAttrs"
@@ -67,10 +63,9 @@
   </StoreProvider>
 </template>
 
-<script lang="tsx">
+<script lang="tsx" setup>
 import type { Component } from 'vue'
 import {
-  defineComponent,
   ref,
   unref,
   computed,
@@ -87,95 +82,64 @@ import Filterbar from '@/components/Filterbar.vue'
 import ListviewContent from '@/components/ListviewContent.vue'
 import ListviewContentFooter from '@/components/ListviewContentFooter.vue'
 
-export default defineComponent({
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Listview',
-
-  components: {
-    StoreProvider,
-    ListviewLayout,
-  },
-
+defineOptions({
   inheritAttrs: false,
+})
 
-  props: {
-    // modelValue: { type: Array, default: () => [] },
-  },
+defineEmits([
+  'filter-submit',
+  'filter-reset',
+  'before-request',
+  'request-valid-error',
+  'request-success',
+  'request-error',
+  'requested',
+])
 
-  emits: [
-    'filter-submit',
-    'filter-reset',
-    'before-request',
-    'request-valid-error',
-    'request-success',
-    'requested',
-    'request-error',
-  ],
+const storeProviderRef = ref(null)
+const layoutRef = ref(null)
+const filterbarRef = ref(null)
+const _cur = getCurrentInstance()
+const attrs = useAttrs()
 
-  setup(props, { emit }) {
-    const storeProviderRef = ref(null)
-    const layoutRef = ref(null)
-    const filterbarRef = ref(null)
-    const _cur = getCurrentInstance()
-    const attrs = useAttrs()
+function _getReplaceComponent(name: string, defaultComp: Component) {
+  const _r: Record<string, any> = (_cur?.data?.replaceComponents__ as any) || {}
+  return _r ? get(_r, name, defaultComp) : defaultComp
+}
 
-    function _getReplaceComponent(name: string, defaultComp: Component) {
-      const _r: Record<string, any> =
-        (_cur?.data?.replaceComponents__ as any) || {}
-      return _r ? get(_r, name, defaultComp) : defaultComp
-    }
+const mergedAttrs = computed<Record<string, any>>(() => {
+  const _r: Record<string, any> = (_cur?.data?.presetProps__ as any) || {}
+  return isPlainObject(_r) ? { ..._r, ...attrs } : attrs
+})
+const headerComponent = computed(() =>
+  _getReplaceComponent('header', ListviewHeader)
+)
+const filterbarComponent = computed(() =>
+  _getReplaceComponent('filterbar', Filterbar)
+)
+const contentComponent = computed(() =>
+  _getReplaceComponent('content', ListviewContent)
+)
+const footerComponent = computed(() =>
+  _getReplaceComponent('footer', ListviewContentFooter)
+)
 
-    const mergedAttrs = computed<Record<string, any>>(() => {
-      const _r: Record<string, any> = (_cur?.data?.presetProps__ as any) || {}
-      return isPlainObject(_r) ? { ..._r, ...attrs } : attrs
-    })
-    const headerComponent = computed(() =>
-      _getReplaceComponent('header', ListviewHeader)
-    )
-    const filterbarComponent = computed(() =>
-      _getReplaceComponent('filterbar', Filterbar)
-    )
-    const contentComponent = computed(() =>
-      _getReplaceComponent('content', ListviewContent)
-    )
-    const footerComponent = computed(() =>
-      _getReplaceComponent('footer', ListviewContentFooter)
-    )
+const _updateWrapperLayout = () => unref<any>(layoutRef)?.updateLayout?.call()
+const _updateFilterLayout = () => unref<any>(filterbarRef)?.updateLayout?.call()
+const handleUpdateLayout = () => nextTick().then(_updateFilterLayout)
+const handleFilterFold = () => nextTick().then(_updateWrapperLayout)
 
-    const _updateWrapperLayout = () =>
-      unref<any>(layoutRef)?.updateLayout?.call()
-    const _updateFilterLayout = () =>
-      unref<any>(filterbarRef)?.updateLayout?.call()
-    const handleUpdateLayout = () => nextTick().then(_updateFilterLayout)
-    const handleFilterFold = () => nextTick().then(_updateWrapperLayout)
-    const handleRootEmit = (rootEventName: string, ...args: any[]) =>
-      emit(rootEventName, ...args)
+const updateLayout = debounce(_updateWrapperLayout, 0, { leading: true })
+const resetFilter = () => unref<any>(filterbarRef)?.handleFilterReset.call()
+const search = (keepInPage: boolean) =>
+  unref<any>(storeProviderRef)?.search(keepInPage)
+const setContentMessage = (text: string, type: string, cleanData = false) =>
+  unref<any>(storeProviderRef)?.setContentMessage(text, type, cleanData)
 
-    const updateLayout = debounce(_updateWrapperLayout, 0, { leading: true })
-    const resetFilter = () => unref<any>(filterbarRef)?.handleFilterReset.call()
-    const search = (keepInPage: boolean) =>
-      unref<any>(storeProviderRef)?.search(keepInPage)
-    const setContentMessage = (text: string, type: string, cleanData = false) =>
-      unref<any>(storeProviderRef)?.setContentMessage(text, type, cleanData)
-
-    return {
-      storeProviderRef,
-      layoutRef,
-      filterbarRef,
-      mergedAttrs,
-      headerComponent,
-      filterbarComponent,
-      contentComponent,
-      footerComponent,
-      handleUpdateLayout,
-      handleFilterFold,
-      handleRootEmit,
-
-      updateLayout,
-      resetFilter,
-      search,
-      setContentMessage,
-    }
-  },
+defineExpose({
+  updateLayout,
+  resetFilter,
+  search,
+  setContentMessage,
 })
 </script>

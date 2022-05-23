@@ -12,6 +12,9 @@ module.exports = {
     '@vue/typescript/recommended',
     '@vue/eslint-config-prettier',
   ],
+  globals: {
+    defineOptions: 'readonly',
+  },
   parserOptions: {
     ecmaVersion: 2020,
   },
