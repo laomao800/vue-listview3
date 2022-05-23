@@ -1,6 +1,7 @@
 import type { FilterField, LvStore } from '~/types'
 import { inject } from 'vue'
-import { isPlainObject, isEmpty, isFunction, isNil } from 'lodash-es'
+import { isEmpty, isNil } from 'lodash-es'
+import { isPlainObject, isFunction } from 'is-what'
 import { get } from '@/utils'
 import { default as _parseSize } from '@laomao800/parse-size-with-unit'
 

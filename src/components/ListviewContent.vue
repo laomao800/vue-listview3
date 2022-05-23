@@ -66,7 +66,8 @@
 <script lang="tsx">
 import type { Slots } from 'vue'
 import { defineComponent, h } from 'vue'
-import { isPlainObject, isFunction, mapKeys, kebabCase, merge } from 'lodash-es'
+import { mapKeys, kebabCase, merge } from 'lodash-es'
+import { isPlainObject, isFunction } from 'is-what'
 import parseSize from '@laomao800/parse-size-with-unit'
 import { ElTableColumn } from 'element-plus'
 import storeProviderMixin from '@/mixins/storeProviderMixin'

@@ -3,7 +3,7 @@ import type { PropType } from 'vue'
 import { isVNode, defineComponent, h } from 'vue'
 import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
-import { isPlainObject, isFunction } from 'lodash-es'
+import { isPlainObject, isFunction } from 'is-what'
 import vNode from './VNode'
 import { hasRenderFn, warn } from '@/utils'
 import {

@@ -73,7 +73,8 @@ import {
   nextTick,
   useAttrs,
 } from 'vue'
-import { debounce, isPlainObject } from 'lodash-es'
+import { debounce } from 'lodash-es'
+import { isPlainObject } from 'is-what'
 import { get } from '@/utils'
 import StoreProvider from '@/components/StoreProvider.vue'
 import ListviewLayout from '@/components/ListviewLayout.vue'

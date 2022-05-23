@@ -1,6 +1,7 @@
 import type { FilterField } from '~/types'
-import { PropType } from 'vue'
-import { merge, isPlainObject, isFunction } from 'lodash-es'
+import type { PropType } from 'vue'
+import { merge } from 'lodash-es'
+import { isPlainObject, isFunction } from 'is-what'
 import storeProviderMixin from '@/mixins/storeProviderMixin'
 import { error, get } from '@/utils'
 

@@ -1,5 +1,6 @@
 import { defineComponent } from 'vue'
-import { pick, isPlainObject } from 'lodash-es'
+import { isPlainObject } from 'is-what'
+import { pick } from 'lodash-es'
 import { Listview as _Listview } from '@/index'
 
 const allowPresetProps = [

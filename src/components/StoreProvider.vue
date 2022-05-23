@@ -3,14 +3,8 @@ import { defineComponent } from 'vue'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import { ElConfigProvider } from 'element-plus'
 import axios, { AxiosRequestConfig } from 'axios'
-import {
-  cloneDeep,
-  isFunction,
-  isPlainObject,
-  isString,
-  merge,
-  pickBy,
-} from 'lodash-es'
+import { cloneDeep, merge, pickBy } from 'lodash-es'
+import { isFunction, isPlainObject, isString } from 'is-what'
 import {
   warn,
   dataMapping,

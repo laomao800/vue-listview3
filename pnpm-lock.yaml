@@ -22,6 +22,7 @@ specifiers:
   eslint-plugin-prettier: ^4.0.0
   eslint-plugin-vue: ^8.6.0
   has-values: ^2.0.1
+  is-what: ^4.1.7
   jsdom: ^19.0.0
   less: ^4.1.2
   lodash-es: ^4.17.21
@@ -44,6 +45,7 @@ dependencies:
   '@element-plus/icons-vue': 1.1.4_vue@3.2.33
   '@laomao800/parse-size-with-unit': 1.0.3
   has-values: 2.0.1
+  is-what: registry.npmjs.org/is-what/4.1.7
   lodash-es: 4.17.21
   normalize.css: 8.0.1
   vue: 3.2.33
@@ -1049,7 +1051,7 @@ packages:
   /copy-anything/2.0.6:
     resolution: {integrity: sha512-1j20GZTsvKNkc4BY3NpMOM8tt///wY3FpIzozTOFO2ffuZcV61nojHXVKIy3WM+7ADCy5FVhdZYHYDdgTU0yJw==}
     dependencies:
-      is-what: 3.14.1
+      is-what: registry.npmjs.org/is-what/3.14.1
     dev: true
 
   /cross-spawn/7.0.3:
@@ -1584,10 +1586,6 @@ packages:
 
   /is-potential-custom-element-name/1.0.1:
     resolution: {integrity: sha512-bCYeRA2rVibKZd+s2625gGnGF/t7DSqDs4dP7CrLA1m7jKWz6pps0LpYLJN8Q64HtmPKJ1hrN3nzPNKFEKOUiQ==}
-    dev: true
-
-  /is-what/3.14.1:
-    resolution: {integrity: sha512-sNxgpk9793nzSs7bA6JQJGeIuRBQhAaNGG77kzYQgMkrID+lS6SlK07K5LaptscDlSaIgH+GPFzf+d75FVxozA==}
     dev: true
 
   /js-tokens/4.0.0:
@@ -3410,6 +3408,19 @@ packages:
     version: 0.1.0
     engines: {node: '>=10'}
     dev: true
+
+  registry.npmjs.org/is-what/3.14.1:
+    resolution: {integrity: sha512-sNxgpk9793nzSs7bA6JQJGeIuRBQhAaNGG77kzYQgMkrID+lS6SlK07K5LaptscDlSaIgH+GPFzf+d75FVxozA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/is-what/-/is-what-3.14.1.tgz}
+    name: is-what
+    version: 3.14.1
+    dev: true
+
+  registry.npmjs.org/is-what/4.1.7:
+    resolution: {integrity: sha512-DBVOQNiPKnGMxRMLIYSwERAS5MVY1B7xYiGnpgctsOFvVDz9f9PFXXxMcTOHuoqYp4NK9qFYQaIC1NRRxLMpBQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/is-what/-/is-what-4.1.7.tgz}
+    name: is-what
+    version: 4.1.7
+    engines: {node: '>=12.13'}
+    dev: false
 
   registry.npmjs.org/isexe/2.0.0:
     resolution: {integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz}
