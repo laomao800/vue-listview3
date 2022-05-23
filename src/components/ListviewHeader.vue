@@ -17,40 +17,39 @@
   </div>
 </template>
 
-<script>
-import { defineComponent, computed } from 'vue'
-import { isPlainObject } from 'lodash-es'
+<script lang="ts" setup>
+import { computed } from 'vue'
+import { isPlainObject } from 'is-what'
 
-export default defineComponent({
-  name: 'ListviewHeader',
+interface ValidedNavItem {
+  text: string
+  to?: any
+}
 
+defineOptions({
   inheritAttrs: false,
+})
 
-  props: {
-    headerTitle: { type: String, default: '' },
-    headerNav: { type: Array, default: () => [] },
-  },
+const props = defineProps({
+  headerTitle: { type: String, default: '' },
+  headerNav: { type: Array, default: () => [] },
+})
 
-  setup(props) {
-    const internalNav = computed(() => {
-      const validNav = []
-      props.headerNav.forEach((nav) => {
-        let text, to
-        if (typeof nav === 'string') {
-          text = nav
-        } else if (isPlainObject(nav)) {
-          text = nav.text
-          to = nav.to
-        }
-        if (text) {
-          validNav.push({ text, to })
-        }
-      })
-      return validNav
-    })
-
-    return { internalNav }
-  },
+const internalNav = computed(() => {
+  const validNav: ValidedNavItem[] = []
+  props.headerNav.forEach((nav) => {
+    let text, to
+    if (typeof nav === 'string') {
+      text = nav
+    } else if (isPlainObject(nav)) {
+      text = nav.text
+      to = nav.to
+    }
+    if (text) {
+      validNav.push({ text, to })
+    }
+  })
+  return validNav
 })
 </script>
 
