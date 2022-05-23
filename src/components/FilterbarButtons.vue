@@ -1,10 +1,9 @@
 <script lang="tsx">
-import type { PropType } from 'vue'
+import type { PropType, VNode } from 'vue'
 import { isVNode, defineComponent, h } from 'vue'
 import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { isPlainObject, isFunction } from 'is-what'
-import vNode from './VNode'
 import { hasRenderFn, warn } from '@/utils'
 import {
   FilterButton,
@@ -26,9 +25,18 @@ function isDropdownButton(item: any): item is FilterButtonHasChildren {
   return isPlainObject(item) && Array.isArray(item.children)
 }
 
+interface NormalizedButton {
+  text: string
+  children: NormalizedButton[]
+  buttonAttrs: Record<string, any> & {
+    icon?: VNode | null
+    onClick?: ($event: MouseEvent) => void
+  }
+}
+
 function normalizeButton(
   button: FilterButton | FilterButtonHasChildren | FilterButtonHasRender
-) {
+): NormalizedButton {
   const { click, icon: _icon, children: _children, ...buttonAttrs } = button
   const icon = _icon ? <el-icon>{h(_icon)}</el-icon> : null
 
@@ -42,7 +50,7 @@ function normalizeButton(
   }
 
   const children = Array.isArray(_children)
-    ? button.children.map(normalizeButton)
+    ? _children.map(normalizeButton)
     : []
 
   return {
@@ -59,10 +67,6 @@ function normalizeButton(
 export default defineComponent({
   name: 'FilterbarButtons',
 
-  components: {
-    vNode,
-  },
-
   props: {
     buttons: {
       type: Array as PropType<FilterButton[]>,
@@ -70,29 +74,29 @@ export default defineComponent({
     },
   },
 
-  methods: {
-    renderButton(button: FilterButton) {
+  setup(props) {
+    function renderButton(button: FilterButton) {
       if (!isValidButtonConfig(button)) return null
 
       if (isFunction(button)) {
-        return <vNode node={button()} />
+        return h(button())
       } else if (hasRenderFn<FilterButtonHasRender>(button)) {
-        return <vNode node={button.render()} />
+        return h(button.render())
       } else if (isVNode(button)) {
-        return <vNode node={button} />
+        return
       } else if (isDropdownButton(button)) {
-        return this.renderDropdownButton(button)
+        return renderDropdownButton(button)
       } else {
-        return this.renderSingleButton(button)
+        return renderSingleButton(button)
       }
-    },
+    }
 
-    renderSingleButton(button: FilterButton) {
+    function renderSingleButton(button: FilterButton) {
       const { text, buttonAttrs } = normalizeButton(button)
       return <el-button {...buttonAttrs}>{text}</el-button>
-    },
+    }
 
-    renderDropdownButton(button: FilterButtonHasChildren) {
+    function renderDropdownButton(button: FilterButtonHasChildren) {
       const { text, children, buttonAttrs } = normalizeButton(button)
       return h(
         ElDropdown,
@@ -122,19 +126,21 @@ export default defineComponent({
             <ElDropdownMenu>
               {children.map((child) => {
                 const { text, buttonAttrs } = child
-                return <ElDropdownItem {...buttonAttrs}>{text}</ElDropdownItem>
+                return (
+                  <ElDropdownItem {...(buttonAttrs as any)}>
+                    {text}
+                  </ElDropdownItem>
+                )
               })}
             </ElDropdownMenu>
           ),
         }
       )
-    },
-  },
+    }
 
-  render() {
-    return (
+    return () => (
       <el-form-item>
-        {this.buttons.map((button) => this.renderButton(button))}
+        {props.buttons.map((button) => renderButton(button))}
       </el-form-item>
     )
   },

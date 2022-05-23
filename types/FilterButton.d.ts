@@ -15,8 +15,11 @@ export interface FilterButton {
   /** 按钮文本 */
   text?: string
 
-  /** 按钮点击事件 */
+  /** @deprecated 按钮点击事件，请使用 onClick 属性代替 */
   click?: ($event: MouseEvent) => void
+
+  /** 按钮点击事件 */
+  onClick?: ($event: MouseEvent) => void
 
   /** 是否展示为分裂按钮 */
   splitButton?: boolean
@@ -25,6 +28,9 @@ export interface FilterButton {
   children?: {
     icon?: FilterButton['icon']
     text?: FilterButton['text']
+    onClick?: FilterButton['onClick']
+
+    /** @deprecated 按钮点击事件，请使用 onClick 属性代替 */
     click?: FilterButton['click']
   }[]
 
