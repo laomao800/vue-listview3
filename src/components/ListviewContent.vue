@@ -249,13 +249,12 @@ export default defineComponent({
 .lv__content {
   overflow: auto;
 
-  // .el-table__empty-text {
-  //   width: auto;
-  //   max-width: 50%;
-  //   position: fixed;
-  //   top: 50vh;
-  //   left: 50vw;
-  //   transform: translate(-50%, -50%);
-  // }
+  .el-scrollbar__view {
+    height: 100%;
+  }
+
+  .el-table__empty-text {
+    width: auto;
+  }
 }
 </style>
