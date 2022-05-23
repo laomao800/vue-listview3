@@ -1,6 +1,21 @@
-<script lang="tsx">
+<template>
+  <span
+    :class="{
+      lv__message: true,
+      [`lv__message--${type}`]: type,
+    }"
+  >
+    <span class="lv__message-icon">
+      <el-icon>
+        <Icon />
+      </el-icon>
+    </span>
+    <span class="lv__message-text">{{ text || '' }}</span>
+  </span>
+</template>
+
+<script lang="tsx" setup>
 import type { PropType } from 'vue'
-import { defineComponent } from 'vue'
 import {
   WarningFilled,
   InfoFilled,
@@ -15,39 +30,18 @@ const iconMap = {
 
 type IconType = keyof typeof iconMap
 
-export default defineComponent({
-  name: 'MessageBlock',
-
-  props: {
-    type: {
-      type: String as PropType<IconType>,
-      default: 'warning',
-    },
-    text: {
-      type: [String, Object],
-      default: '',
-    },
+const props = defineProps({
+  type: {
+    type: String as PropType<IconType>,
+    default: 'warning',
   },
-
-  setup(props) {
-    const className = {
-      lv__message: true,
-      [`lv__message--${props.type}`]: props.type,
-    }
-    const Icon = iconMap[props.type] || iconMap['warning']
-
-    return () => (
-      <span class={className}>
-        <span class="lv__message-icon">
-          <el-icon>
-            <Icon />
-          </el-icon>
-        </span>
-        <span class="lv__message-text">{props.text || ''}</span>
-      </span>
-    )
+  text: {
+    type: [String, Object],
+    default: '',
   },
 })
+
+const Icon = iconMap[props.type] || iconMap['warning']
 </script>
 
 <style lang="less">
