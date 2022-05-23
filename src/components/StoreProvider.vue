@@ -64,14 +64,6 @@ export default defineComponent({
 
   emits: ['update:selection', 'root-emit'],
 
-  setup(props, { slots }) {
-    return () => (
-      <ElConfigProvider locale={zhCn}>
-        {slots.default && slots.default()}
-      </ElConfigProvider>
-    )
-  },
-
   data() {
     return {
       contentHeight: null,
@@ -270,6 +262,14 @@ export default defineComponent({
       this.internalContentMessage = { text, type }
       cleanData && this.cleanContentData()
     },
+  },
+
+  render() {
+    return (
+      <ElConfigProvider locale={zhCn}>
+        {this.$slots.default && this.$slots.default()}
+      </ElConfigProvider>
+    )
   },
 })
 </script>
