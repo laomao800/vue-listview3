@@ -70,7 +70,7 @@ export default defineComponent({
 
       if (isFunction(button)) {
         return h(button())
-      } else if (isFunction(button?.render)) {
+      } else if (isFunction(button.render)) {
         return h(button.render())
       } else if (isVNode(button)) {
         return h(button)
