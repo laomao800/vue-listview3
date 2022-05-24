@@ -64,7 +64,3 @@ export interface FilterField {
 
   render?: () => VNode
 }
-
-export interface FilterFieldHasRender extends FilterField {
-  render: () => VNode
-}

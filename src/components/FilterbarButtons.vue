@@ -4,12 +4,17 @@ import { isVNode, defineComponent, h } from 'vue'
 import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { isPlainObject, isFunction } from 'is-what'
-import { hasRenderFn, warn } from '@/utils'
-import {
-  FilterButton,
-  FilterButtonHasChildren,
-  FilterButtonHasRender,
-} from '~/types'
+import { warn } from '@/utils'
+import { FilterButton } from '~/types'
+
+interface NormalizedButton {
+  text: string
+  children: NormalizedButton[]
+  buttonAttrs: Record<string, any> & {
+    icon?: VNode | null
+    onClick?: ($event: MouseEvent) => void
+  }
+}
 
 function isValidButtonConfig(button: any) {
   return (
@@ -21,22 +26,7 @@ function isValidButtonConfig(button: any) {
   )
 }
 
-function isDropdownButton(item: any): item is FilterButtonHasChildren {
-  return isPlainObject(item) && Array.isArray(item.children)
-}
-
-interface NormalizedButton {
-  text: string
-  children: NormalizedButton[]
-  buttonAttrs: Record<string, any> & {
-    icon?: VNode | null
-    onClick?: ($event: MouseEvent) => void
-  }
-}
-
-function normalizeButton(
-  button: FilterButton | FilterButtonHasChildren | FilterButtonHasRender
-): NormalizedButton {
+function normalizeButton(button: FilterButton): NormalizedButton {
   const { click, icon: _icon, children: _children, ...buttonAttrs } = button
   const icon = _icon ? <el-icon>{h(_icon)}</el-icon> : null
 
@@ -80,11 +70,11 @@ export default defineComponent({
 
       if (isFunction(button)) {
         return h(button())
-      } else if (hasRenderFn<FilterButtonHasRender>(button)) {
+      } else if (isFunction(button?.render)) {
         return h(button.render())
       } else if (isVNode(button)) {
-        return
-      } else if (isDropdownButton(button)) {
+        return h(button)
+      } else if (Array.isArray(button.children)) {
         return renderDropdownButton(button)
       } else {
         return renderSingleButton(button)
@@ -96,7 +86,7 @@ export default defineComponent({
       return <el-button {...buttonAttrs}>{text}</el-button>
     }
 
-    function renderDropdownButton(button: FilterButtonHasChildren) {
+    function renderDropdownButton(button: FilterButton) {
       const { text, children, buttonAttrs } = normalizeButton(button)
       return h(
         ElDropdown,

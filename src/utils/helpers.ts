@@ -85,10 +85,6 @@ export function hasOwn(obj: Record<string, unknown>, key: string) {
   return Object.prototype.hasOwnProperty.call(obj, key)
 }
 
-export function hasRenderFn<T>(item: any): item is T {
-  return isPlainObject(item) && isFunction(item.render)
-}
-
 export function ensurePromise<T>(data: T) {
   return isPromise(data) ? data : Promise.resolve(data)
 }
