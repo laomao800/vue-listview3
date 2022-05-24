@@ -1,6 +1,3 @@
-import type { Component } from 'vue'
-import type { FieldType } from '~/types'
-
 import fieldCascader from './Cascader.vue'
 import fieldDateTime from './DateTime.vue'
 import fieldSelect from './Select.vue'
@@ -15,23 +12,7 @@ import fieldLabel from './Label.vue'
 import fieldNumber from './Number.vue'
 import fieldTimePicker from './TimePicker.vue'
 
-export const allFieldComponents = {
-  fieldCascader,
-  fieldDateTime,
-  fieldSelect,
-  fieldTimePickerRange,
-  fieldDate,
-  fieldDateTimeRange,
-  fieldMultipleSelect,
-  fieldText,
-  fieldTimeSelect,
-  fieldDateRange,
-  fieldLabel,
-  fieldNumber,
-  fieldTimePicker,
-}
-
-export const fieldComponentsMap: Record<FieldType, Component> = {
+const fieldComponentsMap = {
   cascader: fieldCascader,
   dateTime: fieldDateTime,
   select: fieldSelect,
@@ -47,6 +28,6 @@ export const fieldComponentsMap: Record<FieldType, Component> = {
   timePicker: fieldTimePicker,
 }
 
-export function getFieldComponent(type: FieldType) {
+export function getFieldComponent(type: keyof typeof fieldComponentsMap) {
   return fieldComponentsMap[type] || null
 }

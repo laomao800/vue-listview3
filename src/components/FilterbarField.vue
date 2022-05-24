@@ -1,81 +1,75 @@
-<script lang="tsx">
-import type { FilterField, FilterFieldHasRender, LvStore } from '~/types'
+<template>
+  <div class="lv__field">
+    <InnerContent v-if="InnerContent" />
+    <InnerLabel v-if="InnerLabel" />
+  </div>
+</template>
+
+<script lang="tsx" setup>
+import type { FilterField } from '~/types'
 import type { PropType, VNode } from 'vue'
 
-import { computed, inject, unref, isVNode, Transition } from 'vue'
+import { computed, unref, isVNode, Transition, h } from 'vue'
 import hasValues from 'has-values'
 import { isFunction } from 'lodash-es'
-import { hasRenderFn, get } from '@/utils'
-import vNode from './VNode'
+import { isPlainObject } from 'is-what'
+import { get, useLvStore } from '@/utils'
 import { getFieldComponent } from './fields/index'
-import { defineComponent } from 'vue'
-import storeProviderMixin from '@/mixins/storeProviderMixin'
-import { allFieldComponents } from './fields/index'
 
-export default defineComponent({
-  name: 'FilterbarField',
+const _isFieldObj = (payload: typeof props.field): payload is FilterField =>
+  isPlainObject(payload)
 
-  components: { ...allFieldComponents },
+const lvStore = useLvStore()
 
-  mixins: [storeProviderMixin],
-
-  props: {
-    field: {
-      type: [Object, Function] as PropType<FilterField>,
-      default: () => ({}),
-    },
-  },
-
-  setup(props) {
-    const field = props.field || {}
-    const lvStore = inject<LvStore>('lvStore')
-    const showLabelRef = computed(() => {
-      const value = get(lvStore.filterModel, field.model)
-      // hasValues(null) -> true
-      return value !== null && hasValues(value)
-    })
-    let InnerLabel: VNode | null = null
-    let InnerContent = null
-
-    InnerLabel = field?.label ? (
-      <Transition name="lv__field-label-trans">
-        {unref(showLabelRef) && (
-          <div class="lv__field-label">{field.label}</div>
-        )}
-      </Transition>
-    ) : null
-
-    if (isFunction(field)) {
-      const fieldVm = field()
-      InnerContent = <vNode node={fieldVm} />
-    } else if (hasRenderFn<FilterFieldHasRender>(field)) {
-      const fieldVm = field.render()
-      InnerContent = <vNode node={fieldVm} />
-    } else if (isVNode(field)) {
-      InnerContent = <vNode node={field} />
-    } else {
-      const FieldComponent = getFieldComponent(field?.type) as any
-      if (FieldComponent) {
-        InnerContent = (
-          <el-form-item>
-            <FieldComponent
-              {...{
-                field,
-                style: field?.width ? { width: `${field?.width}px` } : null,
-              }}
-            />
-          </el-form-item>
-        )
-      }
-    }
-    return () => (
-      <div class="lv__field">
-        {InnerContent}
-        {InnerLabel}
-      </div>
-    )
+const props = defineProps({
+  field: {
+    type: [Object, Function] as PropType<FilterField | VNode | (() => VNode)>,
+    default: () => ({}),
   },
 })
+
+const showLabelRef = computed(() => {
+  const modelName = get(props.field, 'model')
+  if (modelName) {
+    const value = get(lvStore.filterModel, modelName)
+    // hasValues(null) -> true
+    return value !== null && hasValues(value)
+  }
+  return false
+})
+
+let InnerLabel: VNode | null = null
+let InnerContent: VNode | null = null
+
+if (_isFieldObj(props.field)) {
+  InnerLabel = props.field?.label ? (
+    <Transition name="lv__field-label-trans">
+      {unref(showLabelRef) && (
+        <div class="lv__field-label">{props.field.label}</div>
+      )}
+    </Transition>
+  ) : null
+
+  if (isFunction(props.field.render)) {
+    InnerContent = props.field.render()
+  } else {
+    const FieldComponent = getFieldComponent(props.field.type) as any
+    if (FieldComponent) {
+      const style = props.field.width
+        ? { width: `${props.field.width}px` }
+        : null
+      InnerContent = (
+        <el-form-item>
+          <FieldComponent {...{ field: props.field, style }} />
+        </el-form-item>
+      )
+    }
+  }
+} else if (isFunction(props.field)) {
+  InnerContent = props.field()
+} else if (isVNode(props.field)) {
+  InnerContent = h(props.field)
+}
 </script>
 
 <style lang="less">
