@@ -6,7 +6,7 @@
     @blur="onBlur"
   >
     <template v-for="(slot, key) in componentSlots" #[key]>
-      <v-node v-if="isVNode(slot)" :key="key" :node="slot" />
+      <component :is="slot" v-if="isVNode(slot)" :key="key" />
       <template v-else>{{ slot }}</template>
     </template>
   </el-input>
@@ -15,15 +15,10 @@
 <script>
 import { isVNode } from 'vue'
 import fieldMixin from '@/mixins/fieldMixin'
-import VNode from '../VNode'
 import { hasOwn } from '@/utils'
 
 export default {
   name: 'FieldText',
-
-  components: {
-    VNode,
-  },
 
   mixins: [fieldMixin],
 

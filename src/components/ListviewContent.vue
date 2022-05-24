@@ -54,10 +54,10 @@
         />
       </template>
 
-      <v-node
+      <component
+        :is="renderTableColumn(column)"
         v-for="(column, index) in tableColumns"
         :key="`col${index}`"
-        :node="renderTableColumn(column)"
       />
     </el-table>
   </div>
@@ -72,13 +72,12 @@ import parseSize from '@laomao800/parse-size-with-unit'
 import { ElTableColumn } from 'element-plus'
 import storeProviderMixin from '@/mixins/storeProviderMixin'
 import { nodeParents } from '@/utils'
-import VNode from '@/components/VNode'
 import MessageBlock from '@/components/MessageBlock.vue'
 
 export default defineComponent({
   name: 'ListviewContent',
 
-  components: { VNode, MessageBlock },
+  components: { MessageBlock },
 
   mixins: [storeProviderMixin],
 
