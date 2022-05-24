@@ -42,7 +42,7 @@ export declare class LvStore {
   currentPage: number
   currentPageSize: number
   contentData: Record<string, any>
-  internalContentMessage: null | ContentMessageObject
+  internalContentMessage: ContentMessageObject | null
 
   // Methods
   $rootEmitProxy: (eventName: string, ...args: any[]) => void
