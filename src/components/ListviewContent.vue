@@ -70,9 +70,8 @@ import { mapKeys, kebabCase, merge } from 'lodash-es'
 import { isPlainObject, isFunction } from 'is-what'
 import parseSize from '@laomao800/parse-size-with-unit'
 import { ElTableColumn } from 'element-plus'
-import { useLvStore } from '@/utils'
+import { useLvStore, nodeParents } from '@/utils'
 
-import { nodeParents } from '@/utils'
 import MessageBlock from '@/components/MessageBlock.vue'
 import { TableColumn } from '~/types'
 
