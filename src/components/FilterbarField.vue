@@ -1,7 +1,7 @@
 <template>
   <div class="lv__field">
-    <InnerContent v-if="InnerContent" />
-    <InnerLabel v-if="InnerLabel" />
+    <component :is="InnerContent" />
+    <component :is="InnerLabel" />
   </div>
 </template>
 

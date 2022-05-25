@@ -64,7 +64,7 @@ function stringToPath(string: string) {
   return result
 }
 
-export default function get(
+export function get(
   object: Record<string, any>,
   path: string[] | string,
   defaultValue?: any

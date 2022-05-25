@@ -1,31 +1,31 @@
-import fieldCascader from './Cascader.vue'
-import fieldDateTime from './DateTime.vue'
-import fieldSelect from './Select.vue'
-import fieldTimePickerRange from './TimePickerRange.vue'
-import fieldDate from './Date.vue'
-import fieldDateTimeRange from './DateTimeRange.vue'
-import fieldMultipleSelect from './MultipleSelect.vue'
-import fieldText from './Text.vue'
-import fieldTimeSelect from './TimeSelect.vue'
-import fieldDateRange from './DateRange.vue'
-import fieldLabel from './Label.vue'
-import fieldNumber from './Number.vue'
-import fieldTimePicker from './TimePicker.vue'
+import fieldCascader from './FieldCascader.vue'
+import fieldDate from './FieldDate.vue'
+import fieldDateRange from './FieldDateRange.vue'
+import fieldDateTime from './FieldDateTime.vue'
+import fieldDateTimeRange from './FieldDateTimeRange.vue'
+import fieldLabel from './FieldLabel.vue'
+import fieldMultipleSelect from './FieldMultipleSelect.vue'
+import fieldNumber from './FieldNumber.vue'
+import fieldSelect from './FieldSelect.vue'
+import fieldText from './FieldText.vue'
+import fieldTimePicker from './FieldTimePicker.vue'
+import fieldTimePickerRange from './FieldTimePickerRange.vue'
+import fieldTimeSelect from './FieldTimeSelect.vue'
 
 const fieldComponentsMap = {
   cascader: fieldCascader,
-  dateTime: fieldDateTime,
-  select: fieldSelect,
-  timePickerRange: fieldTimePickerRange,
   date: fieldDate,
-  dateTimeRange: fieldDateTimeRange,
-  multipleSelect: fieldMultipleSelect,
-  text: fieldText,
-  timeSelect: fieldTimeSelect,
   dateRange: fieldDateRange,
+  dateTime: fieldDateTime,
+  dateTimeRange: fieldDateTimeRange,
   label: fieldLabel,
+  multipleSelect: fieldMultipleSelect,
   number: fieldNumber,
+  select: fieldSelect,
+  text: fieldText,
   timePicker: fieldTimePicker,
+  timePickerRange: fieldTimePickerRange,
+  timeSelect: fieldTimeSelect,
 }
 
 export function getFieldComponent(type: keyof typeof fieldComponentsMap) {
