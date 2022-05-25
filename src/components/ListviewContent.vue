@@ -166,7 +166,7 @@ watch(contentData, () => {
  * el-table 表格选中数据同步至父组件
  */
 function handleTableSelectionChange(val: any) {
-  this.selection = val
+  selection.value = val
 }
 
 /**

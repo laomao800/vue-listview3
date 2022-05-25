@@ -66,7 +66,7 @@ export default defineComponent({
 
         <div class="lvc__content">
           <KeepAlive>
-            {this.childViews.map((item, index) =>
+            {unref(childViews).map((item, index) =>
               index === unref(activeTab) ? item : null
             )}
           </KeepAlive>

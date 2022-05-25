@@ -21,14 +21,13 @@ import {
 
 defineOptions({
   // abstract: true,
+  inheritAttrs: false,
 
   provide() {
     return {
       lvStore: this,
     }
   },
-
-  inheritAttrs: false,
 })
 
 const props = defineProps({
@@ -80,7 +79,8 @@ const internalContentMessage = ref<{
 }>({ type: null, text: null })
 
 watch(selection, () => emit('update:selection', unref(selection)))
-watch([currentPage, currentPageSize], () => search())
+watch(currentPage, () => search(true))
+watch(currentPageSize, () => search())
 watch(
   () => props.contentMessage,
   () => {

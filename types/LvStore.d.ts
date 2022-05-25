@@ -1,5 +1,4 @@
-import { AxiosResponse } from 'axios'
-import { AxiosRequestConfig } from 'axios'
+import { AxiosRequestConfig, AxiosResponse } from 'axios'
 
 interface ContentMessageObject {
   text: string

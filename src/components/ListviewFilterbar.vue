@@ -1,3 +1,4 @@
+@@ -0,0 +1,424 @@
 <template>
   <el-form
     :inline="true"
@@ -232,6 +233,8 @@ function handleFilterReset() {
 }
 
 function toggleFilterbar() {
+  console.log('toggleFilterbar')
+
   isFold.value = !isFold.value
   emit('fold-change', isFold.value)
 }

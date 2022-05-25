@@ -17,11 +17,11 @@ export default defineComponent({
       set: (val: number) => (lvStore.currentPage = val),
     })
     const currentPageSize = computed({
-      get: () => lvStore.currentPageSize,
+      get: () => unref(lvStore.currentPageSize),
       set: (val: number) => (lvStore.currentPageSize = val),
     })
     const mergedAttrs = computed(() => {
-      let total = lvStore.contentData.total
+      let total = unref(lvStore.contentData).total
       total = isNil(total) ? 0 : total
       return {
         pageSize: unref(currentPageSize),
@@ -31,12 +31,11 @@ export default defineComponent({
         ...lvStore.pageProps,
         total,
         currentPage: unref(currentPage),
-        'onUpdate:currentPage': (pageSize: number) => {
-          currentPageSize.value = pageSize
-          currentPage.value = 1
-        },
-        'onUpdate:pageSize': (page: number) => {
+        'onUpdate:currentPage': (page: number) => {
           currentPage.value = page
+        },
+        'onUpdate:pageSize': (pageSize: number) => {
+          currentPageSize.value = pageSize
         },
       }
     })

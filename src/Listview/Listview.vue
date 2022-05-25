@@ -73,7 +73,7 @@ import {
   nextTick,
   useAttrs,
 } from 'vue'
-import { debounce } from 'lodash-es'
+import { useDebounceFn } from '@vueuse/core'
 import { isPlainObject } from 'is-what'
 import { get } from '@/utils'
 import StoreProvider from '@/components/StoreProvider.vue'
@@ -130,7 +130,7 @@ const _updateFilterLayout = () => unref<any>(filterbarRef)?.updateLayout?.call()
 const handleUpdateLayout = () => nextTick().then(_updateFilterLayout)
 const handleFilterFold = () => nextTick().then(_updateWrapperLayout)
 
-const updateLayout = debounce(_updateWrapperLayout, 0, { leading: true })
+const updateLayout = useDebounceFn(_updateWrapperLayout, 0, { leading: true })
 const resetFilter = () => unref<any>(filterbarRef)?.handleFilterReset.call()
 const search = (keepInPage: boolean) =>
   unref<any>(storeProviderRef)?.search(keepInPage)
