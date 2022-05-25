@@ -24,7 +24,6 @@
 <script lang="tsx" setup>
 import {
   computed,
-  getCurrentInstance,
   onMounted,
   ref,
   nextTick,

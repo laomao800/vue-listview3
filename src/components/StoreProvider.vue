@@ -1,5 +1,11 @@
-<script lang="tsx">
-import { defineComponent } from 'vue'
+<template>
+  <ElConfigProvider :locale="zhCn">
+    <slot />
+  </ElConfigProvider>
+</template>
+
+<script lang="tsx" setup>
+import { getCurrentInstance, onMounted, ref, unref, watch } from 'vue'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import { ElConfigProvider } from 'element-plus'
 import axios, { AxiosRequestConfig } from 'axios'
@@ -13,10 +19,8 @@ import {
   toDisplayString,
 } from '@/utils'
 
-export default defineComponent({
-  name: 'StoreProvider',
-
-  abstract: true,
+defineOptions({
+  // abstract: true,
 
   provide() {
     return {
@@ -25,251 +29,245 @@ export default defineComponent({
   },
 
   inheritAttrs: false,
+})
 
-  props: {
-    // Data request
-    pressEnterSearch: { type: Boolean, default: true },
-    autoload: { type: Boolean, default: true },
-    requestUrl: { type: String, default: '' },
-    requestMethod: { type: String, default: 'post' },
-    requestConfig: { type: Object, default: () => ({}) },
-    filterModel: { type: Object, default: () => ({}) },
+const props = defineProps({
+  // Data request
+  pressEnterSearch: { type: Boolean, default: true },
+  autoload: { type: Boolean, default: true },
+  requestUrl: { type: String, default: '' },
+  requestMethod: { type: String, default: 'post' },
+  requestConfig: { type: Object, default: () => ({}) },
+  filterModel: { type: Object, default: () => ({}) },
 
-    // Adv request
-    requestHandler: { type: Function, default: null },
-    transformRequestData: { type: Function, default: null },
+  // Adv request
+  requestHandler: { type: Function, default: null },
+  transformRequestData: { type: Function, default: null },
 
-    // Adv response
-    transformResponseData: { type: Function, default: null },
-    contentDataMap: {
-      type: Object,
-      default: () => ({
-        items: 'result.items',
-        total: 'result.total',
-      }),
-    },
-
-    // Request error handler
-    contentMessage: { type: [Object, String], default: null },
-    validateResponse: { type: Function, default: null },
-    resolveResponseErrorMessage: { type: Function, default: null },
-
-    // Pager
-    usePage: { type: [Object, Boolean], default: true },
-    pageSize: { type: Number, default: 20 },
-    pageSizes: { type: Array, default: () => [20, 50, 100] },
-    pageProps: { type: Object, default: () => ({}) },
-    pagePosition: { type: String, default: 'left' },
+  // Adv response
+  transformResponseData: { type: Function, default: null },
+  contentDataMap: {
+    type: Object,
+    default: () => ({
+      items: 'result.items',
+      total: 'result.total',
+    }),
   },
 
-  emits: ['update:selection', 'root-emit'],
+  // Request error handler
+  contentMessage: { type: [Object, String], default: null },
+  validateResponse: { type: Function, default: null },
+  resolveResponseErrorMessage: { type: Function, default: null },
 
-  data() {
-    return {
-      contentHeight: null,
-      contentLoading: false,
-      selection: [],
-      currentPage: 1,
-      currentPageSize: this.pageSize,
-      contentData: { items: [], total: 0 },
-      internalContentMessage: { type: null, text: null },
+  // Pager
+  usePage: { type: [Object, Boolean], default: true },
+  pageSize: { type: Number, default: 20 },
+  pageSizes: { type: Array, default: () => [20, 50, 100] },
+  pageProps: { type: Object, default: () => ({}) },
+  pagePosition: { type: String, default: 'left' },
+})
+const emit = defineEmits(['update:selection', 'root-emit'])
+
+const contentHeight = ref(null)
+const contentLoading = ref(false)
+const selection = ref([])
+const currentPage = ref(1)
+const currentPageSize = ref(props.pageSize)
+const contentData = ref<Record<string, any>>({ items: [], total: 0 })
+const internalContentMessage = ref<{
+  type: string | null
+  text: string | null
+}>({ type: null, text: null })
+
+watch(selection, () => emit('update:selection', unref(selection)))
+watch([currentPage, currentPageSize], () => search())
+watch(
+  () => props.contentMessage,
+  () => {
+    if (isString(props.contentMessage)) {
+      setContentMessage(props.contentMessage)
+    } else if (isPlainObject(props.contentMessage)) {
+      const { type, text } = props.contentMessage
+      setContentMessage(text, type)
     }
   },
+  {
+    immediate: true,
+  }
+)
 
-  watch: {
-    currentPage: 'search',
-    currentPageSize: 'search',
-    contentMessage: {
-      immediate: true,
-      handler() {
-        if (isString(this.contentMessage)) {
-          this.setContentMessage(this.contentMessage)
-        } else if (isPlainObject(this.contentMessage)) {
-          const { type, text } = this.contentMessage
-          this.setContentMessage(text, type)
+onMounted(() => {
+  props.autoload && search()
+})
+
+function doRequest() {
+  if (!props.requestUrl && !props.requestHandler) {
+    return warn('未配置 requestUrl 或 requestHandler ，无法发起数据请求。')
+  }
+
+  $rootEmitProxy('before-request')
+
+  contentLoading.value = true
+  const requestData = getRequestData()
+  // transformRequestData 有可能返回 false 以阻止提交动作，可用于提交前验证等
+  if (requestData === false) {
+    $rootEmitProxy('request-valid-error')
+    /* istanbul ignore next */
+    contentLoading.value = false
+    return Promise.resolve()
+  }
+
+  return (
+    handleRequest(requestData)
+      // 自定义 requestHandler 与内置请求响应都通过验证流程
+      .then(validateResponseData)
+      .then((data: any) => {
+        if (isFunction(props.transformResponseData)) {
+          data = props.transformResponseData(data)
         }
-      },
-    },
-    selection() {
-      this.$emit('update:selection', this.selection)
-    },
-  },
-
-  mounted() {
-    if (this.autoload) {
-      this.search()
-    }
-  },
-
-  methods: {
-    $rootEmitProxy(rootEventName: string, ...args: any[]) {
-      this.$emit('root-emit', rootEventName, this, ...args)
-    },
-
-    search(keepInPage = false) {
-      if (!keepInPage) {
-        this.currentPage = 1
-      }
-      return this.doRequest()
-    },
-
-    doRequest() {
-      if (!this.requestUrl && !this.requestHandler) {
-        return warn('未配置 requestUrl 或 requestHandler ，无法发起数据请求。')
-      }
-
-      this.$rootEmitProxy('before-request')
-
-      this.contentLoading = true
-      const requestData = this.getRequestData()
-      // transformRequestData 有可能返回 false 以阻止提交动作，可用于提交前验证等
-      if (requestData === false) {
-        this.$rootEmitProxy('request-valid-error')
-        /* istanbul ignore next */
-        this.contentLoading = false
-        return Promise.resolve()
-      }
-
-      return (
-        this.handleRequest(requestData)
-          // 自定义 requestHandler 与内置请求响应都通过验证流程
-          .then(this.validateResponseData)
-          .then((data: any) => {
-            if (isFunction(this.transformResponseData)) {
-              data = this.transformResponseData(data)
-            }
-            this.contentData = this.getContentData(data)
-            this.contentLoading = false
-            this.$rootEmitProxy('request-success')
-          })
-          .catch(this.handleResponseError)
-          .finally(() => this.$rootEmitProxy('requested'))
-      )
-    },
-
-    getContentData(data = {}) {
-      return this.contentDataMap ? dataMapping(data, this.contentDataMap) : data
-    },
-
-    cleanContentData() {
-      this.contentData = this.getContentData()
-    },
-
-    handleRequest(data: any) {
-      let responseDataPromise: Promise<any>
-
-      if (isFunction(this.requestHandler)) {
-        // 自定义请求方法
-        responseDataPromise = ensurePromise(this.requestHandler(data))
-      } else {
-        // 多次点击“搜索”会取消前面的请求，以最后一次的请求为准
-        /* istanbul ignore next */
-        // @ts-ignore
-        this._requestCancelToken && this._requestCancelToken()
-
-        const requestConfig = this.getRequestConfig(data)
-        const axiosService = axios.create()(requestConfig)
-        responseDataPromise = axiosService.then((res) => res.data)
-      }
-      return responseDataPromise
-    },
-
-    validateResponseData(data: any): Promise<any> {
-      const validateFn = this.validateResponse
-      if (!isFunction(validateFn) || validateFn(data)) {
-        this.setContentMessage(null)
-        return Promise.resolve(data)
-      } else {
-        return Promise.reject(data)
-      }
-    },
-
-    handleResponseError(error: any) {
-      if (!axios.isCancel(error)) {
-        const resolveErrorMessageFn = this.resolveResponseErrorMessage
-        let errorMessage = error
-        try {
-          errorMessage = isFunction(resolveErrorMessageFn)
-            ? resolveErrorMessageFn(error)
-            : error
-        } catch (e) {}
-        errorMessage = toDisplayString(errorMessage)
-        this.setContentMessage(errorMessage, 'error')
-        // 清空列表内容
-        this.cleanContentData()
-        this.contentLoading = false
-        this.$rootEmitProxy('request-error', error)
-      }
-      return error
-    },
-
-    getRequestConfig(
-      data: AxiosRequestConfig['data'] | AxiosRequestConfig['params']
-    ): AxiosRequestConfig {
-      const requestConfig = merge(
-        {
-          url: this.requestUrl,
-          method: this.requestMethod,
-          withCredentials: true,
-        },
-        this.requestConfig
-      )
-
-      if (/post/i.test(requestConfig.method)) {
-        requestConfig.data = data
-      } else {
-        requestConfig.params = data
-      }
-
-      requestConfig.cancelToken = new axios.CancelToken((cancel) => {
-        // @ts-ignore
-        this._requestCancelToken = cancel
+        contentData.value = getContentData(data)
+        contentLoading.value = false
+        $rootEmitProxy('request-success')
       })
+      .catch(handleResponseError)
+      .finally(() => $rootEmitProxy('requested'))
+  )
+}
 
-      return requestConfig
+function getContentData(data = {}) {
+  return props.contentDataMap ? dataMapping(data, props.contentDataMap) : data
+}
+
+function cleanContentData() {
+  contentData.value = getContentData()
+}
+
+function handleRequest(data: any) {
+  let responseDataPromise: Promise<any>
+
+  if (isFunction(props.requestHandler)) {
+    // 自定义请求方法
+    responseDataPromise = ensurePromise(props.requestHandler(data))
+  } else {
+    // 多次点击“搜索”会取消前面的请求，以最后一次的请求为准
+    /* istanbul ignore next */
+    // @ts-ignore
+    // this._requestCancelToken && this._requestCancelToken()
+
+    const requestConfig = getRequestConfig(data)
+    const axiosService = axios.create()(requestConfig)
+    responseDataPromise = axiosService.then((res) => res.data)
+  }
+  return responseDataPromise
+}
+
+function validateResponseData(data: any): Promise<any> {
+  const validateFn = props.validateResponse
+  if (!isFunction(validateFn) || validateFn(data)) {
+    setContentMessage(null)
+    return Promise.resolve(data)
+  } else {
+    return Promise.reject(data)
+  }
+}
+
+function handleResponseError(error: any) {
+  if (!axios.isCancel(error)) {
+    const resolveErrorMessageFn = props.resolveResponseErrorMessage
+    let errorMessage = error
+    try {
+      errorMessage = isFunction(resolveErrorMessageFn)
+        ? resolveErrorMessageFn(error)
+        : error
+    } catch (e) {}
+    errorMessage = toDisplayString(errorMessage)
+    setContentMessage(errorMessage, 'error')
+    cleanContentData()
+    contentLoading.value = false
+    $rootEmitProxy('request-error', error)
+  }
+  return error
+}
+
+function getRequestConfig(
+  data: AxiosRequestConfig['data'] | AxiosRequestConfig['params']
+): AxiosRequestConfig {
+  const requestConfig = merge(
+    {
+      url: props.requestUrl,
+      method: props.requestMethod,
+      withCredentials: true,
     },
+    props.requestConfig
+  ) as AxiosRequestConfig
 
-    getRequestData() {
-      let data = cloneDeep(this.filterModel)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  if (/post/i.test(requestConfig.method!)) {
+    requestConfig.data = data
+  } else {
+    requestConfig.params = data
+  }
 
-      // 删除提交数据中的无效数据
-      data = pickBy(data, (val) => isValidFieldValue(val))
+  // requestConfig.cancelToken = new axios.CancelToken((cancel) => {
+  //   // @ts-ignore
+  //   this._requestCancelToken = cancel
+  // })
 
-      let indexKey = 'page_index'
-      let sizeKey = 'page_size'
-      const usePage = this.usePage
-      if (usePage) {
-        if (isPlainObject(usePage)) {
-          indexKey = usePage['pageIndex'] || indexKey
-          sizeKey = usePage['pageSize'] || sizeKey
-        }
-        data[indexKey] = this.currentPage
-        data[sizeKey] = this.currentPageSize
-      } else {
-        delete data[indexKey]
-        delete data[sizeKey]
-      }
+  return requestConfig
+}
 
-      if (isFunction(this.transformRequestData)) {
-        // transformRequestDataFn 支持返回 promise
-        data = this.transformRequestData(data)
-      }
+function getRequestData(): Record<string, any> | boolean {
+  let data = cloneDeep(props.filterModel)
 
-      return data
-    },
+  // 删除提交数据中的无效数据
+  data = pickBy(data, (val) => isValidFieldValue(val))
 
-    setContentMessage(text = '', type = null, cleanData = false) {
-      this.internalContentMessage = { text, type }
-      cleanData && this.cleanContentData()
-    },
-  },
+  let indexKey = 'page_index'
+  let sizeKey = 'page_size'
+  const usePage = props.usePage
+  if (usePage) {
+    if (isPlainObject(usePage)) {
+      indexKey = usePage['pageIndex'] || indexKey
+      sizeKey = usePage['pageSize'] || sizeKey
+    }
+    data[indexKey] = unref(currentPage)
+    data[sizeKey] = unref(currentPageSize)
+  } else {
+    delete data[indexKey]
+    delete data[sizeKey]
+  }
 
-  render() {
-    return (
-      <ElConfigProvider locale={zhCn}>
-        {this.$slots.default && this.$slots.default()}
-      </ElConfigProvider>
-    )
-  },
+  if (isFunction(props.transformRequestData)) {
+    // transformRequestDataFn 支持返回 promise
+    data = props.transformRequestData(data)
+  }
+
+  return data
+}
+
+function setContentMessage(
+  text: string | null = null,
+  type: string | null = null,
+  cleanData = false
+) {
+  internalContentMessage.value = { text, type }
+  cleanData && cleanContentData()
+}
+
+function $rootEmitProxy(rootEventName: string, ...args: any[]) {
+  const vm = getCurrentInstance()?.proxy
+  emit('root-emit', rootEventName, vm, ...args)
+}
+
+function search(keepInPage = false) {
+  if (!keepInPage) {
+    currentPage.value = 1
+  }
+  return doRequest()
+}
+
+defineExpose({
+  $rootEmitProxy,
+  search,
 })
 </script>
