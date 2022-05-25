@@ -17,7 +17,7 @@
     "is-what": "^4.1.7",
     "lodash-es": "^4.17.21",
     "normalize.css": "^8.0.1",
-    "vue": "^3.2.33"
+    "vue": "^3.2.36"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.3",
