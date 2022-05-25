@@ -51,11 +51,8 @@ export interface FilterField {
     | Promise<SelectOption[]>
     | ((done: (options: SelectOption[]) => void) => void)
 
-  /** 可传入对应控件原始的 props */
-  componentProps?: { [k: string]: any }
-
-  /** 可传入对应控件原始的 events */
-  componentEvents?: { [k: string]: () => void }
+  /** 可传入对应控件原始的 attrs */
+  componentAttrs?: { [k: string]: any }
 
   /** 可传入对应控件原始的 slots */
   componentSlots?: { [k: string]: any }

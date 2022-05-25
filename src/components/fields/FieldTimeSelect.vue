@@ -1,5 +1,5 @@
 <template>
-  <el-time-select v-model="value" v-bind="mergedProps" v-on="mergedEvents" />
+  <el-time-select v-model="value" v-bind="mergedAttrs" />
 </template>
 
 <script lang="ts" setup>
@@ -12,7 +12,7 @@ const props = defineProps({
   field: { type: Object as PropType<FilterField>, default: () => ({}) },
 })
 
-const { value, mergedProps, mergedEvents } = useFilterField<string>(props.field)
+const { value, mergedAttrs } = useFilterField<string>(props.field)
 
 const defaultProps = markRaw({
   clearable: true,

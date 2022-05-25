@@ -1,5 +1,5 @@
 <template>
-  <el-input-number v-model="value" v-bind="mergedProps" v-on="mergedEvents" />
+  <el-input-number v-model="value" v-bind="mergedAttrs" />
 </template>
 
 <script lang="ts" setup>
@@ -12,7 +12,7 @@ const props = defineProps({
   field: { type: Object as PropType<FilterField>, default: () => ({}) },
 })
 
-const { value, mergedProps, mergedEvents } = useFilterField<number>(props.field)
+const { value, mergedAttrs } = useFilterField<number>(props.field)
 
 const defaultProps = markRaw({
   controlsPosition: 'right',

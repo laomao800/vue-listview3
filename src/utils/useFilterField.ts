@@ -31,19 +31,16 @@ export function useFilterField<T = any>(field: FilterField) {
     },
   })
 
-  const mergedProps = computed<FilterField['componentProps']>(() => {
+  const mergedAttrs = computed<FilterField['componentAttrs']>(() => {
     let defaultProps = (getCurrentInstance()?.proxy as any)?.defaultProps
     defaultProps = isPlainObject(defaultProps) ? defaultProps : {}
-    const componentProps = isPlainObject(field.componentProps)
-      ? field.componentProps
+    const componentAttrs = isPlainObject(field.componentAttrs)
+      ? field.componentAttrs
       : {}
-    return merge(defaultProps, componentProps, {
+    return merge(defaultProps, componentAttrs, {
       disabled: unref(disabled),
       placeholder: unref(placeholder),
     })
-  })
-  const mergedEvents = computed<FilterField['componentEvents']>(() => {
-    return isPlainObject(field.componentEvents) ? field.componentEvents : {}
   })
   const componentSlots = computed<FilterField['componentSlots']>(() => {
     return field.componentSlots || {}
@@ -62,8 +59,7 @@ export function useFilterField<T = any>(field: FilterField) {
     value,
     disabled,
     placeholder,
-    mergedProps,
-    mergedEvents,
+    mergedAttrs,
     componentSlots,
   }
 }

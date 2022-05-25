@@ -1,10 +1,9 @@
 <template>
   <el-cascader
     v-model="value"
-    v-bind="mergedProps"
+    v-bind="mergedAttrs"
     :options="options"
     :loading="loading"
-    v-on="mergedEvents"
   />
 </template>
 
@@ -18,7 +17,7 @@ const props = defineProps({
   field: { type: Object as PropType<FilterField>, default: () => ({}) },
 })
 
-const { value, mergedProps, mergedEvents } = useFilterField<string>(props.field)
+const { value, mergedAttrs } = useFilterField<string>(props.field)
 
 const defaultProps = markRaw({
   clearable: true,

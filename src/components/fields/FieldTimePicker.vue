@@ -1,22 +1,25 @@
 <template>
-  <el-time-picker v-model="value" v-bind="mergedProps" v-on="mergedEvents" />
+  <el-time-picker v-model="value" v-bind="mergedAttrs" />
 </template>
 
-<script>
-import fieldMixin from '@/mixins/fieldMixin'
+<script lang="ts" setup>
+import type { PropType } from 'vue'
+import { markRaw } from 'vue'
+import { useFilterField } from '@/utils'
+import { FilterField } from '~/types'
 
-export default {
-  name: 'FieldTimePicker',
+const props = defineProps({
+  field: { type: Object as PropType<FilterField>, default: () => ({}) },
+})
 
-  mixins: [fieldMixin],
+const { value, mergedAttrs } = useFilterField<string>(props.field)
 
-  data() {
-    return {
-      defaultProps: {
-        clearable: true,
-        style: { width: '160px' },
-      },
-    }
-  },
-}
+const defaultProps = markRaw({
+  clearable: true,
+  style: { width: '160px' },
+})
+
+defineExpose({
+  defaultProps,
+})
 </script>

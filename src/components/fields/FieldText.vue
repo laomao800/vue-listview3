@@ -1,10 +1,5 @@
 <template>
-  <el-input
-    v-model="value"
-    v-bind="mergedProps"
-    v-on="mergedEvents"
-    @blur="onBlur"
-  >
+  <el-input v-model="value" v-bind="mergedAttrs" @blur="onBlur">
     <template v-for="(slot, key) in componentSlots" #[key]>
       <component :is="slot" v-if="isVNode(slot)" :key="key" />
       <template v-else>{{ slot }}</template>
@@ -22,8 +17,9 @@ const props = defineProps({
   field: { type: Object as PropType<FilterField>, default: () => ({}) },
 })
 
-const { value, mergedProps, mergedEvents, componentSlots } =
-  useFilterField<string>(props.field)
+const { value, mergedAttrs, componentSlots } = useFilterField<string>(
+  props.field
+)
 
 const onBlur = () => {
   if (props.field.trim !== false) {

@@ -13,7 +13,7 @@
   ></ListviewComponent>
 </template>
 
-<script setup lang="tsx">
+<script lang="tsx" setup>
 import mitt from 'mitt'
 import { ref, unref, shallowRef } from 'vue'
 import { ElMessage } from 'element-plus'
@@ -120,7 +120,7 @@ const filterFields = shallowRef([
       { label: '类型2', value: 'type2' },
     ],
     label: '搜索类型',
-    componentEvents: {
+    componentAttrs: {
       change: (val) => {
         // this.$emit('search-type-change', val)
       },
@@ -129,8 +129,11 @@ const filterFields = shallowRef([
   {
     type: 'text',
     model: 'typeKeyword',
-    componentProps: { placeholder: '请先选择搜索类型' },
-    disabled: true,
+    // disabled: true,
+    componentAttrs: {
+      placeholder: '请先选择搜索类型',
+      onChange: console.log,
+    },
     effect: ({ vm }) => {
       // this.$on('search-type-change', (value) => {
       //   vm.placeholder = value ? '请输入搜索关键字' : '请先选择搜索类型'
@@ -156,7 +159,7 @@ const filterFields = shallowRef([
       prepend: '$',
       append: '$',
     },
-    componentProps: {
+    componentAttrs: {
       'suffix-icon': 'el-icon-date',
     },
   },

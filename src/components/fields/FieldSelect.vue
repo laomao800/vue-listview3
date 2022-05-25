@@ -1,10 +1,5 @@
 <template>
-  <el-select
-    v-model="value"
-    v-bind="mergedProps"
-    :loading="loading"
-    v-on="mergedEvents"
-  >
+  <el-select v-model="value" v-bind="mergedAttrs" :loading="loading">
     <el-option
       v-for="(option, index) in options"
       v-bind="option"
@@ -23,7 +18,7 @@ const props = defineProps({
   field: { type: Object as PropType<FilterField>, default: () => ({}) },
 })
 
-const { value, mergedProps, mergedEvents } = useFilterField<string>(props.field)
+const { value, mergedAttrs } = useFilterField<string>(props.field)
 
 const isMultiple = props.field.type === 'multipleSelect'
 
