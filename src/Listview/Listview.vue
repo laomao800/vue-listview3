@@ -79,7 +79,7 @@ import { get } from '@/utils'
 import StoreProvider from '@/components/StoreProvider.vue'
 import ListviewLayout from '@/components/ListviewLayout.vue'
 import ListviewHeader from '@/components/ListviewHeader.vue'
-import Filterbar from '@/components/Filterbar.vue'
+import ListviewFilterbar from '@/components/ListviewFilterbar.vue'
 import ListviewContent from '@/components/ListviewContent.vue'
 import ListviewContentFooter from '@/components/ListviewContentFooter.vue'
 
@@ -116,7 +116,7 @@ const headerComponent = computed(() =>
   _getReplaceComponent('header', ListviewHeader)
 )
 const filterbarComponent = computed(() =>
-  _getReplaceComponent('filterbar', Filterbar)
+  _getReplaceComponent('filterbar', ListviewFilterbar)
 )
 const contentComponent = computed(() =>
   _getReplaceComponent('content', ListviewContent)
