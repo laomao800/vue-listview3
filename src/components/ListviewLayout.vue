@@ -65,23 +65,23 @@ const props = defineProps({
 const emit = defineEmits(['update-layout'])
 
 const lvStore = useLvStore()
-const scopeProps = pick(lvStore, [
-  'contentHeight',
-  'contentLoading',
-  'contentData',
-  'filterModel',
-  'contentMessage',
-])
+const scopeProps = computed(() =>
+  pick(lvStore, [
+    'contentHeight',
+    'contentLoading',
+    'contentData',
+    'filterModel',
+    'contentMessage',
+  ])
+)
 
 const wrapperRef = ref<Element | null>(null)
 const contentRef = ref<Element | null>(null)
 const footerRef = ref<Element | null>(null)
 const wrapperHeight = ref<number | string | null>(null)
 const contentHeight = computed({
-  get() {
-    return lvStore.contentHeight
-  },
-  set(newVal: number) {
+  get: () => lvStore.contentHeight,
+  set(newVal) {
     lvStore.contentHeight = newVal
   },
 })
