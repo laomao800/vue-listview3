@@ -73,7 +73,7 @@ import {
   nextTick,
   useAttrs,
 } from 'vue'
-import { useDebounceFn } from '@vueuse/core'
+import { useThrottleFn } from '@vueuse/core'
 import { isPlainObject } from 'is-what'
 import { get } from '@/utils'
 import StoreProvider from '@/components/StoreProvider.vue'
@@ -128,9 +128,13 @@ const footerComponent = computed(() =>
 const _updateWrapperLayout = () => unref<any>(layoutRef)?.updateLayout?.call()
 const _updateFilterLayout = () => unref<any>(filterbarRef)?.updateLayout?.call()
 const handleUpdateLayout = () => nextTick().then(_updateFilterLayout)
-const handleFilterFold = () => nextTick().then(_updateWrapperLayout)
+const handleFilterFold = () => {
+  console.log('handleFilterFold')
 
-const updateLayout = useDebounceFn(_updateWrapperLayout, 0, { leading: true })
+  nextTick().then(_updateWrapperLayout)
+}
+
+const updateLayout = useThrottleFn(_updateWrapperLayout, 100)
 const resetFilter = () => unref<any>(filterbarRef)?.handleFilterReset.call()
 const search = (keepInPage: boolean) =>
   unref<any>(storeProviderRef)?.search(keepInPage)

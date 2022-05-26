@@ -158,9 +158,9 @@ onDeactivated(() => {
   _cleanupListener()
 })
 
-// defineExpose({
-//   updateLayout,
-// })
+defineExpose({
+  updateLayout,
+})
 </script>
 
 <style>
