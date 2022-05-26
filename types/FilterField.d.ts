@@ -1,4 +1,4 @@
-import { VNode } from 'vue'
+import { VNode, Ref } from 'vue'
 
 interface SelectOption {
   label: string
@@ -23,7 +23,7 @@ export type FieldType =
   | 'cascader'
 
 interface FieldEffectPayload {
-  vm: Vue
+  fieldRef: Ref<Record<string, any>>
   filterModel: Record<string, any>
 }
 

@@ -121,24 +121,26 @@ const filterFields = shallowRef([
     ],
     label: '搜索类型',
     componentAttrs: {
-      change: (val) => {
-        // this.$emit('search-type-change', val)
+      onChange: (val) => {
+        emitter.emit('search-type-change', val)
       },
     },
   },
   {
     type: 'text',
     model: 'typeKeyword',
-    // disabled: true,
+    disabled: true,
     componentAttrs: {
       placeholder: '请先选择搜索类型',
       onChange: console.log,
     },
-    effect: ({ vm }) => {
-      // this.$on('search-type-change', (value) => {
-      //   vm.placeholder = value ? '请输入搜索关键字' : '请先选择搜索类型'
-      //   vm.disabled = !value
-      // })
+    effect: ({ fieldRef }) => {
+      emitter.on('search-type-change', (value) => {
+        fieldRef.value.componentAttrs.placeholder = value
+          ? '请输入搜索关键字'
+          : '请先选择搜索类型'
+        fieldRef.value.disabled = !value
+      })
     },
   },
   {
