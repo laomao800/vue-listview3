@@ -11,8 +11,7 @@ import type { PropType, VNode } from 'vue'
 
 import { computed, unref, isVNode, Transition, h } from 'vue'
 import hasValues from 'has-values'
-import { isFunction } from 'lodash-es'
-import { isPlainObject } from 'is-what'
+import { isPlainObject, isFunction } from 'is-what'
 import { get, useLvStore } from '@/utils'
 import { getFieldComponent } from './fields/index'
 

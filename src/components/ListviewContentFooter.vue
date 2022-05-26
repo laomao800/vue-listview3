@@ -1,6 +1,6 @@
 <script lang="tsx">
 import { defineComponent, unref, computed } from 'vue'
-import { isNil } from 'lodash-es'
+import { isNumber } from 'is-what'
 import { useLvStore } from '@/utils'
 
 export default defineComponent({
@@ -22,7 +22,7 @@ export default defineComponent({
     })
     const mergedAttrs = computed(() => {
       let total = unref(lvStore.contentData).total
-      total = isNil(total) ? 0 : total
+      total = isNumber(total) ? total : 0
       return {
         pageSize: unref(currentPageSize),
         pageSizes: lvStore.pageSizes,

@@ -1,7 +1,14 @@
 import type { FilterField, LvStore } from '~/types'
 import { inject } from 'vue'
-import { isEmpty, isNil } from 'lodash-es'
-import { isPlainObject, isFunction } from 'is-what'
+import {
+  isPlainObject,
+  isFunction,
+  isEmptyArray,
+  isEmptyObject,
+  isEmptyString,
+  isNull,
+  isUndefined,
+} from 'is-what'
 import { get } from '@/utils'
 import { default as _parseSize } from '@laomao800/parse-size-with-unit'
 
@@ -48,10 +55,10 @@ export function dataMapping(
  * 判断值是否为搜索栏内合法的值，通过验证的值才可继续作为参数随请求提交
  */
 export function isValidFieldValue(val: any): val is FilterField {
-  if (Array.isArray(val) || isPlainObject(val)) {
-    return !isEmpty(val)
+  if (isEmptyArray(val) || isEmptyObject(val)) {
+    return false
   }
-  return !isNil(val) && val !== ''
+  return !isNull(val) && !isUndefined(val) && !isEmptyString(val)
 }
 
 export function nodeParents(node: Element, selector: string) {

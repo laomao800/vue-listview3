@@ -2,7 +2,7 @@
 import type { FilterField } from '~/types'
 import { VNode, PropType, ref, defineComponent } from 'vue'
 import { isVNode } from 'vue'
-import { isFunction } from 'lodash-es'
+import { isFunction } from 'is-what'
 import { hasOwn, error } from '@/utils'
 import { getFieldComponent } from './fields/index'
 import FilterbarField from './FilterbarField.vue'
