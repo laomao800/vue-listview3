@@ -8,6 +8,7 @@ import {
   isEmptyString,
   isNull,
   isUndefined,
+  isPromise,
 } from 'is-what'
 import { get } from '@/utils'
 import { default as _parseSize } from '@laomao800/parse-size-with-unit'
@@ -80,25 +81,12 @@ export function nodeParents(node: Element, selector: string) {
   return find(node)
 }
 
-export function isPromise(obj: any): obj is Promise<any> {
-  return (
-    !!obj &&
-    (typeof obj === 'object' || typeof obj === 'function') &&
-    typeof obj.then === 'function'
-  )
-}
-
 export function hasOwn(obj: Record<string, unknown>, key: string) {
   return Object.prototype.hasOwnProperty.call(obj, key)
 }
 
 export function ensurePromise<T>(data: T) {
   return isPromise(data) ? data : Promise.resolve(data)
-}
-
-/* istanbul ignore next */
-export function noop() {
-  // noop
 }
 
 export function resolveOptions(

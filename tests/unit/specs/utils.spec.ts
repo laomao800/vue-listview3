@@ -1,11 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import {
-  dataMapping,
-  isPromise,
-  isValidFieldValue,
-  nodeParents,
-  noop,
-} from '@/utils'
+import { dataMapping, isPromise, isValidFieldValue, nodeParents } from '@/utils'
+
+const noop = () => {
+  // noop
+}
 
 describe('utils', () => {
   it('dataMapping', () => {
@@ -39,12 +37,6 @@ describe('utils', () => {
     expect(isValidFieldValue(null)).toBe(false)
     expect(isValidFieldValue([])).toBe(false)
     expect(isValidFieldValue({})).toBe(false)
-  })
-
-  it('isPromise', () => {
-    expect(isPromise(new Promise((resolve) => resolve(1)))).toBe(true)
-    expect(isPromise(Promise.resolve().catch())).toBe(true)
-    expect(isPromise(Promise.reject(1).catch(noop))).toBe(true)
   })
 })
 
