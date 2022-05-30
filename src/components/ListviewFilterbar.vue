@@ -233,8 +233,6 @@ function handleFilterReset() {
 }
 
 function toggleFilterbar() {
-  console.log('toggleFilterbar')
-
   isFold.value = !isFold.value
   emit('fold-change', isFold.value)
 }

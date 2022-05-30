@@ -128,11 +128,7 @@ const footerComponent = computed(() =>
 const _updateWrapperLayout = () => unref<any>(layoutRef)?.updateLayout?.call()
 const _updateFilterLayout = () => unref<any>(filterbarRef)?.updateLayout?.call()
 const handleUpdateLayout = () => nextTick().then(_updateFilterLayout)
-const handleFilterFold = () => {
-  console.log('handleFilterFold')
-
-  nextTick().then(_updateWrapperLayout)
-}
+const handleFilterFold = () => nextTick().then(_updateWrapperLayout)
 
 const updateLayout = useThrottleFn(_updateWrapperLayout, 100)
 const resetFilter = () => unref<any>(filterbarRef)?.handleFilterReset.call()
