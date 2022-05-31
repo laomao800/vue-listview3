@@ -131,7 +131,7 @@ const handleUpdateLayout = () => nextTick().then(_updateFilterLayout)
 const handleFilterFold = () => nextTick().then(_updateWrapperLayout)
 
 const updateLayout = useThrottleFn(_updateWrapperLayout, 100)
-const resetFilter = () => unref<any>(filterbarRef)?.handleFilterReset.call()
+const resetFilter = () => unref<any>(filterbarRef)?.resetFilter.call()
 const search = (keepInPage: boolean) =>
   unref<any>(storeProviderRef)?.search(keepInPage)
 const setContentMessage = (text: string, type: string, cleanData = false) =>

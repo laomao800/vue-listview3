@@ -267,8 +267,9 @@ function search(keepInPage = false) {
 }
 
 defineExpose({
+  contentHeight,
   $rootEmitProxy,
   search,
-  contentHeight,
+  setContentMessage,
 })
 </script>

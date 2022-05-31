@@ -46,7 +46,7 @@
             <el-button
               v-if="isShowResetButton"
               v-bind="resetButtonProp"
-              @click="handleFilterReset"
+              @click="resetFilter"
             >
               {{ resetButtonProp.text }}
             </el-button>
@@ -209,7 +209,7 @@ function handleFilterSearch() {
   lvStore.search()
 }
 
-function handleFilterReset() {
+function resetFilter() {
   const filterModel = lvStore.filterModel
   const _resetField = (field: FilterField) => {
     const name = field.model
@@ -251,7 +251,7 @@ function updateLayout() {
 
 function updateTopRightItemIndex() {
   let lastFilterIndex = -1
-  const allFields: Element[] = unref(filterbarFieldsRef)?.$el.children
+  const allFields: Element[] = unref(filterbarFieldsRef)?.$el.children || []
   if (allFields.length > 0) {
     let lastFilterTop = unref(actionRef)?.getBoundingClientRect().top || 0
     for (let i = 0; i < allFields.length; i++) {
@@ -286,6 +286,7 @@ function updateActionOffset() {
 
 defineExpose({
   updateLayout,
+  resetFilter,
 })
 </script>
 
