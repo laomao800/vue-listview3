@@ -13,6 +13,7 @@ describe('Methods', () => {
         { type: 'multipleSelect', model: 'multiple' },
       ],
     })
+
     vm.resetFilter()
     await wait()
     expect(storeVm.$props.filterModel).toEqual({

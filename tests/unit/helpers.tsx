@@ -1,12 +1,14 @@
+import type { ListviewProps } from '~/types'
 import { vi } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { mount, MountingOptions } from '@vue/test-utils'
 import ElementPlus from 'element-plus'
-import { ListviewProps } from '~/types'
+import { get, merge, set } from 'lodash-es'
 import { Listview } from '@/index'
+import { isArray } from 'is-what'
 
 export async function createListviewWrapper(
   propsData: Partial<ListviewProps> = {},
-  component = Listview
+  component: any = Listview
 ) {
   const requestSpy = vi.fn(() =>
     Promise.resolve({
@@ -25,9 +27,10 @@ export async function createListviewWrapper(
       ...propsData,
     },
   })
+
   const vm = wrapper.vm as any
-  const storeWrapper = wrapper.findComponent({ name: 'StoreProvider' })
-  const storeVm = wrapper.findComponent({ name: 'StoreProvider' }).vm as any
+  const storeWrapper = wrapper.findComponent({ ref: 'storeProviderRef' })
+  const storeVm = storeWrapper.vm
 
   await wait()
   return { requestSpy, wrapper, vm, storeWrapper, storeVm }
@@ -44,10 +47,10 @@ export function removeElCascaderHtmlId(html: string) {
   return html.replace(/id="cascader-menu-\d+-\d+"/, '')
 }
 
-export function mountWithEl(c: any, o: Parameters<typeof mount>[1] = {}) {
-  const plugins = o?.global?.plugins || []
-  return mount(c, {
-    ...o,
-    global: { plugins: [ElementPlus, ...plugins] },
-  })
+export function mountWithEl(component: any, opts: MountingOptions<any> = {}) {
+  const plugins = get(opts, 'global.plugins', [])
+  plugins.push(ElementPlus)
+  set(opts, 'global.plugins', plugins)
+
+  return mount(component, opts)
 }

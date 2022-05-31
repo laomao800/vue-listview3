@@ -1,16 +1,19 @@
 import { describe, it, expect, vi } from 'vitest'
 import mitt from 'mitt'
 import { createListviewWrapper, wait, mountWithEl } from '../helpers'
+import StoreProvider from '@/components/StoreProvider.vue'
 import ListviewFilterbar from '@/components/ListviewFilterbar.vue'
+import { mount } from '@vue/test-utils'
 
-const lvStore: any = { filterModel: {} }
 const DATE1 = new Date('2021/01/01 09:30:00')
 const DATE2 = new Date('2021/06/01 09:30:00')
+
+const lvStore = mount(StoreProvider).vm
 
 describe('Filterbar layout', () => {
   it('filterbarFold', () => {
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: { filterbarFold: false },
     })
     expect(
@@ -21,7 +24,7 @@ describe('Filterbar layout', () => {
   })
   it('filterbarFoldable', () => {
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: { filterbarFoldable: false },
     })
     expect(wrapper.find('.lv__filterbar--fold').exists()).toBe(false)
@@ -41,7 +44,7 @@ describe('Filter buttons', () => {
       { type: 'danger', icon: 'el-icon-delete', text: 'danger' },
     ]
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: { filterButtons },
     })
     const buttons = wrapper
@@ -52,7 +55,7 @@ describe('Filter buttons', () => {
 
   it('dropdown', () => {
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: {
         filterButtons: [
           {
@@ -91,7 +94,7 @@ describe('Filter buttons', () => {
       },
     ]
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: { filterButtons },
     })
     const button = wrapper
@@ -114,7 +117,7 @@ describe('Filter buttons', () => {
       <div class="jsx-type">text</div>,
     ]
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: { filterButtons },
     })
     expect(wrapper.find('div.function-type').exists()).toBe(true)
@@ -125,7 +128,7 @@ describe('Filter buttons', () => {
 describe('Filter fields', () => {
   it('Field label render', () => {
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: {
         searchButton: false,
         resetButton: false,
@@ -138,9 +141,8 @@ describe('Filter fields', () => {
   })
 
   it('Fields render', () => {
-    const lvStore: any = { filterModel: {} }
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: {
         filterFields: [
           { type: 'text', model: 'text' },
@@ -180,7 +182,7 @@ describe('Filter fields', () => {
 
   it('Invalid fields render', () => {
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: {
         filterFields: [{ type: 'text_x' }, { type: 'number_x' }],
       },
@@ -189,9 +191,8 @@ describe('Filter fields', () => {
   })
 
   it('Group fields render', () => {
-    const lvStore: any = { filterModel: {} }
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: {
         filterFields: [
           [
@@ -205,9 +206,8 @@ describe('Filter fields', () => {
   })
 
   it('Filter fields set value', () => {
-    const lvStore: any = { filterModel: {} }
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: {
         filterFields: [
           { type: 'text', model: 'text' },
@@ -262,13 +262,12 @@ describe('Filter fields', () => {
       <input class="vnode-type" />,
     ]
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: { filterFields },
     })
     expect(wrapper.find('.lv__field input.object-type').exists()).toBe(true)
     expect(wrapper.find('.lv__field input.function-type').exists()).toBe(true)
-    // FIXME:
-    // expect(wrapper.find('.lv__field input.vnode-type').exists()).toBe(true)
+    expect(wrapper.find('.lv__field input.vnode-type').exists()).toBe(true)
   })
 
   it('effect', async () => {
@@ -280,10 +279,10 @@ describe('Filter fields', () => {
           type: 'select',
           model: 'selectField',
           options: [],
-          effect: ({ vm, filterModel }: any) => {
+          effect: ({ fieldRef, filterModel }: any) => {
             emitter.on('custom-update-input', (value: string) => {
               filterModel.selectField = value
-              vm.options = [
+              fieldRef.value.options = [
                 { label: value, value },
                 { label: 'other-label', value: 'other-value' },
               ]
@@ -299,29 +298,30 @@ describe('Filter fields', () => {
     const $options = $filterbar.findAllComponents({ name: 'ElOption' })
     expect($options.length).toBe(2)
     expect($options.at(0)?.element.textContent?.trim()).toBe(optionText)
-    // FIXME:
-    // expect($options.at(0)?.element.classList.contains('selected')).toBeTruthy()
+    expect($options.at(0)?.element.classList.contains('selected')).toBeTruthy()
   })
 })
 
 describe('Filter fields default value', () => {
-  const lvStore = {
-    filterModel: {
-      text: 'text',
-      number: 9527,
-      date: DATE1,
-      dateRange: [DATE1, DATE2],
-      timeSelect: '10:00',
-      timePicker: DATE1,
-      timePickerRange: [DATE1, DATE2],
-      dateTime: DATE1,
-      dateTimeRange: [DATE1, DATE2],
-      select: 'option1',
-      cascader: [1, 2, 3, 4],
+  const lvStore = mount(StoreProvider, {
+    propsData: {
+      filterModel: {
+        text: 'text',
+        number: 9527,
+        date: DATE1,
+        dateRange: [DATE1, DATE2],
+        timeSelect: '10:00',
+        timePicker: DATE1,
+        timePickerRange: [DATE1, DATE2],
+        dateTime: DATE1,
+        dateTimeRange: [DATE1, DATE2],
+        select: 'option1',
+        cascader: [1, 2, 3, 4],
+      },
     },
-  }
+  }).vm
   const wrapper = mountWithEl(ListviewFilterbar, {
-    provide: { lvStore },
+    global: { provide: { lvStore } },
     propsData: {
       filterFields: [
         { type: 'text', model: 'text' },
@@ -375,7 +375,7 @@ describe('Filter fields options resolve', () => {
 
   it('array', async () => {
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: {
         filterFields: [
           { type: 'select', model: 'select', options },
@@ -394,7 +394,7 @@ describe('Filter fields options resolve', () => {
 
   it('promise', async () => {
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: {
         filterFields: [
           {
@@ -421,7 +421,7 @@ describe('Filter fields options resolve', () => {
 
   it('function return array', async () => {
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: {
         filterFields: [
           { type: 'select', model: 'select', options: () => options },
@@ -440,7 +440,7 @@ describe('Filter fields options resolve', () => {
 
   it('function return promise', async () => {
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: {
         filterFields: [
           {
@@ -467,7 +467,7 @@ describe('Filter fields options resolve', () => {
 
   it('invalid options', async () => {
     const wrapper = mountWithEl(ListviewFilterbar, {
-      provide: { lvStore },
+      global: { provide: { lvStore } },
       propsData: {
         filterFields: [{ type: 'select', model: 'select', options: 'options' }],
       },
