@@ -37,37 +37,39 @@ const showLabelRef = computed(() => {
   return false
 })
 
-let InnerLabel: VNode | null = null
-let InnerContent: VNode | null = null
-
-if (_isFieldObj(props.field)) {
-  InnerLabel = props.field?.label ? (
+function _renderField(field: FilterField) {
+  const Label = field.label ? (
     <Transition name="lv__field-label-trans">
-      {unref(showLabelRef) && (
-        <div class="lv__field-label">{props.field.label}</div>
-      )}
+      {unref(showLabelRef) && <div class="lv__field-label">{field.label}</div>}
     </Transition>
   ) : null
 
-  if (isFunction(props.field.render)) {
-    InnerContent = props.field.render()
+  let Content = null
+  if (isFunction(field.render)) {
+    Content = field.render()
   } else {
-    const FieldComponent = getFieldComponent(props.field.type) as any
+    const FieldComponent = getFieldComponent(field.type) as any
     if (FieldComponent) {
-      const style = props.field.width
-        ? { width: `${props.field.width}px` }
-        : null
-      InnerContent = (
+      const style = field.width ? { width: `${field.width}px` } : null
+      Content = (
         <el-form-item>
-          <FieldComponent {...{ field: props.field, style }} />
+          <FieldComponent {...{ field, style }} />
         </el-form-item>
       )
     }
   }
+  return [Label, Content]
+}
+
+let InnerLabel: VNode | null = null
+let InnerContent: VNode | null = null
+
+if (isVNode(props.field)) {
+  InnerContent = h(props.field)
+} else if (_isFieldObj(props.field)) {
+  ;[InnerLabel, InnerContent] = _renderField(props.field)
 } else if (isFunction(props.field)) {
   InnerContent = props.field()
-} else if (isVNode(props.field)) {
-  InnerContent = h(props.field)
 }
 </script>
 

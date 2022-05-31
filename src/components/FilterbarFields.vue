@@ -10,6 +10,8 @@ import FilterbarField from './FilterbarField.vue'
 function isValidFieldConfig(field: any) {
   if (!field) return false
 
+  if (isVNode(field)) return true
+
   if (hasOwn(field, 'type')) {
     if (getFieldComponent(field.type)) {
       return true
@@ -22,7 +24,6 @@ function isValidFieldConfig(field: any) {
   return (
     (hasOwn(field, 'render') && isFunction(field.render)) ||
     isFunction(field) ||
-    isVNode(field) ||
     Array.isArray(field)
   )
 }
@@ -55,7 +56,6 @@ export default defineComponent({
 
     function renderField(field = {} as FilterField) {
       if (!isValidFieldConfig(field)) return null
-
       const key = field.key || field.model || `unnamed-field-${uid++}`
       return (
         <FilterbarField
