@@ -1,7 +1,7 @@
 import type { App, Component } from 'vue'
 import 'element-plus/es/components/button-group/style/css'
 import 'element-plus/es/components/dropdown/style/css'
-import { create } from '@/create'
+import { create } from './create'
 import _Listview from './Listview'
 import _ListviewContainer from './ListviewContainer'
 
