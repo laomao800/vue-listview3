@@ -2,7 +2,7 @@
 import { defineComponent, h, markRaw } from 'vue'
 import { describe, it, expect } from 'vitest'
 import { pick } from 'lodash-es'
-import ListviewOrigin, { create as createListview } from '@/index'
+import { Listview, create as createListview } from '@/index'
 
 import { createListviewWrapper } from '../helpers'
 
@@ -31,7 +31,7 @@ const ListviewCustom = createListview(globalConfig)
 
 describe('Create config', () => {
   it('Create normal listview', async () => {
-    const { vm: vmOrigin } = await createListviewWrapper({}, ListviewOrigin)
+    const { vm: vmOrigin } = await createListviewWrapper({}, Listview)
     const { vm: vmNormal } = await createListviewWrapper({}, ListviewNormal)
     const { vm: vmCustom } = await createListviewWrapper({}, ListviewCustom)
     expect(vmOrigin.presetProps__).toEqual(undefined)

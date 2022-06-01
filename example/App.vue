@@ -10,6 +10,8 @@
     :filter-model="filterModel"
     :table-columns="tableColumns"
     :page-props="{ pagerCount: 5 }"
+    :content-attrs="{ rowClassName: 'row-view-class' }"
+    :table-selection-column="{ selectable: (row, index) => index !== 1 }"
   ></ListviewComponent>
 </template>
 
@@ -20,7 +22,7 @@ import { ElMessage } from 'element-plus'
 import 'element-plus/es/components/badge/style/css'
 import 'element-plus/es/components/message/style/css'
 import { CirclePlus, Remove } from '@element-plus/icons-vue'
-import { create as createListview, ListviewContainer } from '@/'
+import { create as createListview, ListviewContainer } from '../src'
 const ListviewComponent = createListview({})
 
 const selection = ref([])
