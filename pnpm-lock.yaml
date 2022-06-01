@@ -40,7 +40,7 @@ specifiers:
   vite: ^2.9.8
   vitest: ^0.12.9
   vue: ^3.2.36
-  vue-tsc: ^0.34.7
+  vue-tsc: ^0.34.17
 
 dependencies:
   '@element-plus/icons-vue': 1.1.4_vue@3.2.36
@@ -84,7 +84,7 @@ devDependencies:
   unplugin-vue-define-options: 0.6.1_vite@2.9.8+vue@3.2.36
   vite: registry.npmjs.org/vite/2.9.8_less@4.1.2
   vitest: registry.npmjs.org/vitest/0.12.9_mmenbuga4zhlaahycivvp3dtfm
-  vue-tsc: 0.34.8_typescript@4.6.3
+  vue-tsc: registry.npmjs.org/vue-tsc/0.34.17_typescript@4.6.3
 
 packages:
 
@@ -649,36 +649,6 @@ packages:
     dependencies:
       vite: registry.npmjs.org/vite/2.9.8_less@4.1.2
       vue: registry.npmjs.org/vue/3.2.36
-    dev: true
-
-  /@volar/code-gen/0.34.8:
-    resolution: {integrity: sha512-BTH6704XbsppOMyAAZzuV8Y9ENe5CzAkkaUBOFJGzYA4M8XOpQGC0A8I31aUc+XGS23DCATgkar8V/HeHEC6JQ==}
-    dependencies:
-      '@volar/source-map': 0.34.8
-    dev: true
-
-  /@volar/source-map/0.34.8:
-    resolution: {integrity: sha512-PPCcf72A4a3DCqTCHf2MM6IVtHswGl5nkdS9VkeFQfau6OHt1byDCgoo9E9O41N90MmUAdAQAdiYbc2MHRWPIg==}
-    dev: true
-
-  /@volar/vue-code-gen/0.34.8:
-    resolution: {integrity: sha512-vfRVlC/H24EZ0pNzOUawBJJ1XbZwos2HDhRgONN0R0+aiRtFUWFcFq+yRztWEEhYCLJNaU3+ZlXK5UOKqCf0zQ==}
-    dependencies:
-      '@volar/code-gen': 0.34.8
-      '@volar/source-map': 0.34.8
-      '@vue/compiler-core': registry.npmjs.org/@vue/compiler-core/3.2.36
-      '@vue/compiler-dom': registry.npmjs.org/@vue/compiler-dom/3.2.36
-      '@vue/shared': registry.npmjs.org/@vue/shared/3.2.36
-    dev: true
-
-  /@volar/vue-typescript/0.34.8:
-    resolution: {integrity: sha512-TmdqxlnCt0j4cUMxnwJH/CX4Tb/87mCkhxsCeaD44m9U4MC9vMVaev6JOW72Jpu00FmSmPOREX5nYfQbA3ycSw==}
-    dependencies:
-      '@volar/code-gen': 0.34.8
-      '@volar/source-map': 0.34.8
-      '@volar/vue-code-gen': 0.34.8
-      '@vue/compiler-sfc': registry.npmjs.org/@vue/compiler-sfc/3.2.36
-      '@vue/reactivity': registry.npmjs.org/@vue/reactivity/3.2.36
     dev: true
 
   /@vue/babel-helper-vue-transform-on/1.0.2:
@@ -2096,16 +2066,6 @@ packages:
       - supports-color
     dev: true
 
-  /vue-tsc/0.34.8_typescript@4.6.3:
-    resolution: {integrity: sha512-RvuFwiuj2lfSnTGHhLy6xLspNA7VOU3low+Ckvbl3utw6A6ELmXDUuuo8VAzNm7HuJe3M64lAxxWdOOG3vqMVw==}
-    hasBin: true
-    peerDependencies:
-      typescript: '*'
-    dependencies:
-      '@volar/vue-typescript': 0.34.8
-      typescript: 4.6.3
-    dev: true
-
   /w3c-hr-time/1.0.2:
     resolution: {integrity: sha512-z8P5DvDNjKDoFIHK7q8r8lackT6l+jo/Ye3HOle7l9nICP9lf1Ci25fy9vHd0JOWewkIFzXIEig3TdKT7JQ5fQ==}
     dependencies:
@@ -2336,6 +2296,44 @@ packages:
     version: 0.12.9
     dependencies:
       sirv: registry.npmjs.org/sirv/2.0.2
+    dev: true
+
+  registry.npmjs.org/@volar/code-gen/0.34.17:
+    resolution: {integrity: sha512-rHR7BA71BJ/4S7xUOPMPiB7uk6iU9oTWpEMZxFi5VGC9iJmDncE82WzU5iYpcbOBCVHsOjMh0+5CGMgdO6SaPA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@volar/code-gen/-/code-gen-0.34.17.tgz}
+    name: '@volar/code-gen'
+    version: 0.34.17
+    dependencies:
+      '@volar/source-map': registry.npmjs.org/@volar/source-map/0.34.17
+    dev: true
+
+  registry.npmjs.org/@volar/source-map/0.34.17:
+    resolution: {integrity: sha512-3yn1IMXJGGWB/G817/VFlFMi8oh5pmE7VzUqvgMZMrppaZpKj6/juvJIEiXNxRsgWc0RxIO8OSp4htdPUg1Raw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@volar/source-map/-/source-map-0.34.17.tgz}
+    name: '@volar/source-map'
+    version: 0.34.17
+    dev: true
+
+  registry.npmjs.org/@volar/vue-code-gen/0.34.17:
+    resolution: {integrity: sha512-17pzcK29fyFWUc+C82J3JYSnA+jy3QNrIldb9kPaP9Itbik05ZjEIyEue9FjhgIAuHeYSn4LDM5s6nGjxyfhsQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@volar/vue-code-gen/-/vue-code-gen-0.34.17.tgz}
+    name: '@volar/vue-code-gen'
+    version: 0.34.17
+    dependencies:
+      '@volar/code-gen': registry.npmjs.org/@volar/code-gen/0.34.17
+      '@volar/source-map': registry.npmjs.org/@volar/source-map/0.34.17
+      '@vue/compiler-core': registry.npmjs.org/@vue/compiler-core/3.2.36
+      '@vue/compiler-dom': registry.npmjs.org/@vue/compiler-dom/3.2.36
+      '@vue/shared': registry.npmjs.org/@vue/shared/3.2.36
+    dev: true
+
+  registry.npmjs.org/@volar/vue-typescript/0.34.17:
+    resolution: {integrity: sha512-U0YSVIBPRWVPmgJHNa4nrfq88+oS+tmyZNxmnfajIw9A/GOGZQiKXHC0k09SVvbYXlsjgJ6NIjhm9NuAhGRQjg==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@volar/vue-typescript/-/vue-typescript-0.34.17.tgz}
+    name: '@volar/vue-typescript'
+    version: 0.34.17
+    dependencies:
+      '@volar/code-gen': registry.npmjs.org/@volar/code-gen/0.34.17
+      '@volar/source-map': registry.npmjs.org/@volar/source-map/0.34.17
+      '@volar/vue-code-gen': registry.npmjs.org/@volar/vue-code-gen/0.34.17
+      '@vue/compiler-sfc': registry.npmjs.org/@vue/compiler-sfc/3.2.36
+      '@vue/reactivity': registry.npmjs.org/@vue/reactivity/3.2.36
     dev: true
 
   registry.npmjs.org/@vue/compiler-core/3.2.33:
@@ -4266,6 +4264,19 @@ packages:
       - sass
       - stylus
       - supports-color
+    dev: true
+
+  registry.npmjs.org/vue-tsc/0.34.17_typescript@4.6.3:
+    resolution: {integrity: sha512-jzUXky44ZLHC4daaJag7FQr3idlPYN719/K1eObGljz5KaS2UnVGTU/XSYCd7d6ampYYg4OsyalbHyJIxV0aEQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/vue-tsc/-/vue-tsc-0.34.17.tgz}
+    id: registry.npmjs.org/vue-tsc/0.34.17
+    name: vue-tsc
+    version: 0.34.17
+    hasBin: true
+    peerDependencies:
+      typescript: '*'
+    dependencies:
+      '@volar/vue-typescript': registry.npmjs.org/@volar/vue-typescript/0.34.17
+      typescript: 4.6.3
     dev: true
 
   registry.npmjs.org/vue/3.2.36:
