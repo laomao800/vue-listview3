@@ -22,13 +22,14 @@ import {
 defineOptions({
   // abstract: true,
   inheritAttrs: false,
-
   provide() {
     return {
       lvStore: this,
     }
   },
 })
+
+let abortController!: AbortController
 
 const props = defineProps({
   // Data request
@@ -150,9 +151,7 @@ function handleRequest(data: any) {
     responseDataPromise = ensurePromise(props.requestHandler(data))
   } else {
     // 多次点击“搜索”会取消前面的请求，以最后一次的请求为准
-    /* istanbul ignore next */
-    // @ts-ignore
-    // this._requestCancelToken && this._requestCancelToken()
+    abortController?.abort()
 
     const requestConfig = getRequestConfig(data)
     const axiosService = axios.create()(requestConfig)
@@ -208,10 +207,8 @@ function getRequestConfig(
     requestConfig.params = data
   }
 
-  // requestConfig.cancelToken = new axios.CancelToken((cancel) => {
-  //   // @ts-ignore
-  //   this._requestCancelToken = cancel
-  // })
+  abortController = new AbortController()
+  requestConfig.signal = abortController.signal
 
   return requestConfig
 }
