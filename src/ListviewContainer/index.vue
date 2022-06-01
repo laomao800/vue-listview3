@@ -27,7 +27,7 @@ export default defineComponent({
 
     const childViews = computed<VNode[]>(() => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const _children = slots.default && slots.default()
+      const _children = (slots.default && slots.default()) || []
       return _children.map((item, index) => {
         item.key = `view-${index}`
         return item
