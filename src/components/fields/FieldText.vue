@@ -29,12 +29,12 @@ const onBlur = () => {
   }
 }
 
-const defaultProps = markRaw({
+const defaultAttrs = markRaw({
   clearable: true,
   style: { width: '180px' },
 })
 
 defineExpose({
-  defaultProps,
+  defaultAttrs,
 })
 </script>

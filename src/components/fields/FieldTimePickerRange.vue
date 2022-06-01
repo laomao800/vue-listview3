@@ -14,7 +14,7 @@ const props = defineProps({
 
 const { value, mergedAttrs } = useFilterField<string>(props.field)
 
-const defaultProps = markRaw({
+const defaultAttrs = markRaw({
   clearable: true,
   style: { width: '200px' },
   isRange: true,
@@ -23,6 +23,6 @@ const defaultProps = markRaw({
 })
 
 defineExpose({
-  defaultProps,
+  defaultAttrs,
 })
 </script>

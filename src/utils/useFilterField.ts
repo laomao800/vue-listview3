@@ -37,12 +37,12 @@ export function useFilterField<T = any>(field: FilterField) {
   })
 
   const mergedAttrs = computed<FilterField['componentAttrs']>(() => {
-    let defaultProps = (getCurrentInstance()?.proxy as any)?.defaultProps
-    defaultProps = isPlainObject(defaultProps) ? defaultProps : {}
+    let defaultAttrs = (getCurrentInstance()?.proxy as any)?.defaultAttrs
+    defaultAttrs = isPlainObject(defaultAttrs) ? defaultAttrs : {}
     const componentAttrs = isPlainObject(unref(fieldRef).componentAttrs)
       ? unref(fieldRef).componentAttrs
       : {}
-    return merge(defaultProps, componentAttrs, {
+    return merge(defaultAttrs, componentAttrs, {
       disabled: unref(disabled),
       placeholder: unref(placeholder),
     })

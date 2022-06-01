@@ -14,12 +14,12 @@ const props = defineProps({
 
 const { value, mergedAttrs } = useFilterField<number>(props.field)
 
-const defaultProps = markRaw({
+const defaultAttrs = markRaw({
   controlsPosition: 'right',
   style: { width: '100px' },
 })
 
 defineExpose({
-  defaultProps,
+  defaultAttrs,
 })
 </script>

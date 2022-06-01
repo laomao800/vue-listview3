@@ -22,7 +22,7 @@ const { value, mergedAttrs } = useFilterField<string>(props.field)
 
 const isMultiple = props.field.type === 'multipleSelect'
 
-const defaultProps = markRaw({
+const defaultAttrs = markRaw({
   clearable: true,
   filterable: true,
   style: { width: '180px' },
@@ -52,6 +52,6 @@ watch(
 )
 
 defineExpose({
-  defaultProps,
+  defaultAttrs,
 })
 </script>
