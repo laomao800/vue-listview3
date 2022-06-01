@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { dataMapping, isPromise, isValidFieldValue, nodeParents } from '@/utils'
+import { dataMapping, isValidFieldValue, nodeParents } from '@/utils'
 
 const noop = () => {
   // noop

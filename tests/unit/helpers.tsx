@@ -2,9 +2,8 @@ import type { ListviewProps } from '~/types'
 import { vi } from 'vitest'
 import { mount, MountingOptions } from '@vue/test-utils'
 import ElementPlus from 'element-plus'
-import { get, merge, set } from 'lodash-es'
+import { get, set } from 'lodash-es'
 import { Listview } from '@/index'
-import { isArray } from 'is-what'
 
 export async function createListviewWrapper(
   propsData: Partial<ListviewProps> = {},

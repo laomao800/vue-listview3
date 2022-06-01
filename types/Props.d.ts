@@ -107,10 +107,7 @@ declare class ListviewProps extends ComponentWithInstall {
   resetButton: Record<string, any> | boolean
 
   /** 可传入 <el-table> 的所有支持属性。 default: {} */
-  contentProps: Record<string, any>
-
-  /** 可传入 <el-table> 的所有支持事件。 default: {} */
-  contentEvents: Record<string, (...args: any[]) => void>
+  contentAttrs: Record<string, any>
 
   /** 表格列配置。 default: [] */
   tableColumns: TableColumn[]

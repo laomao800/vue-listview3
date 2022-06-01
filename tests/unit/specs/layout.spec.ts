@@ -111,7 +111,7 @@ describe('row class name', () => {
         result: { items: [{}], total: 1 },
         is_success: true,
       }),
-      contentProps: { rowClassName: 'row-view-class' },
+      contentAttrs: { rowClassName: 'row-view-class' },
     })
     expect(
       wrapper.findAll('.el-table__body-wrapper .el-table__row.row-view-class')
@@ -125,7 +125,7 @@ describe('row class name', () => {
         result: { items: [{}], total: 1 },
         is_success: true,
       }),
-      contentProps: {
+      contentAttrs: {
         rowClassName: () => 'row-view-class-fn',
       },
     })

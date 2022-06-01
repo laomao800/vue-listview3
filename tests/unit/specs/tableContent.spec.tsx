@@ -39,7 +39,7 @@ describe('Table content', () => {
     await rowWrapper.at(2).find('td').element.click()
     expect(storeWrapper.emitted('update:selection')!.length).toBe(2)
     expect(storeVm.selection.length).toBe(2)
-    expect(wrapper.findAll('tr.row--selected').length).toBe(2)
+    expect(wrapper.findAll('tr.lv-row--selected').length).toBe(2)
   })
 
   // FIXME:
