@@ -268,5 +268,6 @@ defineExpose({
   $rootEmitProxy,
   search,
   setContentMessage,
+  selection,
 })
 </script>

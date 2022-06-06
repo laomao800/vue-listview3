@@ -7,7 +7,8 @@ import { Listview } from '@/index'
 
 export async function createListviewWrapper(
   propsData: Partial<ListviewProps> = {},
-  component: any = Listview
+  component: any = Listview,
+  opts: MountingOptions<any> = {}
 ) {
   const requestSpy = vi.fn(() =>
     Promise.resolve({
@@ -25,6 +26,7 @@ export async function createListviewWrapper(
       requestHandler: requestSpy,
       ...propsData,
     },
+    ...opts,
   })
 
   const vm = wrapper.vm as any
@@ -41,10 +43,6 @@ export const wait = (time = 100) =>
 export const mockDataList = Array(10)
   .fill(undefined)
   .map((row, index) => ({ id: index, name: `row${index}` }))
-
-export function removeElCascaderHtmlId(html: string) {
-  return html.replace(/id="cascader-menu-\d+-\d+"/, '')
-}
 
 export function mountWithEl(component: any, opts: MountingOptions<any> = {}) {
   const plugins = get(opts, 'global.plugins', [])
