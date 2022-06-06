@@ -71,24 +71,29 @@ describe('Table content', () => {
     expect(wrapper.findAll('tr.lv-row--selected').length).toBe(2)
   })
 
-  // FIXME:
-  it.skip('Row single select', async () => {
+  it('Row single select', async () => {
+    document.body.innerHTML = '<div id="app"></div>'
     const tableColumns = [
       { label: 'column1' },
       { label: 'column1' },
       { label: 'column1' },
     ]
-    const { wrapper, storeWrapper, storeVm } = await createListviewWrapper({
-      tableColumns,
-      tableSelectionColumn: 'single',
-    })
+    const { wrapper, storeWrapper, storeVm } = await createListviewWrapper(
+      {
+        tableColumns,
+        tableSelectionColumn: 'single',
+      },
+      undefined,
+      { attachTo: document.getElementById('app')! }
+    )
     const rowWrapper = wrapper
       .findComponent({ name: 'ElTableBody' })
       .findAll('.el-table__row')
-    rowWrapper.at(1).find('td .el-radio__original').element.click()
-    rowWrapper.at(2).find('td .el-radio__original').element.click()
+    await rowWrapper.at(1).find('.el-radio').trigger('click')
+    await rowWrapper.at(2).find('.el-radio').trigger('click')
+
     expect(storeWrapper.emitted('update:selection')!.length).toBe(2)
     expect(storeVm.selection.length).toBe(1)
-    expect(wrapper.findAll('tr.row--selected').length).toBe(1)
+    expect(wrapper.findAll('tr.lv-row--selected').length).toBe(1)
   })
 })
