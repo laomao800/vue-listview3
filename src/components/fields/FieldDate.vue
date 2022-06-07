@@ -1,10 +1,11 @@
 <template>
-  <el-date-picker v-model="value" v-bind="mergedAttrs" />
+  <ElDatePicker v-model="value" v-bind="mergedAttrs" />
 </template>
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
 import { markRaw } from 'vue'
+import { ElDatePicker } from 'element-plus'
 import { useFilterField } from '@/utils'
 import { FilterField } from '~/types'
 

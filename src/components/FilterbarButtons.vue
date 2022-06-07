@@ -1,7 +1,14 @@
 <script lang="tsx">
 import type { PropType, VNode } from 'vue'
 import { isVNode, defineComponent, h } from 'vue'
-import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
+import {
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElIcon,
+  ElButton,
+  ElFormItem,
+} from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { isPlainObject, isFunction } from 'is-what'
 import { warn } from '@/utils'
@@ -28,7 +35,7 @@ function isValidButtonConfig(button: any) {
 
 function normalizeButton(button: FilterButton): NormalizedButton {
   const { click, icon: _icon, children: _children, ...buttonAttrs } = button
-  const icon = _icon ? <el-icon>{h(_icon)}</el-icon> : null
+  const icon = _icon ? <ElIcon>{h(_icon)}</ElIcon> : null
 
   let onClick = button.onClick
   if (click) {
@@ -83,7 +90,7 @@ export default defineComponent({
 
     function renderSingleButton(button: FilterButton) {
       const { text, buttonAttrs } = normalizeButton(button)
-      return <el-button {...buttonAttrs}>{text}</el-button>
+      return <ElButton {...buttonAttrs}>{text}</ElButton>
     }
 
     function renderDropdownButton(button: FilterButton) {
@@ -104,12 +111,12 @@ export default defineComponent({
             return buttonAttrs.splitButton ? (
               content
             ) : (
-              <el-button {...buttonAttrs}>
+              <ElButton {...buttonAttrs}>
                 {content}
-                <el-icon class="el-icon--right">
+                <ElIcon class="ElIcon--right">
                   <ArrowDown />
-                </el-icon>
-              </el-button>
+                </ElIcon>
+              </ElButton>
             )
           },
           dropdown: () => (
@@ -129,9 +136,9 @@ export default defineComponent({
     }
 
     return () => (
-      <el-form-item>
+      <ElFormItem>
         {props.buttons.map((button) => renderButton(button))}
-      </el-form-item>
+      </ElFormItem>
     )
   },
 })

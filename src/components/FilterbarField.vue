@@ -10,6 +10,7 @@ import type { FilterField } from '~/types'
 import type { PropType, VNode } from 'vue'
 
 import { computed, unref, isVNode, Transition, h } from 'vue'
+import { ElFormItem } from 'element-plus'
 import hasValues from 'has-values'
 import { isPlainObject, isFunction } from 'is-what'
 import { get, useLvStore } from '@/utils'
@@ -52,9 +53,9 @@ function _renderField(field: FilterField) {
     if (FieldComponent) {
       const style = field.width ? { width: `${field.width}px` } : null
       Content = (
-        <el-form-item>
+        <ElFormItem>
           <FieldComponent {...{ field, style }} />
-        </el-form-item>
+        </ElFormItem>
       )
     }
   }

@@ -1,6 +1,5 @@
-@@ -0,0 +1,424 @@
 <template>
-  <el-form
+  <ElForm
     :inline="true"
     :class="['lv__filterbar', { 'lv__filterbar--fold': isFold }]"
     @submit.prevent
@@ -36,25 +35,25 @@
             class="lv__filterbar-action-submit"
           >
             <slot name="prepend-submit" />
-            <el-button
+            <ElButton
               v-if="isShowSearchButton"
               v-bind="searchButtonProp"
               @click="handleFilterSearch"
             >
               {{ searchButtonProp.text }}
-            </el-button>
-            <el-button
+            </ElButton>
+            <ElButton
               v-if="isShowResetButton"
               v-bind="resetButtonProp"
               @click="resetFilter"
             >
               {{ resetButtonProp.text }}
-            </el-button>
+            </ElButton>
             <slot name="append-submit" />
           </div>
           <div class="lv__filterbar-action-ext">
             <slot name="prepend-more" />
-            <el-button
+            <ElButton
               v-if="filterbarFoldable"
               :icon="CaretTop"
               type="primary"
@@ -89,12 +88,13 @@
     <div v-if="$slots['filterbar-bottom']" class="lv__filterbar-bottom">
       <slot name="filterbar-bottom" />
     </div>
-  </el-form>
+  </ElForm>
 </template>
 
 <script lang="tsx" setup>
 import type { PropType } from 'vue'
 import { ref, unref, computed, useSlots, watch, nextTick, markRaw } from 'vue'
+import { ElForm, ElButton } from 'element-plus'
 import { Search, CaretTop } from '@element-plus/icons-vue'
 import { isPlainObject } from 'is-what'
 import { FilterButton, FilterField } from '~/types'

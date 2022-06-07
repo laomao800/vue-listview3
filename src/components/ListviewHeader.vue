@@ -1,25 +1,26 @@
 <template>
   <div class="lv__header">
     <h1 v-if="headerTitle" class="lv__header-title">{{ headerTitle }}</h1>
-    <el-breadcrumb
+    <ElBreadcrumb
       v-if="internalNav.length > 0"
       separator="/"
       class="lv__header-breadcrumb"
     >
-      <el-breadcrumb-item
+      <ElBreadcrumbItem
         v-for="(item, index) in internalNav"
         :key="index"
         :to="item.to"
       >
         {{ item.text }}
-      </el-breadcrumb-item>
-    </el-breadcrumb>
+      </ElBreadcrumbItem>
+    </ElBreadcrumb>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { isPlainObject } from 'is-what'
+import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 
 interface ValidedNavItem {
   text: string

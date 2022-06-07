@@ -1,16 +1,13 @@
 <template>
-  <el-select v-model="value" v-bind="mergedAttrs" :loading="loading">
-    <el-option
-      v-for="(option, index) in options"
-      v-bind="option"
-      :key="index"
-    />
-  </el-select>
+  <ElSelect v-model="value" v-bind="mergedAttrs" :loading="loading">
+    <ElOption v-for="(option, index) in options" v-bind="option" :key="index" />
+  </ElSelect>
 </template>
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
 import { markRaw, ref, watch } from 'vue'
+import { ElSelect, ElOption } from 'element-plus'
 import { resolveOptions, useFilterField } from '@/utils'
 import { FilterField } from '~/types'
 

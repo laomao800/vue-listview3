@@ -1,5 +1,5 @@
 <template>
-  <el-cascader
+  <ElCascader
     v-model="value"
     v-bind="mergedAttrs"
     :options="options"
@@ -10,6 +10,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue'
 import { markRaw, ref, watch } from 'vue'
+import { ElCascader } from 'element-plus'
 import { resolveOptions, useFilterField } from '@/utils'
 import { FilterField } from '~/types'
 

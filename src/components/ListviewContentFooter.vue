@@ -1,5 +1,6 @@
 <script lang="tsx">
 import { defineComponent, unref, computed } from 'vue'
+import { ElPagination } from 'element-plus'
 import { isNumber } from 'is-what'
 import { useLvStore } from '@/utils'
 
@@ -44,7 +45,7 @@ export default defineComponent({
     const _renderPager = (position: string) =>
       unref(usePage) &&
       unref(pagePosition) === position && (
-        <el-pagination
+        <ElPagination
           {...unref(mergedAttrs)}
           ref="pagination"
           class="lv__pager"

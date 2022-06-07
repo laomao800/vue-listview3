@@ -18,11 +18,15 @@
 <script lang="tsx" setup>
 import mitt from 'mitt'
 import { ref, unref, shallowRef } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElButton } from 'element-plus'
 import 'element-plus/es/components/badge/style/css'
 import 'element-plus/es/components/message/style/css'
 import { CirclePlus, Remove } from '@element-plus/icons-vue'
-import { create as createListview, ListviewContainer } from '../src'
+// import { create as createListview, ListviewContainer } from '../src'
+import {
+  create as createListview,
+  ListviewContainer,
+} from '../dist/index.es.js'
 const ListviewComponent = createListview({})
 
 const selection = ref([])
@@ -47,7 +51,7 @@ const filterButtons = shallowRef([
       }),
   },
   () => (
-    <el-button
+    <ElButton
       loading={unref(loadingSelection)}
       icon={Remove}
       type="danger"
@@ -72,7 +76,7 @@ const filterButtons = shallowRef([
       }}
     >
       查看已选
-    </el-button>
+    </ElButton>
   ),
   {
     type: 'primary',
@@ -331,22 +335,22 @@ const tableColumns = shallowRef([
     render: () => {
       return (
         <div>
-          <el-button
+          <ElButton
             onClick={(e) => e.stopPropagation()}
             style="padding:4px 8px"
             size="small"
             type="success"
           >
             审核
-          </el-button>
-          <el-button
+          </ElButton>
+          <ElButton
             onClick={(e) => e.stopPropagation()}
             style="padding:4px 8px"
             size="small"
             type="danger"
           >
             删除
-          </el-button>
+          </ElButton>
         </div>
       )
     },

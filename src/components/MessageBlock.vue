@@ -6,9 +6,9 @@
     }"
   >
     <span class="lv__message-icon">
-      <el-icon>
+      <ElIcon>
         <Icon />
-      </el-icon>
+      </ElIcon>
     </span>
     <span class="lv__message-text">{{ text || '' }}</span>
   </span>
@@ -21,6 +21,7 @@ import {
   InfoFilled,
   CircleCloseFilled,
 } from '@element-plus/icons-vue'
+import { ElIcon } from 'element-plus'
 
 const iconMap = {
   warning: WarningFilled,

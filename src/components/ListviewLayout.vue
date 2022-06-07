@@ -32,6 +32,7 @@ import {
   onActivated,
   onDeactivated,
 } from 'vue'
+import { vLoading } from 'element-plus'
 import { pick } from 'lodash-es'
 import { parseSize, useLvStore } from '@/utils'
 
@@ -55,6 +56,9 @@ function getElBottomOffset(el: Element) {
 
 defineOptions({
   inheritAttrs: false,
+  directives: {
+    loading: vLoading,
+  },
 })
 
 const props = defineProps({

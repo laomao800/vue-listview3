@@ -1,10 +1,11 @@
 <template>
-  <el-time-select v-model="value" v-bind="mergedAttrs" />
+  <ElTimeSelect v-model="value" v-bind="mergedAttrs" />
 </template>
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
 import { markRaw } from 'vue'
+import { ElTimeSelect } from 'element-plus'
 import { useFilterField } from '@/utils'
 import { FilterField } from '~/types'
 

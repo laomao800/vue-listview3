@@ -1,6 +1,6 @@
 <template>
   <div class="lv__content lv__table-content">
-    <el-table
+    <ElTable
       ref="contentTableRef"
       size="small"
       border
@@ -24,7 +24,7 @@
       </template>
 
       <template v-if="!!selectionColumn">
-        <el-table-column
+        <ElTableColumn
           v-if="selectionColumn.type === 'single'"
           :resizable="false"
           :fixed="tableColumns.some((col) => col.fixed)"
@@ -33,7 +33,7 @@
           class-name="el-table-column--selection el-table-column--single-selection"
         >
           <template #default="{ row, $index }">
-            <el-radio
+            <ElRadio
               :model-value="selection.indexOf(row) > -1 ? '' : false"
               :disabled="
                 selectionColumn.selectable
@@ -46,9 +46,9 @@
               "
             />
           </template>
-        </el-table-column>
+        </ElTableColumn>
 
-        <el-table-column
+        <ElTableColumn
           v-else
           v-bind="selectionColumn"
           type="selection"
@@ -62,7 +62,7 @@
         v-for="(column, index) in tableColumns"
         :key="`col${index}`"
       />
-    </el-table>
+    </ElTable>
   </div>
 </template>
 
@@ -71,7 +71,7 @@ import type { PropType } from 'vue'
 import { computed, ref, unref, watch, h } from 'vue'
 import { isPlainObject, isFunction, isString } from 'is-what'
 import parseSize from '@laomao800/parse-size-with-unit'
-import { ElTableColumn } from 'element-plus'
+import { ElTable, ElTableColumn, ElRadio } from 'element-plus'
 import { useLvStore, nodeParents } from '@/utils'
 
 import MessageBlock from '@/components/MessageBlock.vue'

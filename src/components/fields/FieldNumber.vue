@@ -1,10 +1,11 @@
 <template>
-  <el-input-number v-model="value" v-bind="mergedAttrs" />
+  <ElInputNumber v-model="value" v-bind="mergedAttrs" />
 </template>
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
 import { markRaw } from 'vue'
+import { ElInputNumber } from 'element-plus'
 import { useFilterField } from '@/utils'
 import { FilterField } from '~/types'
 

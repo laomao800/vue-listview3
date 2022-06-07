@@ -1,15 +1,16 @@
 <template>
-  <el-input v-model="value" v-bind="mergedAttrs" @blur="onBlur">
+  <ElInput v-model="value" v-bind="mergedAttrs" @blur="onBlur">
     <template v-for="(slot, key) in componentSlots" #[key]>
       <component :is="slot" v-if="isVNode(slot)" :key="key" />
       <template v-else>{{ slot }}</template>
     </template>
-  </el-input>
+  </ElInput>
 </template>
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
 import { isVNode, markRaw } from 'vue'
+import { ElInput } from 'element-plus'
 import { useFilterField } from '@/utils'
 import { FilterField } from '~/types'
 
