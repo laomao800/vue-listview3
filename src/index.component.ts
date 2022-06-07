@@ -1,3 +1,4 @@
+import 'element-plus/es/components/loading/style/css'
 import 'element-plus/es/components/form/style/css'
 import 'element-plus/es/components/form-item/style/css'
 import 'element-plus/es/components/button-group/style/css'
