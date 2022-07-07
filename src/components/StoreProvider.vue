@@ -106,13 +106,13 @@ function doRequest() {
     return warn('未配置 requestUrl 或 requestHandler ，无法发起数据请求。')
   }
 
-  $rootEmitProxy('before-request')
+  rootEmitProxy('before-request')
 
   contentLoading.value = true
   const requestData = getRequestData()
   // transformRequestData 有可能返回 false 以阻止提交动作，可用于提交前验证等
   if (requestData === false) {
-    $rootEmitProxy('request-valid-error')
+    rootEmitProxy('request-valid-error')
     /* istanbul ignore next */
     contentLoading.value = false
     return Promise.resolve()
@@ -128,10 +128,10 @@ function doRequest() {
         }
         contentData.value = getContentData(data)
         contentLoading.value = false
-        $rootEmitProxy('request-success')
+        rootEmitProxy('request-success')
       })
       .catch(handleResponseError)
-      .finally(() => $rootEmitProxy('requested'))
+      .finally(() => rootEmitProxy('requested'))
   )
 }
 
@@ -183,7 +183,7 @@ function handleResponseError(error: any) {
     setContentMessage(errorMessage, 'error')
     cleanContentData()
     contentLoading.value = false
-    $rootEmitProxy('request-error', error)
+    rootEmitProxy('request-error', error)
   }
   return error
 }
@@ -251,7 +251,7 @@ function setContentMessage(
   cleanData && cleanContentData()
 }
 
-function $rootEmitProxy(rootEventName: string, ...args: any[]) {
+function rootEmitProxy(rootEventName: string, ...args: any[]) {
   const vm = getCurrentInstance()?.proxy
   emit('root-emit', rootEventName, vm, ...args)
 }
@@ -265,7 +265,7 @@ function search(keepInPage = false) {
 
 defineExpose({
   contentHeight,
-  $rootEmitProxy,
+  rootEmitProxy,
   search,
   setContentMessage,
   selection,

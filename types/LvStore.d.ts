@@ -44,7 +44,7 @@ export declare class LvStore {
   internalContentMessage: ContentMessageObject | null
 
   // Methods
-  $rootEmitProxy: (eventName: string, ...args: any[]) => void
+  rootEmitProxy: (eventName: string, ...args: any[]) => void
   search: (keepInPage?: boolean) => Promise<any>
   setContentMessage: (
     text: string,
