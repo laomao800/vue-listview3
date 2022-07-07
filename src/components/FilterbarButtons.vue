@@ -34,7 +34,14 @@ function isValidButtonConfig(button: any) {
 }
 
 function normalizeButton(button: FilterButton): NormalizedButton {
-  const { click, icon: _icon, children: _children, ...buttonAttrs } = button
+  const {
+    click,
+    type,
+    text = '',
+    icon: _icon,
+    children: _children,
+    ...buttonAttrs
+  } = button
   const icon = _icon ? <ElIcon>{h(_icon)}</ElIcon> : null
 
   let onClick = button.onClick
@@ -51,9 +58,10 @@ function normalizeButton(button: FilterButton): NormalizedButton {
     : []
 
   return {
-    text: button.text || '',
+    text,
     children,
     buttonAttrs: {
+      type,
       icon,
       onClick,
       ...buttonAttrs,

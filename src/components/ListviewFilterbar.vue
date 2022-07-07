@@ -37,14 +37,14 @@
             <slot name="prepend-submit" />
             <ElButton
               v-if="isShowSearchButton"
-              v-bind="searchButtonProp"
+              v-bind="searchButtonProp.attrs"
               @click="handleFilterSearch"
             >
               {{ searchButtonProp.text }}
             </ElButton>
             <ElButton
               v-if="isShowResetButton"
-              v-bind="resetButtonProp"
+              v-bind="resetButtonProp.attrs"
               @click="resetFilter"
             >
               {{ resetButtonProp.text }}
@@ -106,13 +106,17 @@ const lvStore = useLvStore()
 
 const DEFAULT_SEARCH_BUTTON = markRaw({
   text: '搜索',
-  icon: Search,
-  type: 'primary',
+  attrs: {
+    icon: Search,
+    type: 'primary',
+  },
 })
 
 const DEFAULT_RESET_BUTTON = markRaw({
   text: '重置',
-  type: 'default',
+  attrs: {
+    type: 'default',
+  },
 })
 
 defineOptions({
@@ -198,14 +202,14 @@ watch(
   }
 )
 
-const $rootEmitProxy = lvStore.$rootEmitProxy.bind(lvStore)
+const rootEmitProxy = lvStore.rootEmitProxy.bind(lvStore)
 
 function handleSubmit() {
   lvStore.pressEnterSearch && handleFilterSearch()
 }
 
 function handleFilterSearch() {
-  $rootEmitProxy('filter-submit')
+  rootEmitProxy('filter-submit')
   lvStore.search()
 }
 
@@ -229,7 +233,7 @@ function resetFilter() {
       _resetField(field)
     }
   })
-  $rootEmitProxy('filter-reset')
+  rootEmitProxy('filter-reset')
 }
 
 function toggleFilterbar() {
