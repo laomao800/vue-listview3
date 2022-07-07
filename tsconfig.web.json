@@ -1,27 +1,13 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
-    "target": "esnext",
-    "useDefineForClassFields": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
     "jsx": "preserve",
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
-    "skipLibCheck": true,
-    "types": ["element-plus/global", "vite/client"],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "~/*": ["*"]
-    }
+    "lib": ["ES2018", "DOM", "DOM.Iterable"],
+    "types": ["unplugin-vue-define-options"]
   },
   "include": [
-    "vite.config.*",
+    // "vite.config.*",
     "env.d.ts",
     "src/**/*.ts",
     "src/**/*.d.ts",
@@ -30,5 +16,6 @@
     "example/**/*",
     "tests/**/*",
     "public/mockServiceWorker.js"
-  ]
+  ],
+  "exclude": ["node_modules", "dist"]
 }
