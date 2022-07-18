@@ -1,10 +1,5 @@
 <template>
-  <span
-    :class="{
-      lv__message: true,
-      [`lv__message--${type}`]: type,
-    }"
-  >
+  <span class="lv__message" :class="{ [`lv__message--${type}`]: type }">
     <span class="lv__message-icon">
       <ElIcon>
         <Icon />

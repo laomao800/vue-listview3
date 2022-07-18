@@ -1,7 +1,8 @@
 <template>
   <ElForm
     :inline="true"
-    :class="['lv__filterbar', { 'lv__filterbar--fold': isFold }]"
+    :class="{ 'lv__filterbar--fold': isFold }"
+    class="lv__filterbar"
     @submit.prevent
     @keydown.enter="handleSubmit"
   >
@@ -22,13 +23,11 @@
         <div
           v-if="isShowFilterSubmit"
           ref="actionRef"
-          :class="[
-            'lv__filterbar-action',
-            {
-              'lv__filterbar-action--nomore': isNoMore,
-              'lv__filterbar-action--onleft': isNoneFields,
-            },
-          ]"
+          class="lv__filterbar-action"
+          :class="{
+            'lv__filterbar-action--nomore': isNoMore,
+            'lv__filterbar-action--onleft': isNoneFields,
+          }"
         >
           <div
             :style="{ transform: `translateX(${searchBtnOffset}px)` }"
