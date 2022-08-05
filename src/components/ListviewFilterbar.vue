@@ -97,7 +97,8 @@ import { ElForm, ElButton } from 'element-plus'
 import { Search, CaretTop } from '@element-plus/icons-vue'
 import { isPlainObject } from 'is-what'
 import { FilterButton, FilterField } from '~/types'
-import { hasOwn, useLvStore } from '@/utils'
+import { hasOwn } from '@/utils'
+import { useLvStore } from '@/useLvStore'
 import FilterbarButtons from './FilterbarButtons.vue'
 import FilterbarFields from './FilterbarFields.vue'
 
@@ -105,20 +106,16 @@ const lvStore = useLvStore()
 
 const DEFAULT_SEARCH_BUTTON = markRaw({
   text: '搜索',
-  attrs: {
-    icon: Search,
-    type: 'primary',
-  },
+  attrs: { type: 'primary', icon: Search },
 })
 
 const DEFAULT_RESET_BUTTON = markRaw({
   text: '重置',
-  attrs: {
-    type: 'default',
-  },
+  attrs: { type: 'default' },
 })
 
 defineOptions({
+  name: 'ListviewFilterbar',
   inheritAttrs: false,
 })
 
@@ -155,10 +152,7 @@ const slots = useSlots()
 
 const filterbarFieldsRef = ref<any>(null)
 const actionRef = ref<Element | null>(null)
-const isFold = ref(props.filterbarFold)
-if (!props.filterbarFoldable) {
-  isFold.value = false
-}
+const isFold = ref(!props.filterbarFoldable ? false : props.filterbarFold)
 const topRightItemIndex = ref(-1)
 const actionOffsetLeft = ref(0)
 const searchBtnOffset = ref(0)
@@ -201,7 +195,7 @@ watch(
   }
 )
 
-const rootEmitProxy = lvStore.rootEmitProxy.bind(lvStore)
+const rootEmitProxy = lvStore?.rootEmitProxy?.bind(lvStore)
 
 function handleSubmit() {
   lvStore.pressEnterSearch && handleFilterSearch()
@@ -256,7 +250,7 @@ function updateTopRightItemIndex() {
   let lastFilterIndex = -1
   const allFields: Element[] = unref(filterbarFieldsRef)?.$el.children || []
   if (allFields.length > 0) {
-    let lastFilterTop = unref(actionRef)?.getBoundingClientRect().top || 0
+    const lastFilterTop = unref(actionRef)?.getBoundingClientRect().top || 0
     for (let i = 0; i < allFields.length; i++) {
       const curItemTop = allFields[i].getBoundingClientRect().top
       if (curItemTop > lastFilterTop) {

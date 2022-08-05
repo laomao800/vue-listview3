@@ -1,5 +1,6 @@
 <template>
   <ListviewComponent
+    ref="listview"
     v-model:selection="selection"
     header-title="演示列表1"
     :header-nav="['菜单1', { text: '菜单2' }]"
@@ -22,12 +23,8 @@ import { ElMessage, ElButton } from 'element-plus'
 import 'element-plus/es/components/badge/style/css'
 import 'element-plus/es/components/message/style/css'
 import { CirclePlus, Remove } from '@element-plus/icons-vue'
-// import { create as createListview, ListviewContainer } from '../src'
-import {
-  create as createListview,
-  ListviewContainer,
-} from '../dist/index.es.js'
-const ListviewComponent = createListview({})
+// @ts-ignore
+import { Listview as ListviewComponent } from '../src'
 
 const selection = ref([])
 const loadingSelection = ref(false)
@@ -101,8 +98,6 @@ const filterButtons = shallowRef([
 ])
 
 const emitter = mitt<any>()
-;(window as any).emitter = emitter
-
 const filterFields = shallowRef([
   {
     type: 'select',

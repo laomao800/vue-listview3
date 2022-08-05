@@ -1,5 +1,5 @@
 <script lang="tsx">
-import type { PropType, VNode } from 'vue'
+import type { PropType } from 'vue'
 import { isVNode, defineComponent, h } from 'vue'
 import {
   ElDropdown,
@@ -17,10 +17,7 @@ import { FilterButton } from '~/types'
 interface NormalizedButton {
   text: string
   children: NormalizedButton[]
-  buttonAttrs: Record<string, any> & {
-    icon?: VNode | null
-    onClick?: ($event: MouseEvent) => void
-  }
+  buttonAttrs: Record<string, any>
 }
 
 function isValidButtonConfig(button: any) {

@@ -1,4 +1,4 @@
-import type { ListviewProps } from '~/types'
+import type { ListviewProps, LvStore } from '~/types'
 import { vi } from 'vitest'
 import { mount, MountingOptions } from '@vue/test-utils'
 import ElementPlus from 'element-plus'
@@ -29,12 +29,11 @@ export async function createListviewWrapper(
     ...opts,
   })
 
-  const vm = wrapper.vm as any
-  const storeWrapper = wrapper.findComponent({ ref: 'storeProviderRef' })
-  const storeVm = storeWrapper.vm
+  const vm = wrapper.vm
+  const lvStore: LvStore = wrapper.findComponent({ ref: 'layoutRef' }).vm
+    .lvStore
 
-  await wait()
-  return { requestSpy, wrapper, vm, storeWrapper, storeVm }
+  return { requestSpy, wrapper, vm, lvStore }
 }
 
 export const wait = (time = 100) =>

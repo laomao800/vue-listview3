@@ -8,23 +8,27 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue'
-import { markRaw, ref, watch } from 'vue'
+import type { CascaderProps } from 'element-plus'
+import { computed, PropType, unref } from 'vue'
+import { ref, watch } from 'vue'
 import { ElCascader } from 'element-plus'
 import { resolveOptions, useFilterField } from '@/utils'
 import { FilterField } from '~/types'
+
+defineOptions({ name: 'FieldCascader' })
 
 const props = defineProps({
   field: { type: Object as PropType<FilterField>, default: () => ({}) },
 })
 
-const { value, mergedAttrs } = useFilterField<string>(props.field)
+const { value, componentAttrs } = useFilterField<string>(props.field)
 
-const defaultAttrs = markRaw({
+const mergedAttrs = computed(() => ({
+  ...unref(componentAttrs),
   clearable: true,
   style: { width: '180px' },
-  props: { expandTrigger: 'hover' },
-})
+  props: { expandTrigger: 'hover' } as CascaderProps,
+}))
 const options = ref<any[]>([])
 const loading = ref(false)
 
@@ -46,8 +50,4 @@ watch(
   },
   { immediate: true }
 )
-
-defineExpose({
-  defaultAttrs,
-})
 </script>

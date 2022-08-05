@@ -1,8 +1,10 @@
-import { computed, getCurrentInstance, onMounted, ref, unref } from 'vue'
+import type { FilterField } from '~/types'
+
+import { computed, onMounted, ref, unref } from 'vue'
 import { merge } from 'lodash-es'
 import { isPlainObject, isFunction } from 'is-what'
-import type { FilterField } from '../../types'
-import { useLvStore, error, get } from './index'
+import { useLvStore } from '@/useLvStore'
+import { error, get } from './index'
 
 export function useFilterField<T = any>(field: FilterField) {
   const lvStore = useLvStore()
@@ -12,17 +14,17 @@ export function useFilterField<T = any>(field: FilterField) {
   const placeholder = computed(() => unref(fieldRef).label)
   const value = computed<T>({
     get() {
-      const modelProperty = unref(fieldRef).model
+      const key = unref(fieldRef).model
       let value = null
-      if (modelProperty) {
-        value = get(lvStore.filterModel, modelProperty)
+      if (key) {
+        value = get(lvStore.filterModel, key)
       }
       return value
     },
     set(newVal) {
-      const modelProperty = unref(fieldRef).model
-      if (modelProperty) {
-        lvStore.filterModel[modelProperty] = newVal
+      const key = unref(fieldRef).model
+      if (key) {
+        lvStore.filterModel[key] = newVal
       } else {
         /* istanbul ignore next */
         if (process.env.NODE_ENV !== 'production') {
@@ -36,13 +38,11 @@ export function useFilterField<T = any>(field: FilterField) {
     },
   })
 
-  const mergedAttrs = computed<FilterField['componentAttrs']>(() => {
-    let defaultAttrs = (getCurrentInstance()?.proxy as any)?.defaultAttrs
-    defaultAttrs = isPlainObject(defaultAttrs) ? defaultAttrs : {}
+  const componentAttrs = computed<FilterField['componentAttrs']>(() => {
     const componentAttrs = isPlainObject(unref(fieldRef).componentAttrs)
       ? unref(fieldRef).componentAttrs
       : {}
-    return merge(defaultAttrs, componentAttrs, {
+    return merge(componentAttrs, {
       disabled: unref(disabled),
       placeholder: unref(placeholder),
     })
@@ -64,7 +64,7 @@ export function useFilterField<T = any>(field: FilterField) {
     value,
     disabled,
     placeholder,
-    mergedAttrs,
+    componentAttrs,
     componentSlots,
   }
 }

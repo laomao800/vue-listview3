@@ -1,5 +1,5 @@
 <template>
-  <StoreProvider ref="storeProviderRef" v-bind="mergedAttrs" @root-emit="$emit">
+  <ElConfigProvider :locale="zhCn">
     <ListviewLayout
       ref="layoutRef"
       v-bind="mergedAttrs"
@@ -41,11 +41,13 @@
           </template>
         </component>
       </template>
-      <template #content="props">
-        <slot v-bind="props">
+
+      <template #content="scopedProps">
+        <slot v-bind="scopedProps">
           <component :is="contentComponent" v-bind="mergedAttrs" />
         </slot>
       </template>
+
       <template #footer>
         <component :is="footerComponent" v-bind="mergedAttrs">
           <template v-if="$slots['footer-left']" #footer-left>
@@ -60,34 +62,30 @@
         </component>
       </template>
     </ListviewLayout>
-  </StoreProvider>
+  </ElConfigProvider>
 </template>
 
 <script lang="tsx" setup>
 import type { Component } from 'vue'
-import {
-  ref,
-  unref,
-  computed,
-  getCurrentInstance,
-  nextTick,
-  useAttrs,
-} from 'vue'
+import { watch } from 'vue'
+import { ref, unref, computed, nextTick, useAttrs } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
-import { isPlainObject } from 'is-what'
+import { ElConfigProvider } from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { get } from '@/utils'
-import StoreProvider from '@/components/StoreProvider.vue'
 import ListviewLayout from '@/components/ListviewLayout.vue'
 import ListviewHeader from '@/components/ListviewHeader.vue'
 import ListviewFilterbar from '@/components/ListviewFilterbar.vue'
 import ListviewContent from '@/components/ListviewContent.vue'
 import ListviewContentFooter from '@/components/ListviewContentFooter.vue'
+import { useProvideLvStore } from '@/useLvStore'
 
 defineOptions({
+  name: 'ListviewMain',
   inheritAttrs: false,
 })
 
-defineEmits([
+const emits = defineEmits([
   'filter-submit',
   'filter-reset',
   'before-request',
@@ -97,21 +95,67 @@ defineEmits([
   'requested',
 ])
 
-const storeProviderRef = ref(null)
-const layoutRef = ref(null)
+const props = defineProps({
+  // Data request
+  pressEnterSearch: { type: Boolean, default: true },
+  autoload: { type: Boolean, default: true },
+  requestUrl: { type: String, default: '' },
+  requestMethod: { type: String, default: 'post' },
+  requestConfig: { type: Object, default: () => ({}) },
+  filterModel: { type: Object, default: () => ({}) },
+
+  // Adv request
+  requestHandler: { type: Function, default: null },
+  transformRequestData: { type: Function, default: null },
+
+  // Adv response
+  transformResponseData: { type: Function, default: null },
+  contentDataMap: {
+    type: Object,
+    default: () => ({
+      items: 'result.items',
+      total: 'result.total',
+    }),
+  },
+
+  // Request error handler
+  contentMessage: { type: [Object, String], default: null },
+  validateResponse: { type: Function, default: null },
+  resolveResponseErrorMessage: { type: Function, default: null },
+
+  // Pager
+  usePage: { type: [Object, Boolean], default: true },
+  pageSize: { type: Number, default: 20 },
+  pageSizes: { type: Array, default: () => [20, 50, 100] },
+  pageProps: { type: Object, default: () => ({}) },
+  pagePosition: { type: String, default: 'left' },
+
+  replaceComponents: { type: Object, default: null },
+})
+
+const layoutRef = ref<any>(null)
 const filterbarRef = ref(null)
-const _cur = getCurrentInstance()
-const attrs = useAttrs()
+const lvStore = computed(() => unref(layoutRef)?.lvStore)
+
+const unwatchStore = watch(lvStore, () => {
+  if (unref(lvStore)) {
+    unref(lvStore).emitter.on('root-emit', ({ event, payload }: any) => {
+      emits(event, payload)
+    })
+    unwatchStore()
+  }
+})
 
 function _getReplaceComponent(name: string, defaultComp: Component) {
-  const _r: Record<string, any> = (_cur?.data?.replaceComponents__ as any) || {}
-  return _r ? get(_r, name, defaultComp) : defaultComp
+  return get(props.replaceComponents, name, defaultComp)
 }
 
-const mergedAttrs = computed<Record<string, any>>(() => {
-  const _r: Record<string, any> = (_cur?.data?.presetProps__ as any) || {}
-  return isPlainObject(_r) ? { ..._r, ...attrs } : attrs
-})
+// ListviewProps
+const attrs = useAttrs()
+const mergedAttrs = computed<Record<string, any>>(() => ({
+  ...props,
+  ...attrs,
+}))
 const headerComponent = computed(() =>
   _getReplaceComponent('header', ListviewHeader)
 )
@@ -132,10 +176,12 @@ const handleFilterFold = () => nextTick().then(_updateWrapperLayout)
 
 const updateLayout = useThrottleFn(_updateWrapperLayout, 100)
 const resetFilter = () => unref<any>(filterbarRef)?.resetFilter.call()
-const search = (keepInPage: boolean) =>
-  unref<any>(storeProviderRef)?.search(keepInPage)
+const search = (keepInPage: boolean) => lvStore.value.search(keepInPage)
 const setContentMessage = (text: string, type: string, cleanData = false) =>
-  unref<any>(storeProviderRef)?.setContentMessage(text, type, cleanData)
+  lvStore.value.setContentMessage(text, type, cleanData)
+
+// TODO: type fix
+useProvideLvStore(unref(mergedAttrs) as any)
 
 defineExpose({
   updateLayout,

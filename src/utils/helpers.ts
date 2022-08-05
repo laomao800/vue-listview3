@@ -118,4 +118,4 @@ export const toDisplayString = (val: unknown): string => {
     : String(val)
 }
 
-export const useLvStore = () => inject('lvStore') as LvStore
+export const useLvStore = () => inject<LvStore>('lvStore')!

@@ -2,7 +2,6 @@
   <div class="lv__content lv__table-content">
     <ElTable
       ref="contentTableRef"
-      size="small"
       border
       stripe
       v-bind="contentAttrs"
@@ -41,9 +40,7 @@
                   : false
               "
               label
-              @click.stop.prevent="
-                ($event: any) => handleRowClick(row, null, $event)
-              "
+              @click.stop.prevent="($event: any) => handleRowClick(row, null, $event)"
             />
           </template>
         </ElTableColumn>
@@ -72,33 +69,33 @@ import { computed, ref, unref, watch, h } from 'vue'
 import { isPlainObject, isFunction, isString } from 'is-what'
 import parseSize from '@laomao800/parse-size-with-unit'
 import { ElTable, ElTableColumn, ElRadio } from 'element-plus'
-import { useLvStore, nodeParents } from '@/utils'
-
+import { nodeParents } from '@/utils'
+import { useLvStore } from '@/useLvStore'
 import MessageBlock from '@/components/MessageBlock.vue'
 import { TableColumn } from '~/types'
-
-const props = defineProps({
-  tableColumns: { type: Array as PropType<TableColumn[]>, default: () => [] },
-  tableSelectionColumn: { type: [Boolean, String, Object], default: true },
-  contentAttrs: { type: Object, default: () => ({}) },
-})
 
 defineOptions({
   inheritAttrs: false,
 })
 
 const lvStore = useLvStore()
-const contentTableRef = ref<any>(null)
-
-const _height = computed(() => parseSize(lvStore.contentHeight) || void 0)
-const selection = computed({
-  get: () => lvStore.selection,
-  set: (newVal) => (lvStore.selection = newVal),
+const props = defineProps({
+  tableColumns: { type: Array as PropType<TableColumn[]>, default: () => [] },
+  tableSelectionColumn: { type: [Boolean, String, Object], default: true },
+  contentAttrs: { type: Object, default: () => ({}) },
 })
-const contentData = computed(() => lvStore.contentData)
-const contentMessage = computed(
-  () => lvStore.internalContentMessage || ({} as any)
+
+const contentTableRef = ref<any>(null)
+const _height = computed(
+  () => parseSize(unref(lvStore.contentHeight)) || undefined
 )
+const selection = computed({
+  get: () => unref(lvStore.selection),
+  set: (newVal) => (lvStore.selection.value = newVal),
+})
+const contentData = lvStore.contentData
+const contentMessage = lvStore.internalContentMessage
+
 /**
  * 规范化表格选择列配置
  */
@@ -107,7 +104,7 @@ const selectionColumn = computed(() => {
   if (column === false) {
     return false
   }
-  let finalColumn: any = { selectable: null }
+  const finalColumn: any = { selectable: null }
   if (column === 'single') {
     finalColumn.type = 'single'
   } else if (isPlainObject(column)) {
@@ -157,7 +154,7 @@ function handleTableSelectionChange(val: any) {
 function renderTableColumn(tableColumn: any) {
   const _createColumn = (column: any) => {
     const { render, children, ...restOptions } = column
-    let slots: Record<string, any> = {}
+    const slots: Record<string, any> = {}
     if (render) {
       slots.default = (props: any) => render(props)
     } else if (Array.isArray(children)) {

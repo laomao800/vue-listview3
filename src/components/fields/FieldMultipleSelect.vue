@@ -4,4 +4,6 @@
 
 <script lang="ts" setup>
 import FieldSelect from './FieldSelect.vue'
+
+defineOptions({ name: 'FieldMultipleSelect' })
 </script>

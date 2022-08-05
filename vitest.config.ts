@@ -24,5 +24,8 @@ export default defineConfig({
     coverage: {
       reportsDirectory: path.resolve(__dirname, 'tests/unit/coverage'),
     },
+    deps: {
+      inline: ['element-plus'],
+    },
   },
 })

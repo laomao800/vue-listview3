@@ -34,7 +34,8 @@ import {
 } from 'vue'
 import { vLoading } from 'element-plus'
 import { pick } from 'lodash-es'
-import { parseSize, useLvStore } from '@/utils'
+import { parseSize } from '@/utils'
+import { useLvStore } from '@/useLvStore'
 
 function isDom(item: any): item is Element {
   return item instanceof Element
@@ -68,7 +69,10 @@ const props = defineProps({
 
 const emit = defineEmits(['update-layout'])
 
-const lvStore = useLvStore()
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const lvStore = useLvStore()!
+
+// TODO: test 用例检查传值
 const scopeProps = computed(() =>
   pick(lvStore, [
     'contentHeight',
@@ -84,12 +88,12 @@ const contentRef = ref<Element | null>(null)
 const footerRef = ref<Element | null>(null)
 const wrapperHeight = ref<number | string | null>(null)
 const contentHeight = computed({
-  get: () => lvStore.contentHeight,
+  get: () => unref(lvStore.contentHeight),
   set(newVal) {
-    lvStore.contentHeight = newVal
+    lvStore.contentHeight.value = newVal
   },
 })
-const contentLoading = computed(() => !!lvStore.contentLoading)
+const contentLoading = computed(() => !!unref(lvStore.contentLoading))
 const bottomOffset = computed<number>(() =>
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   getElBottomOffset(unref(wrapperRef)!)
@@ -164,6 +168,7 @@ onDeactivated(() => {
 
 defineExpose({
   updateLayout,
+  lvStore,
 })
 </script>
 

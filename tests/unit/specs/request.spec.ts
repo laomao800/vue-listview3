@@ -1,3 +1,4 @@
+import { unref } from 'vue'
 import { describe, it, expect } from 'vitest'
 import { createListviewWrapper, mockDataList, wait } from '../helpers'
 
@@ -68,15 +69,12 @@ describe('Request params', () => {
   })
 
   it('request', async () => {
-    const { wrapper } = await createListviewWrapper({
+    const { lvStore } = await createListviewWrapper({
       requestHandler: undefined,
       requestUrl: '/mock/list',
     })
     await wait(400)
-    const storeRef = wrapper.findComponent({
-      ref: 'storeProviderRef',
-    }).componentVM
-    expect(storeRef).toHaveProperty('contentData.total', 800)
+    expect(unref(lvStore.contentData)).toHaveProperty('total', 800)
   })
 })
 
@@ -124,17 +122,17 @@ describe('分页参数', () => {
   })
 
   it.skip('切换 pageSize', async () => {
-    const { wrapper, storeVm } = await createListviewWrapper({
+    const { wrapper, lvStore } = await createListviewWrapper({
       pageSize: 2,
     })
     const $pagination = wrapper.findComponent({ name: 'ElPagination' })
     $pagination.vm.$emit('update:page-size', 3)
 
-    expect(storeVm.currentPageSize).toBe(3)
+    expect(lvStore.currentPageSize).toBe(3)
   })
 
   it('search(true) 保持当前页码', async () => {
-    const { wrapper, vm, storeVm } = await createListviewWrapper({
+    const { wrapper, vm, lvStore } = await createListviewWrapper({
       pageSize: 2,
     })
 
@@ -143,15 +141,15 @@ describe('分页参数', () => {
       .findComponent({ name: 'ElPagination' })
       .vm.$emit('update:current-page', newCurPage)
     await vm.search(true)
-    expect(storeVm.currentPage).toBe(newCurPage)
+    expect(unref(lvStore.currentPage)).toBe(newCurPage)
     await vm.search()
-    expect(storeVm.currentPage).toBe(1)
+    expect(unref(lvStore.currentPage)).toBe(1)
   })
 })
 
 describe('Response', () => {
   it('contentDataMap', async () => {
-    const { storeVm } = await createListviewWrapper({
+    const { lvStore } = await createListviewWrapper({
       contentDataMap: {
         custom_items: 'result.items',
         custom_total: 'result.total_count',
@@ -159,7 +157,7 @@ describe('Response', () => {
         custom_unknow: 'result.unknow.prop',
       },
     })
-    expect(storeVm.contentData).toEqual({
+    expect(unref(lvStore.contentData)).toEqual({
       custom_items: mockDataList,
       custom_total: 40,
       custom_success: true,
@@ -172,7 +170,7 @@ describe('Response', () => {
       items: mockDataList,
       total: 40,
     }
-    const { storeVm } = await createListviewWrapper({
+    const { lvStore } = await createListviewWrapper({
       requestHandler: () =>
         Promise.resolve({
           custom_is_success: 'done',
@@ -180,11 +178,11 @@ describe('Response', () => {
         }),
       validateResponse: (response) => response.custom_is_success === 'done',
     })
-    expect(storeVm.contentData).toEqual(result)
+    expect(unref(lvStore.contentData)).toEqual(result)
   })
 
   it('resolveResponseErrorMessage', async () => {
-    const { storeVm } = await createListviewWrapper({
+    const { lvStore } = await createListviewWrapper({
       requestHandler: () =>
         Promise.resolve({
           custom_is_success: 'fail',
@@ -199,14 +197,14 @@ describe('Response', () => {
         }
       },
     })
-    expect(storeVm.internalContentMessage).toEqual({
+    expect(unref(lvStore.internalContentMessage)).toEqual({
       type: 'error',
       text: 'error: (error info)',
     })
   })
 
   it('transformResponseData', async () => {
-    const { storeVm } = await createListviewWrapper({
+    const { lvStore } = await createListviewWrapper({
       contentDataMap: {
         success: 'is_success',
         items: 'new_data.items',
@@ -222,7 +220,7 @@ describe('Response', () => {
         },
       }),
     })
-    expect(storeVm.contentData).toEqual({
+    expect(unref(lvStore.contentData)).toEqual({
       success: true,
       items: mockDataList,
       total: 40,

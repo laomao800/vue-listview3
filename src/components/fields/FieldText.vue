@@ -9,16 +9,19 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
-import { isVNode, markRaw } from 'vue'
+import { isVNode, computed } from 'vue'
 import { ElInput } from 'element-plus'
 import { useFilterField } from '@/utils'
 import { FilterField } from '~/types'
+import { unref } from 'vue'
+
+defineOptions({ name: 'FieldText' })
 
 const props = defineProps({
   field: { type: Object as PropType<FilterField>, default: () => ({}) },
 })
 
-const { value, mergedAttrs, componentSlots } = useFilterField<string>(
+const { value, componentAttrs, componentSlots } = useFilterField<string>(
   props.field
 )
 
@@ -30,12 +33,9 @@ const onBlur = () => {
   }
 }
 
-const defaultAttrs = markRaw({
+const mergedAttrs = computed(() => ({
+  ...unref(componentAttrs),
   clearable: true,
   style: { width: '180px' },
-})
-
-defineExpose({
-  defaultAttrs,
-})
+}))
 </script>

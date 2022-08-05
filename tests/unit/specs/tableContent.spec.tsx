@@ -29,7 +29,7 @@ describe('Table content', () => {
       { label: 'column1' },
       { label: 'column1' },
     ]
-    const { wrapper, storeWrapper, storeVm } = await createListviewWrapper({
+    const { wrapper, lvStore } = await createListviewWrapper({
       tableColumns,
     })
     const rowWrapper = wrapper
@@ -37,8 +37,8 @@ describe('Table content', () => {
       .findAll('.el-table__row')
     await rowWrapper.at(1).find('td').element.click()
     await rowWrapper.at(2).find('td').element.click()
-    expect(storeWrapper.emitted('update:selection')!.length).toBe(2)
-    expect(storeVm.selection.length).toBe(2)
+    // expect(storeWrapper.emitted('update:selection')!.length).toBe(2)
+    expect(lvStore.selection.value.length).toBe(2)
     expect(wrapper.findAll('tr.lv-row--selected').length).toBe(2)
   })
 
@@ -49,7 +49,7 @@ describe('Table content', () => {
       { label: 'column1' },
       { label: 'column1' },
     ]
-    const { wrapper, storeWrapper, storeVm } = await createListviewWrapper(
+    const { wrapper, lvStore } = await createListviewWrapper(
       {
         tableColumns,
         tableSelectionColumn: {
@@ -66,8 +66,8 @@ describe('Table content', () => {
     await rowWrapper.at(1).find('.el-checkbox').trigger('click')
     await rowWrapper.at(2).find('.el-checkbox').trigger('click')
 
-    expect(storeWrapper.emitted('update:selection')?.length).toBe(2)
-    expect(storeVm.selection.length).toBe(2)
+    // expect(storeWrapper.emitted('update:selection')?.length).toBe(2)
+    expect(lvStore.selection.value.length).toBe(2)
     expect(wrapper.findAll('tr.lv-row--selected').length).toBe(2)
   })
 
@@ -78,7 +78,7 @@ describe('Table content', () => {
       { label: 'column1' },
       { label: 'column1' },
     ]
-    const { wrapper, storeWrapper, storeVm } = await createListviewWrapper(
+    const { wrapper, lvStore } = await createListviewWrapper(
       {
         tableColumns,
         tableSelectionColumn: 'single',
@@ -92,8 +92,8 @@ describe('Table content', () => {
     await rowWrapper.at(1).find('.el-radio').trigger('click')
     await rowWrapper.at(2).find('.el-radio').trigger('click')
 
-    expect(storeWrapper.emitted('update:selection')!.length).toBe(2)
-    expect(storeVm.selection.length).toBe(1)
+    // expect(storeWrapper.emitted('update:selection')!.length).toBe(2)
+    expect(lvStore.selection.value.length).toBe(1)
     expect(wrapper.findAll('tr.lv-row--selected').length).toBe(1)
   })
 })

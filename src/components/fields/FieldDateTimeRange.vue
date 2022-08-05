@@ -4,27 +4,27 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
-import { markRaw } from 'vue'
+import type { DatePickType } from 'element-plus'
+import { computed, unref } from 'vue'
 import { ElDatePicker } from 'element-plus'
 import { useFilterField } from '@/utils'
 import { FilterField } from '~/types'
+
+defineOptions({ name: 'FieldDateTimeRange' })
 
 const props = defineProps({
   field: { type: Object as PropType<FilterField>, default: () => ({}) },
 })
 
-const { value, mergedAttrs } = useFilterField<string>(props.field)
+const { value, componentAttrs } = useFilterField<string>(props.field)
 
-const defaultAttrs = markRaw({
+const mergedAttrs = computed(() => ({
+  ...unref(componentAttrs),
   clearable: true,
   style: { width: '380px' },
-  type: 'datetimerange',
+  type: 'datetimerange' as DatePickType,
   startPlaceholder: '开始日期',
   endPlaceholder: '结束日期',
   expandTrigger: 'hover',
-})
-
-defineExpose({
-  defaultAttrs,
-})
+}))
 </script>

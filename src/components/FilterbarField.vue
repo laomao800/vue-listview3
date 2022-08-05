@@ -13,7 +13,8 @@ import { computed, unref, isVNode, Transition, h } from 'vue'
 import { ElFormItem } from 'element-plus'
 import hasValues from 'has-values'
 import { isPlainObject, isFunction } from 'is-what'
-import { get, useLvStore } from '@/utils'
+import { get } from '@/utils'
+import { useLvStore } from '@/useLvStore'
 import { getFieldComponent } from './fields/index'
 
 const _isFieldObj = (payload: typeof props.field): payload is FilterField =>
@@ -45,20 +46,28 @@ function _renderField(field: FilterField) {
     </Transition>
   ) : null
 
-  let Content = null
-  if (isFunction(field.render)) {
-    Content = field.render()
-  } else {
-    const FieldComponent = getFieldComponent(field.type) as any
-    if (FieldComponent) {
-      const style = field.width ? { width: `${field.width}px` } : null
-      Content = (
-        <ElFormItem>
-          <FieldComponent {...{ field, style }} />
-        </ElFormItem>
-      )
+  let Content: VNode | null = null
+
+  if (isFunction(field)) {
+    Content = field()
+  } else if (isVNode(field)) {
+    Content = field
+  } else if (isPlainObject(field)) {
+    if (isFunction(field.render)) {
+      Content = field.render()
+    } else if (field.type) {
+      const FieldComponent = getFieldComponent(field.type) as any
+      if (FieldComponent) {
+        const style = field.width ? { width: `${field.width}px` } : null
+        Content = (
+          <ElFormItem>
+            <FieldComponent {...{ field, style }} />
+          </ElFormItem>
+        )
+      }
     }
   }
+
   return [Label, Content]
 }
 

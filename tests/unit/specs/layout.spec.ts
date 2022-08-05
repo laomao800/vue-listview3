@@ -17,6 +17,7 @@ describe('height', () => {
       usePage: false,
     })
 
+    await wait()
     expect(wrapper.find('.lv__wrapper').element.style.height).toBe('800px')
 
     Object.defineProperty(window, 'innerHeight', {

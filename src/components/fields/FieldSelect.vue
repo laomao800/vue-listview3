@@ -6,26 +6,29 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
-import { markRaw, ref, watch } from 'vue'
+import { computed, unref, ref, watch } from 'vue'
 import { ElSelect, ElOption } from 'element-plus'
 import { resolveOptions, useFilterField } from '@/utils'
 import { FilterField } from '~/types'
+
+defineOptions({ name: 'FieldSelect' })
 
 const props = defineProps({
   field: { type: Object as PropType<FilterField>, default: () => ({}) },
 })
 
-const { value, mergedAttrs } = useFilterField<string>(props.field)
+const { value, componentAttrs } = useFilterField<string>(props.field)
 
 const isMultiple = props.field.type === 'multipleSelect'
 
-const defaultAttrs = markRaw({
+const mergedAttrs = computed(() => ({
+  ...unref(componentAttrs),
   clearable: true,
   filterable: true,
   style: { width: '180px' },
   multiple: isMultiple,
   collapseTags: isMultiple,
-})
+}))
 const options = ref<any[]>([])
 const loading = ref(false)
 
@@ -47,8 +50,4 @@ watch(
   },
   { immediate: true }
 )
-
-defineExpose({
-  defaultAttrs,
-})
 </script>

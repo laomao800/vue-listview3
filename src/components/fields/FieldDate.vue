@@ -4,23 +4,22 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
-import { markRaw } from 'vue'
+import { computed, unref } from 'vue'
 import { ElDatePicker } from 'element-plus'
 import { useFilterField } from '@/utils'
 import { FilterField } from '~/types'
+
+defineOptions({ name: 'FieldDate' })
 
 const props = defineProps({
   field: { type: Object as PropType<FilterField>, default: () => ({}) },
 })
 
-const { value, mergedAttrs } = useFilterField<string>(props.field)
+const { value, componentAttrs } = useFilterField<string>(props.field)
 
-const defaultAttrs = markRaw({
+const mergedAttrs = computed(() => ({
+  ...unref(componentAttrs),
   clearable: true,
   style: { width: '180px' },
-})
-
-defineExpose({
-  defaultAttrs,
-})
+}))
 </script>

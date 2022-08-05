@@ -2,7 +2,7 @@
 import { defineComponent, unref, computed } from 'vue'
 import { ElPagination } from 'element-plus'
 import { isNumber } from 'is-what'
-import { useLvStore } from '@/utils'
+import { useLvStore } from '@/useLvStore'
 
 export default defineComponent({
   name: 'ListviewContentFooter',
@@ -14,12 +14,12 @@ export default defineComponent({
     const usePage = computed(() => lvStore.usePage)
     const pagePosition = computed(() => lvStore.pagePosition)
     const currentPage = computed({
-      get: () => lvStore.currentPage,
-      set: (val: number) => (lvStore.currentPage = val),
+      get: () => unref(lvStore.currentPage),
+      set: (val: number) => (lvStore.currentPage.value = val),
     })
     const currentPageSize = computed({
       get: () => unref(lvStore.currentPageSize),
-      set: (val: number) => (lvStore.currentPageSize = val),
+      set: (val: number) => (lvStore.currentPageSize.value = val),
     })
     const mergedAttrs = computed(() => {
       let total = unref(lvStore.contentData).total

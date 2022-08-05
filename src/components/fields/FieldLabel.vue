@@ -6,6 +6,8 @@
 import type { PropType } from 'vue'
 import { FilterField } from '~/types'
 
+defineOptions({ name: 'FieldLabel' })
+
 defineProps({
   field: { type: Object as PropType<FilterField>, default: () => ({}) },
 })
