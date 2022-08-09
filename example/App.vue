@@ -12,14 +12,14 @@
     :table-columns="tableColumns"
     :page-props="{ pagerCount: 5 }"
     :content-attrs="{ rowClassName: 'row-view-class' }"
-    :table-selection-column="{ selectable: (row, index) => index !== 1 }"
+    :table-selection-column="{ selectable: (row: any, index:number) => index !== 1 }"
   ></ListviewComponent>
 </template>
 
 <script lang="tsx" setup>
 import mitt from 'mitt'
-import { ref, unref, shallowRef } from 'vue'
-import { ElMessage, ElButton } from 'element-plus'
+import { ref, unref, shallowRef, computed } from 'vue'
+import { ElMessage, ElButton, ElSelect, ElOption } from 'element-plus'
 import 'element-plus/es/components/badge/style/css'
 import 'element-plus/es/components/message/style/css'
 import { CirclePlus, Remove } from '@element-plus/icons-vue'
@@ -33,6 +33,7 @@ const filterModel = ref({
   hidden: 'hidden',
   multipleSelect: [],
   selectField: '',
+  module_id: '3',
 })
 
 const filterButtons = shallowRef([
@@ -99,6 +100,17 @@ const filterButtons = shallowRef([
 
 const emitter = mitt<any>()
 const filterFields = shallowRef([
+  {
+    label: 'Module',
+    model: 'module_id',
+    render: () =>
+      computed(() => (
+        <ElSelect v-model={filterModel.value.module_id}>
+          <ElOption label="Module 1" value="1" />
+          <ElOption label="Module 2" value="2" />
+        </ElSelect>
+      )),
+  },
   {
     type: 'select',
     model: 'selectField',
