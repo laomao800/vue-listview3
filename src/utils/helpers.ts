@@ -1,5 +1,6 @@
+import type { Ref } from 'vue'
 import type { FilterField, LvStore } from '~/types'
-import { inject } from 'vue'
+import { inject, unref } from 'vue'
 import {
   isPlainObject,
   isFunction,
@@ -89,10 +90,12 @@ export function ensurePromise<T>(data: T) {
   return isPromise(data) ? data : Promise.resolve(data)
 }
 
+type FilterFieldOptions = FilterField['options']
 export function resolveOptions(
-  optionsConfig: any,
+  optionsConfig: FilterFieldOptions | Ref<FilterFieldOptions>,
   done: (options: any[]) => void
 ) {
+  optionsConfig = unref(optionsConfig)
   let optionsPromise = null
   if (optionsConfig) {
     if (Array.isArray(optionsConfig)) {
@@ -103,7 +106,7 @@ export function resolveOptions(
       optionsPromise = optionsConfig
     }
   }
-  return optionsPromise
+  return optionsPromise.then(done)
 }
 
 const objectToString = Object.prototype.toString

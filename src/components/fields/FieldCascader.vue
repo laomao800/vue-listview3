@@ -43,7 +43,7 @@ watch(
     const optionsPromise = resolveOptions(props.field.options, setOptions)
     if (optionsPromise) {
       loading.value = true
-      optionsPromise.then(setOptions).finally(() => {
+      optionsPromise.finally(() => {
         loading.value = false
       })
     }
