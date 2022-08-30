@@ -1,6 +1,6 @@
 {
   "name": "@laomao800/vue-listview",
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-alpha.5",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./types/index.d.ts",
@@ -9,7 +9,7 @@
     "types"
   ],
   "scripts": {
-    "dev": "vite --force",
+    "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint ./src/**/*.{ts,js,vue} --fix",
