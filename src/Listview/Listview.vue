@@ -93,6 +93,7 @@ const emits = defineEmits([
   'request-success',
   'request-error',
   'requested',
+  'update:selection',
 ])
 
 const props = defineProps({
@@ -141,6 +142,9 @@ const unwatchStore = watch(lvStore, () => {
   if (unref(lvStore)) {
     unref(lvStore).emitter.on('root-emit', ({ event, payload }: any) => {
       emits(event, payload)
+    })
+    unref(lvStore).emitter.on('update:selection', (selection: any) => {
+      emits('update:selection', selection)
     })
     unwatchStore()
   }

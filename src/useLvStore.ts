@@ -29,6 +29,7 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
     const internalContentMessage = ref({ type: '', text: '' })
     const filterModel = reactive(props.filterModel)
 
+    watch(selection, () => emitter.emit('update:selection', unref(selection)))
     watch(currentPage, () => search(true))
     watch(currentPageSize, () => search())
     watch(
