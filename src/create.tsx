@@ -51,9 +51,11 @@ const create = (options: Record<string, any> = {}) => {
 
       return () => (
         // @ts-ignore
-        <Listview ref={lvRef} {...overwriteProps}>
-          {{ slots }}
-        </Listview>
+        <Listview
+          ref={lvRef}
+          {...overwriteProps}
+          v-slots={{ ...slots }}
+        ></Listview>
       )
     },
   })
