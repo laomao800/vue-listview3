@@ -3,9 +3,9 @@
   "compilerOptions": {
     "composite": true,
     "lib": ["DOM"],
-    "types": ["node"],
+    "types": ["node", "unplugin-vue-macros/macros-global"],
     "jsx": "preserve"
   },
-  "include": ["vitest.setup.ts", "src", "tests"],
-  "exclude": ["node_modules", "src/dist"]
+  "include": ["**/vitest.setup.*", "src", "tests"],
+  "exclude": ["node_modules", "dist"]
 }
