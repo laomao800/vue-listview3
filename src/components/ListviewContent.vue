@@ -65,7 +65,7 @@
 
 <script lang="tsx" setup>
 import type { PropType } from 'vue'
-import { computed, ref, unref, watch, h } from 'vue'
+import { computed, ref, unref, watch, h, isVNode } from 'vue'
 import { isPlainObject, isFunction, isString } from 'is-what'
 import parseSize from '@laomao800/parse-size-with-unit'
 import { ElTable, ElTableColumn, ElRadio } from 'element-plus'
@@ -156,7 +156,11 @@ function renderTableColumn(tableColumn: any) {
     const { render, children, ...restOptions } = column
     const slots: Record<string, any> = {}
     if (render) {
-      slots.default = (props: any) => render(props)
+      if (isFunction(render)) {
+        slots.default = (props: any) => render(props)
+      } else if (isVNode(render)) {
+        slots.default = () => render
+      }
     } else if (Array.isArray(children)) {
       slots.default = () => children.map((child) => _createColumn(child))
     }
