@@ -3,7 +3,7 @@ import type { ListviewProps } from '~/types'
 import { reactive, ref, unref, watch } from 'vue'
 import { createInjectionState } from '@vueuse/shared'
 import axios, { AxiosRequestConfig } from 'axios'
-import { cloneDeep, pickBy, merge } from 'lodash-es'
+import { pickBy, merge } from 'lodash-es'
 import { isFunction, isPlainObject, isString } from 'is-what'
 import mitt from 'mitt'
 import {
@@ -183,7 +183,6 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
       }
 
       if (isFunction(props.transformRequestData)) {
-        // data = cloneDeep(data)
         // transformRequestDataFn 支持返回 promise
         data = props.transformRequestData(data)
       }
