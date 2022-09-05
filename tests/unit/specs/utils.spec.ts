@@ -1,22 +1,18 @@
 import { describe, it, expect } from 'vitest'
 import { dataMapping, isValidFieldValue, nodeParents } from '@/utils'
 
-const noop = () => {
-  // noop
-}
-
 describe('utils', () => {
   it('dataMapping', () => {
     const data = {
       result: {
         results: [1, 2, 3],
-        total_count: 3,
+        total: 3,
       },
       success: true,
     }
     const result = dataMapping(data, {
       items: 'result.results',
-      total: 'result.total_count',
+      total: 'result.total',
       success: 'success',
       unknow: 'result.unknow.prop',
     })

@@ -68,7 +68,7 @@ describe('Request params', () => {
     expect(requestSpy.mock).toHaveProperty('calls[0][0].addonStr', 'listview')
   })
 
-  it('request', async () => {
+  it.only('request', async () => {
     const { lvStore } = await createListviewWrapper({
       requestHandler: undefined,
       requestUrl: '/mock/list',
@@ -152,7 +152,7 @@ describe('Response', () => {
     const { lvStore } = await createListviewWrapper({
       contentDataMap: {
         custom_items: 'result.items',
-        custom_total: 'result.total_count',
+        custom_total: 'result.total',
         custom_success: 'success',
         custom_unknow: 'result.unknow.prop',
       },
@@ -215,7 +215,7 @@ describe('Response', () => {
         is_success: true,
         new_data: {
           items: response.result.items,
-          total: response.result.total_count,
+          total: response.result.total,
           addon: 'addon data',
         },
       }),

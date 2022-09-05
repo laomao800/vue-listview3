@@ -68,7 +68,7 @@ declare class ListviewProps extends ComponentWithInstall {
   /** 对原始响应数据的加工方法 default: null */
   transformResponseData: (responseData: Dic) => void
 
-  /** 数据接口响应内容属性映射。 default: { items: 'result.items', total: 'result.total_count' } */
+  /** 数据接口响应内容属性映射。 default: { items: 'result.items', total: 'result.total' } */
   contentDataMap: { [k: string]: string }
 
   /** 可用在 autoload 为 false 时候，初始显示的提示信息。 default: null */
