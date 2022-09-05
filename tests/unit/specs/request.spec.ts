@@ -68,7 +68,7 @@ describe('Request params', () => {
     expect(requestSpy.mock).toHaveProperty('calls[0][0].addonStr', 'listview')
   })
 
-  it.only('request', async () => {
+  it('request', async () => {
     const { lvStore } = await createListviewWrapper({
       requestHandler: undefined,
       requestUrl: '/mock/list',
