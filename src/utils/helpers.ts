@@ -106,7 +106,7 @@ export function resolveOptions(
       optionsPromise = optionsConfig
     }
   }
-  return optionsPromise.then(done)
+  return ensurePromise(optionsPromise).then(done)
 }
 
 const objectToString = Object.prototype.toString
