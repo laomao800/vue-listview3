@@ -14,7 +14,7 @@ export declare class LvStore {
   // autoload: boolean
   // requestUrl: AxiosRequestConfig['url']
   // requestMethod: AxiosRequestConfig['method']
-  // filterModel: AxiosRequestConfig['data'] | AxiosRequestConfig['params']
+  filterModel: AxiosRequestConfig['data'] | AxiosRequestConfig['params']
   // requestConfig: AxiosRequestConfig
   // /** @default null */
   // requestHandler: null | ((reqData: Record<string, any>) => any)

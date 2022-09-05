@@ -22,23 +22,23 @@ const globalConfig = {
   contentDataMap: {
     addon: 'addon',
     items: 'result.items',
-    total: 'result.total_count',
+    total: 'result.total',
   },
   usePage: { pageIndex: 'global_page_index', pageSize: 'global_page_size' },
 }
 
-const ListviewNormal = createListview()
+const ListviewNormal = createListview({})
 const ListviewCustom = createListview(globalConfig)
 
 describe('Create config', () => {
-  // it('Create normal listview', async () => {
-  //   const { vm: vmOrigin } = await createListviewWrapper({}, Listview)
-  //   const { vm: vmNormal } = await createListviewWrapper({}, ListviewNormal)
-  //   const { vm: vmCustom } = await createListviewWrapper({}, ListviewCustom)
-  //   expect(vmOrigin.presetProps__).toEqual(undefined)
-  //   expect(vmNormal.presetProps__).toEqual({})
-  //   expect(vmCustom.presetProps__).toEqual(globalConfig)
-  // })
+  it('Create normal listview', async () => {
+    const { vm: vmOrigin } = await createListviewWrapper({}, Listview)
+    const { vm: vmNormal } = await createListviewWrapper({}, ListviewNormal)
+    const { vm: vmCustom } = await createListviewWrapper({}, ListviewCustom)
+    expect(vmOrigin.presetProps__).toEqual(undefined)
+    expect(vmNormal.presetProps__).toEqual({})
+    expect(vmCustom.presetProps__).toEqual(globalConfig)
+  })
 
   it('Apply global config', async () => {
     const { requestSpy, lvStore } = await createListviewWrapper(
@@ -67,7 +67,7 @@ describe('Create config', () => {
       contentDataMap: {
         addon: 'prop.addon',
         items: 'prop.result.items',
-        total: 'prop.result.total_count',
+        total: 'prop.result.total',
       },
       usePage: {
         pageIndex: 'prop_page_index',

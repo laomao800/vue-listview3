@@ -30,6 +30,7 @@ const create = (
   createArgs: Parameters<typeof _create>[0],
   registerName = 'Listview'
 ) => bindInstall(registerName, _create(createArgs))
+
 const Listview = bindInstall('Listview', _Listview as any)
 const ListviewContainer = bindInstall('ListviewContainer', _ListviewContainer)
 
