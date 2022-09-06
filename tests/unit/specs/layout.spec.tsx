@@ -56,7 +56,7 @@ describe('listview header', () => {
     const wrapper = mount(ListviewHeader, {
       propsData: { headerTitle },
     })
-    expect(wrapper.text()).toMatch(headerTitle)
+    expect(wrapper?.text()).toMatch(headerTitle)
   })
 
   it('nav', async () => {
@@ -84,7 +84,7 @@ describe('contentMessage', () => {
       contentMessage,
     })
     const messageBlock = wrapper.find('.lv__message')
-    expect(messageBlock.find('.lv__message-text').text()).toMatch(
+    expect(messageBlock.find('.lv__message-text')?.text()).toMatch(
       contentMessage
     )
   })
@@ -100,7 +100,7 @@ describe('contentMessage', () => {
       contentMessage,
     })
     const messageBlock = wrapper.find('.lv__message')
-    expect(messageBlock.find('.lv__message-text').text()).toMatch(
+    expect(messageBlock.find('.lv__message-text')?.text()).toMatch(
       contentMessage.text
     )
   })
@@ -158,20 +158,6 @@ describe('listview footer', () => {
     expect(wrapper.find('.lv__footer-left .lv__pager').exists()).toBe(false)
     expect(wrapper.find('.lv__footer-right .lv__pager').exists()).toBe(true)
   })
-
-  it('footer slots', () => {
-    const slots = {
-      'footer-left': 'footer left',
-      'footer-center': 'footer center',
-      'footer-right': 'footer right',
-    }
-    const wrapper = mountWithEl(Listview, { slots })
-    expect(wrapper.find('.lv__footer-left').text()).toBe(slots['footer-left'])
-    expect(wrapper.find('.lv__footer-center').text()).toBe(
-      slots['footer-center']
-    )
-    expect(wrapper.find('.lv__footer-right').text()).toBe(slots['footer-right'])
-  })
 })
 
 describe('listview container', () => {
@@ -210,5 +196,60 @@ describe('listview container', () => {
   })
 })
 
-// TODO:
-describe.skip('slots')
+describe('slots', () => {
+  const genSlots = (names: string[]) =>
+    names.reduce((result, name) => {
+      result[name] = <div class={name}>{name}</div>
+      return result
+    }, {} as any)
+
+  it.only('filterbar slots', () => {
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 800,
+    })
+    const slots = genSlots([
+      'filterbar-top',
+      'filterbar-left',
+      'filterbar-right',
+      'filterbar-bottom',
+      'prepend-submit',
+      'append-submit',
+      'prepend-more',
+      'append-more',
+    ])
+    const wrapper = mount(Listview, {
+      slots,
+      props: { filterFields: [{ type: 'text' }] },
+    })
+    expect(wrapper.find('.filterbar-top').exists()).toBeTruthy()
+    expect(wrapper.find('.filterbar-left').exists()).toBeTruthy()
+    expect(wrapper.find('.filterbar-right').exists()).toBeTruthy()
+    expect(wrapper.find('.filterbar-bottom').exists()).toBeTruthy()
+    expect(wrapper.find('.prepend-submit').exists()).toBeTruthy()
+    expect(wrapper.find('.append-submit').exists()).toBeTruthy()
+    expect(wrapper.find('.prepend-more').exists()).toBeTruthy()
+    expect(wrapper.find('.append-more').exists()).toBeTruthy()
+  })
+
+  it('content default slot', () => {
+    const slots = genSlots(['default'])
+    const wrapper = mount(Listview, { slots })
+    expect(wrapper.find('.default').exists()).toBeTruthy()
+  })
+
+  it('content empty slot', () => {
+    const slots = genSlots(['content-empty'])
+    const wrapper = mount(Listview, { slots })
+    expect(wrapper.find('.content-empty').exists()).toBeTruthy()
+  })
+
+  it('footer slots', () => {
+    const slots = genSlots(['footer-left', 'footer-center', 'footer-right'])
+    const wrapper = mount(Listview, { slots })
+    expect(wrapper.find('.footer-left').exists()).toBeTruthy()
+    expect(wrapper.find('.footer-center').exists()).toBeTruthy()
+    expect(wrapper.find('.footer-right').exists()).toBeTruthy()
+  })
+})

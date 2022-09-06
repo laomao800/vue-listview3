@@ -44,7 +44,11 @@
 
       <template #content="scopedProps">
         <slot v-bind="scopedProps">
-          <component :is="contentComponent" v-bind="mergedAttrs" />
+          <component :is="contentComponent" v-bind="mergedAttrs">
+            <template v-if="$slots['content-empty']" #content-empty="scoped">
+              <slot name="content-empty" v-bind="scoped" />
+            </template>
+          </component>
         </slot>
       </template>
 
