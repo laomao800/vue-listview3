@@ -27,10 +27,10 @@ export async function createListviewWrapper(
   })
 
   const vm = wrapper.vm
-  const lvStore: LvStore = wrapper.findComponent({ ref: 'layoutRef' }).vm
+  const lvStore: LvStore = wrapper.findComponent({ name: 'ListviewLayout' }).vm
     .lvStore
 
-  // 此处以 setTimeout 等待 lvStore 内部初始化及挂载后如 contentData 等的数据请求写入
+  // 此处需以 setTimeout 等待 lvStore 内部初始化及挂载后如 contentData 等的数据请求写入
   await new Promise((resolve) => setTimeout(resolve))
 
   return { requestSpy, wrapper, vm, lvStore }

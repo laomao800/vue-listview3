@@ -3,7 +3,7 @@ import type { ListviewProps } from '~/types'
 import { reactive, ref, unref, watch } from 'vue'
 import { createInjectionState } from '@vueuse/shared'
 import axios, { AxiosRequestConfig } from 'axios'
-import { pickBy, merge } from 'lodash-es'
+import { pickBy } from 'lodash-es'
 import { isFunction, isPlainObject, isString } from 'is-what'
 import mitt from 'mitt'
 import {
@@ -105,6 +105,8 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
         abortController?.abort()
 
         const requestConfig = getRequestConfig(data)
+        console.log(requestConfig)
+
         const axiosService = axios.create()(requestConfig)
         responseDataPromise = axiosService.then((res) => res.data)
       }
@@ -142,17 +144,14 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
     function getRequestConfig(
       data: AxiosRequestConfig['data'] | AxiosRequestConfig['params']
     ): AxiosRequestConfig {
-      const requestConfig = merge(
-        {
-          url: props.requestUrl,
-          method: props.requestMethod,
-          withCredentials: true,
-        },
-        props.requestConfig
-      ) as AxiosRequestConfig
+      const requestConfig: AxiosRequestConfig = {
+        url: props.requestUrl,
+        method: props.requestMethod,
+        withCredentials: true,
+        ...props.requestConfig,
+      }
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      if (/post/i.test(requestConfig.method!)) {
+      if (/post/i.test(requestConfig.method || '')) {
         requestConfig.data = data
       } else {
         requestConfig.params = data
@@ -228,6 +227,7 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
 )
 
 function useLvStore() {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return _useLvStore()!
 }
 

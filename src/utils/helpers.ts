@@ -121,4 +121,5 @@ export const toDisplayString = (val: unknown): string => {
     : String(val)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const useLvStore = () => inject<LvStore>('lvStore')!

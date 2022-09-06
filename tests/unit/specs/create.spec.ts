@@ -1,7 +1,4 @@
-import { wait } from './../helpers'
-/* eslint-disable vue/one-component-per-file */
-import { defineComponent, h, markRaw } from 'vue'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { pick } from 'lodash-es'
 import { Listview, create as createListview } from '@/index'
 
@@ -30,14 +27,19 @@ const globalConfig = {
 const ListviewNormal = createListview({})
 const ListviewCustom = createListview(globalConfig)
 
-describe('Create config', () => {
-  it('Create normal listview', async () => {
-    const { vm: vmOrigin } = await createListviewWrapper({}, Listview)
-    const { vm: vmNormal } = await createListviewWrapper({}, ListviewNormal)
-    const { vm: vmCustom } = await createListviewWrapper({}, ListviewCustom)
-    expect(vmOrigin.presetProps__).toEqual(undefined)
-    expect(vmNormal.presetProps__).toEqual({})
-    expect(vmCustom.presetProps__).toEqual(globalConfig)
+describe('Create api', () => {
+  it('Create ListviewPreset component', async () => {
+    const { wrapper: wOrigin } = await createListviewWrapper({}, Listview)
+    const { wrapper: wNormal } = await createListviewWrapper({}, ListviewNormal)
+    const { wrapper: wCustom } = await createListviewWrapper({}, ListviewCustom)
+    expect(wOrigin.find({ name: 'ListviewPreset' }).exists()).toBeFalsy()
+    expect(wNormal.find({ name: 'ListviewPreset' }).exists()).toBeTruthy()
+    expect(wCustom.find({ name: 'ListviewPreset' }).exists()).toBeTruthy()
+  })
+
+  it('Listview extends preset', async () => {
+    const { wrapper } = await createListviewWrapper({}, ListviewCustom)
+    expect(wrapper.find({ name: 'ListviewPreset' }).exists()).toBeTruthy()
   })
 
   it('Apply global config', async () => {
@@ -47,9 +49,23 @@ describe('Create config', () => {
     )
     expect(requestSpy.mock).toHaveProperty('calls[0][0].global_page_index')
     expect(requestSpy.mock).toHaveProperty('calls[0][0].global_page_size')
-    expect(lvStore.contentData).toHaveProperty('addon')
-    expect(lvStore.contentData).toHaveProperty('items')
-    expect(lvStore.contentData).toHaveProperty('total')
+    expect(lvStore.contentData.value).toHaveProperty('addon')
+    expect(lvStore.contentData.value).toHaveProperty('items')
+    expect(lvStore.contentData.value).toHaveProperty('total')
+  })
+
+  it.only('requestConfig', async () => {
+    const createFn = console.log // vi.fn()
+    vi.mock('axios', () => {
+      return { create: () => createFn }
+    })
+    // console.log(createFn.mock.calls)
+
+    // await createListviewWrapper({}, ListviewCustom)
+    // expect(lvStore.getRequestConfig()).toHaveProperty(
+    //   'headers',
+    //   globalConfig.requestConfig.headers
+    // )
   })
 
   it('Props override global config', async () => {
@@ -74,21 +90,17 @@ describe('Create config', () => {
         pageSize: 'prop_page_size',
       },
     }
-    const { vm, requestSpy } = await createListviewWrapper(
+    const { wrapper, requestSpy } = await createListviewWrapper(
       propsData,
       ListviewCustom
     )
-    expect(pick(vm.mergedAttrs, Object.keys(propsData))).toEqual(propsData)
+    const curProps = pick(
+      wrapper.findComponent({ name: 'ListviewMain' }).props(),
+      Object.keys(propsData)
+    )
+    expect(curProps).toEqual(propsData)
     expect(requestSpy.mock).toHaveProperty('calls[0][0].prop_page_index')
     expect(requestSpy.mock).toHaveProperty('calls[0][0].prop_page_size')
-  })
-
-  it('requestConfig', async () => {
-    const { lvStore } = await createListviewWrapper({}, ListviewCustom)
-    expect(lvStore.getRequestConfig()).toHaveProperty(
-      'headers',
-      globalConfig.requestConfig.headers
-    )
   })
 })
 

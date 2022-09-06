@@ -12,6 +12,7 @@
     :table-columns="tableColumns"
     :page-props="{ pagerCount: 5 }"
     :content-attrs="{ rowClassName: 'row-view-class' }"
+    :validate-response1="() => true"
     :table-selection-column="{ selectable: (row: any, index:number) => index !== 1 }"
   ></ListviewComponent>
 </template>
@@ -24,7 +25,30 @@ import 'element-plus/es/components/badge/style/css'
 import 'element-plus/es/components/message/style/css'
 import { CirclePlus, Remove } from '@element-plus/icons-vue'
 // @ts-ignore
-import { Listview as ListviewComponent } from '../src'
+// import { Listview as ListviewComponent } from '../src'
+import { create as createListview } from '../src'
+
+const globalConfig = {
+  requestConfig: { headers: { 'my-header': 'text' } },
+  validateResponse: () => false,
+  resolveResponseErrorMessage: () => 'config error from global',
+  transformRequestData(data: Record<string, any>) {
+    data.addon = 'requestAddon from global'
+    return data
+  },
+  transformResponseData(response: Record<string, any>) {
+    response.addon = 'responseAddon from global'
+    return response
+  },
+  contentDataMap: {
+    addon: 'addon',
+    items: 'result.items',
+    total: 'result.total',
+  },
+  usePage: { pageIndex: 'global_page_index', pageSize: 'global_page_size' },
+}
+
+const ListviewComponent = createListview(globalConfig)
 
 const selection = ref([])
 const loadingSelection = ref(false)

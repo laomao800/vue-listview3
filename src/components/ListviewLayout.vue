@@ -56,6 +56,7 @@ function getElBottomOffset(el: Element) {
 }
 
 defineOptions({
+  name: 'ListviewLayout',
   inheritAttrs: false,
   directives: {
     loading: vLoading,
