@@ -1,8 +1,6 @@
 import type { ListviewProps, LvStore } from '~/types'
 import { vi } from 'vitest'
 import { mount, MountingOptions } from '@vue/test-utils'
-import ElementPlus from 'element-plus'
-import { get, set } from 'lodash-es'
 import { Listview } from '@/index'
 
 export async function createListviewWrapper(
@@ -44,11 +42,3 @@ export const wait = (time = 100) =>
 export const mockDataList = Array(10)
   .fill(undefined)
   .map((row, index) => ({ id: index, name: `row${index}` }))
-
-export function mountWithEl(component: any, opts: MountingOptions<any> = {}) {
-  const plugins = get(opts, 'global.plugins', [])
-  plugins.push(ElementPlus)
-  set(opts, 'global.plugins', plugins)
-
-  return mount(component, opts)
-}

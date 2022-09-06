@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { createListviewWrapper, wait, mountWithEl } from '../helpers'
+import { mount } from '@vue/test-utils'
+import { createListviewWrapper, wait } from '../helpers'
 import Listview from '@/Listview'
 import ListviewHeader from '@/components/ListviewHeader.vue'
 import ListviewContainer from '@/ListviewContainer'
@@ -52,14 +53,14 @@ describe('height', () => {
 describe('listview header', () => {
   it('title', () => {
     const headerTitle = 'headerTitle'
-    const wrapper = mountWithEl(ListviewHeader, {
+    const wrapper = mount(ListviewHeader, {
       propsData: { headerTitle },
     })
     expect(wrapper.text()).toMatch(headerTitle)
   })
 
   it('nav', async () => {
-    const wrapper = mountWithEl(ListviewHeader, {
+    const wrapper = mount(ListviewHeader, {
       propsData: {
         headerNav: ['home', { text: 'list', to: '/list' }],
       },
@@ -175,7 +176,7 @@ describe('listview footer', () => {
 
 describe('listview container', () => {
   it('header title', () => {
-    const wrapper = mountWithEl({
+    const wrapper = mount({
       components: { ListviewContainer, Listview },
       template:
         '<ListviewContainer>' +
@@ -193,7 +194,7 @@ describe('listview container', () => {
   })
 
   it('tab content switch', async () => {
-    const wrapper = mountWithEl({
+    const wrapper = mount({
       components: { ListviewContainer, Listview },
       template:
         '<ListviewContainer>' +
