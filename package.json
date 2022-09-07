@@ -16,7 +16,9 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "release": "node scripts/release.js",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",
@@ -64,6 +66,7 @@
     "unplugin-vue-macros": "^0.11.1",
     "vite": "3.1.0",
     "vite-plugin-css-injected-by-js": "^1.5.1",
+    "vitepress": "1.0.0-alpha.13",
     "vitest": "^0.23.1",
     "vue": "^3.2.38",
     "vue-tsc": "^0.40.7"
@@ -75,5 +78,12 @@
   },
   "msw": {
     "workerDirectory": "public"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@algolia/client-search"
+      ]
+    }
   }
 }
