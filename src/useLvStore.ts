@@ -105,8 +105,6 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
         abortController?.abort()
 
         const requestConfig = getRequestConfig(data)
-        console.log(requestConfig)
-
         const axiosService = axios.create()(requestConfig)
         responseDataPromise = axiosService.then((res) => res.data)
       }

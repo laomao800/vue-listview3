@@ -1,5 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
+import { defineComponent, markRaw, h } from 'vue'
 import { pick } from 'lodash-es'
+import axios from 'axios'
 import { Listview, create as createListview } from '@/index'
 
 import { createListviewWrapper } from '../helpers'
@@ -32,14 +34,15 @@ describe('Create api', () => {
     const { wrapper: wOrigin } = await createListviewWrapper({}, Listview)
     const { wrapper: wNormal } = await createListviewWrapper({}, ListviewNormal)
     const { wrapper: wCustom } = await createListviewWrapper({}, ListviewCustom)
-    expect(wOrigin.find({ name: 'ListviewPreset' }).exists()).toBeFalsy()
-    expect(wNormal.find({ name: 'ListviewPreset' }).exists()).toBeTruthy()
-    expect(wCustom.find({ name: 'ListviewPreset' }).exists()).toBeTruthy()
-  })
-
-  it('Listview extends preset', async () => {
-    const { wrapper } = await createListviewWrapper({}, ListviewCustom)
-    expect(wrapper.find({ name: 'ListviewPreset' }).exists()).toBeTruthy()
+    expect(
+      wOrigin.findComponent({ name: 'ListviewPreset' }).exists()
+    ).toBeFalsy()
+    expect(
+      wNormal.findComponent({ name: 'ListviewPreset' }).exists()
+    ).toBeTruthy()
+    expect(
+      wCustom.findComponent({ name: 'ListviewPreset' }).exists()
+    ).toBeTruthy()
   })
 
   it('Apply global config', async () => {
@@ -54,18 +57,19 @@ describe('Create api', () => {
     expect(lvStore.contentData.value).toHaveProperty('total')
   })
 
-  it.only('requestConfig', async () => {
-    const createFn = console.log // vi.fn()
-    vi.mock('axios', () => {
-      return { create: () => createFn }
-    })
-    // console.log(createFn.mock.calls)
+  it('requestConfig', async () => {
+    const spy = vi.fn(axios.create())
+    vi.spyOn(axios, 'create').mockImplementation(() => spy as any)
 
-    // await createListviewWrapper({}, ListviewCustom)
-    // expect(lvStore.getRequestConfig()).toHaveProperty(
-    //   'headers',
-    //   globalConfig.requestConfig.headers
-    // )
+    await createListviewWrapper(
+      { requestHandler: undefined, requestUrl: '/mock/list' },
+      ListviewCustom
+    )
+
+    expect(spy.mock).toHaveProperty(
+      'calls[0][0].headers',
+      globalConfig.requestConfig.headers
+    )
   })
 
   it('Props override global config', async () => {
@@ -104,28 +108,29 @@ describe('Create api', () => {
   })
 })
 
-// describe('Replace component', () => {
-//   const createComponent = (name: string) =>
-//     defineComponent(
-//       markRaw({
-//         render: () => h('div', { class: `custom-${name}` }, name),
-//       })
-//     )
+describe('Replace component', () => {
+  const createComponent = (name: string) =>
+    defineComponent(
+      markRaw({
+        inheritAttrs: false,
+        render: () => h('div', { class: `custom-${name}` }, name),
+      })
+    )
 
-//   const Listview = createListview({
-//     replaceComponents: {
-//       header: createComponent('header'),
-//       filterbar: createComponent('filterbar'),
-//       content: createComponent('content'),
-//       footer: createComponent('footer'),
-//     },
-//   })
+  const Listview = createListview({
+    replaceComponents: {
+      header: createComponent('header'),
+      filterbar: createComponent('filterbar'),
+      content: createComponent('content'),
+      footer: createComponent('footer'),
+    },
+  })
 
-//   it('replaceComponents', async () => {
-//     const { wrapper } = await createListviewWrapper({}, Listview)
-//     expect(wrapper.find('div.custom-header').exists()).toBe(true)
-//     expect(wrapper.find('div.custom-filterbar').exists()).toBe(true)
-//     expect(wrapper.find('div.custom-content').exists()).toBe(true)
-//     expect(wrapper.find('div.custom-footer').exists()).toBe(true)
-//   })
-// })
+  it('replaceComponents', async () => {
+    const { wrapper } = await createListviewWrapper({}, Listview)
+    expect(wrapper.find('div.custom-header').exists()).toBe(true)
+    expect(wrapper.find('div.custom-filterbar').exists()).toBe(true)
+    expect(wrapper.find('div.custom-content').exists()).toBe(true)
+    expect(wrapper.find('div.custom-footer').exists()).toBe(true)
+  })
+})
