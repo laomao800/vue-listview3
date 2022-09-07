@@ -70,8 +70,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update-layout'])
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const lvStore = useLvStore()!
+const lvStore = useLvStore()
 
 // TODO: test 用例检查传值
 const scopeProps = computed(() =>

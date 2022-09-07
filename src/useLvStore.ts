@@ -1,4 +1,4 @@
-import type { ListviewProps } from '~/types'
+import type { ListviewProps, LvStore } from '~/types'
 
 import { reactive, ref, unref, watch } from 'vue'
 import { createInjectionState } from '@vueuse/shared'
@@ -201,7 +201,7 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
 
     props.autoload && search()
 
-    return {
+    const lvStore: LvStore = {
       contentHeight,
       contentLoading,
       internalContentMessage,
@@ -221,6 +221,8 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
       pageSizes: props.pageSizes,
       pageProps: props.pageProps,
     }
+
+    return lvStore
   }
 )
 
@@ -230,12 +232,3 @@ function useLvStore() {
 }
 
 export { useProvideLvStore, useLvStore }
-
-// export function useLvStoreOrThrow() {
-//   const counterStore = useLvStore()
-//   if (counterStore == null)
-//     throw new Error(
-//       'Please call `useProvideLvStore` on the appropriate parent component'
-//     )
-//   return counterStore
-// }
