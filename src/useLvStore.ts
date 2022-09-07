@@ -20,7 +20,7 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
     const emitter = mitt()
 
     // state
-    const contentHeight = ref<number>()
+    const contentHeight = ref(undefined as unknown as number)
     const contentLoading = ref(false)
     const selection = ref<any[]>([])
     const currentPage = ref(1)
@@ -52,7 +52,8 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
     // actions
     function doRequest() {
       if (!props.requestUrl && !props.requestHandler) {
-        return warn('未配置 requestUrl 或 requestHandler ，无法发起数据请求。')
+        warn('请先配置 requestUrl 或 requestHandler 以发起数据请求')
+        return Promise.resolve()
       }
 
       rootEmitProxy('before-request')
