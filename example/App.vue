@@ -34,7 +34,7 @@ const filterModel = ref({
   hidden: 'hidden',
   multipleSelect: [],
   selectField: '',
-  module_id: '3',
+  module_id: '2',
 })
 
 const filterButtons = shallowRef([
