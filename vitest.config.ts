@@ -30,6 +30,7 @@ export default defineConfig({
       web: [/\.[jt]sx$/],
     },
     coverage: {
+      provider: 'istanbul',
       reportsDirectory: path.resolve(__dirname, 'tests/unit/coverage'),
     },
     deps: {
