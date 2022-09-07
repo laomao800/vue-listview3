@@ -203,7 +203,7 @@ describe('slots', () => {
       return result
     }, {} as any)
 
-  it.only('filterbar slots', () => {
+  it('filterbar slots', () => {
     Object.defineProperty(window, 'innerWidth', {
       writable: true,
       configurable: true,

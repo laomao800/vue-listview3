@@ -121,14 +121,14 @@ describe('分页参数', () => {
     expect(requestSpy.mock).toHaveProperty('calls[0][0].page_size', 2)
   })
 
-  it.skip('切换 pageSize', async () => {
+  it('切换 pageSize', async () => {
     const { wrapper, lvStore } = await createListviewWrapper({
       pageSize: 2,
     })
     const $pagination = wrapper.findComponent({ name: 'ElPagination' })
     $pagination.vm.$emit('update:page-size', 3)
 
-    expect(lvStore.currentPageSize).toBe(3)
+    expect(lvStore.currentPageSize.value).toBe(3)
   })
 
   it('search(true) 保持当前页码', async () => {
