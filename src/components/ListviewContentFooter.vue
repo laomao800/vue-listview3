@@ -29,7 +29,7 @@ export default defineComponent({
         pageSizes: lvStore.pageSizes,
         background: true,
         layout: 'total, sizes, prev, pager, next, jumper',
-        ...lvStore.pageProps,
+        ...lvStore.pageAttrs,
         total,
         currentPage: unref(currentPage),
         'onUpdate:currentPage': (page: number) => {

@@ -133,8 +133,8 @@ declare class ListviewProps extends ComponentWithInstall {
   /** 页码位置。 default: 'left' */
   pagePosition: 'left' | 'right'
 
-  /** el-pagination Props */
-  pageProps: Record<string, any>
+  /** el-pagination Attrs */
+  pageAttrs: Record<string, any>
 }
 
 export declare class ListviewContainerProps extends ComponentWithInstall {

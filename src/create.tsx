@@ -18,7 +18,7 @@ const allowPresetProps = [
   'usePage',
   'pageSize',
   'pageSizes',
-  'pageProps',
+  'pageAttrs',
   'pagePosition',
   'replaceComponents',
 

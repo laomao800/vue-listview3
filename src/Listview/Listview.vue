@@ -132,7 +132,7 @@ const props = defineProps({
   usePage: { type: [Object, Boolean], default: true },
   pageSize: { type: Number, default: 20 },
   pageSizes: { type: Array, default: () => [20, 50, 100] },
-  pageProps: { type: Object, default: () => ({}) },
+  pageAttrs: { type: Object, default: () => ({}) },
   pagePosition: { type: String, default: 'left' },
 
   replaceComponents: { type: Object, default: null },

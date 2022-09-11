@@ -15,7 +15,7 @@ type AllowPresetProps =
   | 'usePage'
   | 'pageSize'
   | 'pageSizes'
-  | 'pageProps'
+  | 'pageAttrs'
   | 'pagePosition'
   | 'height'
   | 'fullHeight'

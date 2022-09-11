@@ -220,7 +220,7 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
       usePage: props.usePage,
       pagePosition: props.pagePosition,
       pageSizes: props.pageSizes,
-      pageProps: props.pageProps,
+      pageAttrs: props.pageAttrs,
     }
 
     return lvStore

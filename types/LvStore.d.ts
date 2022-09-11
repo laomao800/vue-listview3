@@ -10,7 +10,7 @@ export declare class LvStore {
   usePage: ListviewProps['usePage']
   pagePosition: ListviewProps['pagePosition']
   pageSizes: ListviewProps['pageSizes']
-  pageProps: ListviewProps['pageProps']
+  pageAttrs: ListviewProps['pageAttrs']
   currentPage: Ref<number>
   currentPageSize: Ref<ListviewProps['currentPageSize']>
   contentHeight: Ref<number>
