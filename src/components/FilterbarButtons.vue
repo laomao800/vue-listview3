@@ -12,12 +12,12 @@ import {
 import { ArrowDown } from '@element-plus/icons-vue'
 import { isPlainObject, isFunction } from 'is-what'
 import { warn } from '@/utils'
-import { FilterButton } from '~/types'
+import { FilterButton, FilterButtonConfig } from '~/types'
 
 interface NormalizedButton {
   text: string
   children: NormalizedButton[]
-  buttonAttrs: Record<string, any>
+  attrs: Record<string, any>
 }
 
 function isValidButtonConfig(button: any) {
@@ -30,16 +30,8 @@ function isValidButtonConfig(button: any) {
   )
 }
 
-function normalizeButton(button: FilterButton): NormalizedButton {
-  const {
-    click,
-    type,
-    text = '',
-    icon: _icon,
-    children: _children,
-    ...buttonAttrs
-  } = button
-  const icon = _icon ? <ElIcon>{h(_icon)}</ElIcon> : null
+function normalizeButton(button: FilterButtonConfig): NormalizedButton {
+  const { click, text = '', children: _children, ...attrs } = button
 
   let onClick = button.onClick
   if (click) {
@@ -57,11 +49,9 @@ function normalizeButton(button: FilterButton): NormalizedButton {
   return {
     text,
     children,
-    buttonAttrs: {
-      type,
-      icon,
+    attrs: {
       onClick,
-      ...buttonAttrs,
+      ...attrs,
     },
   }
 }
@@ -82,41 +72,41 @@ export default defineComponent({
 
       if (isFunction(button)) {
         return h(button())
-      } else if (isFunction(button.render)) {
-        return h(button.render())
       } else if (isVNode(button)) {
         return h(button)
-      } else if (Array.isArray(button.children)) {
-        return renderDropdownButton(button)
-      } else {
-        return renderSingleButton(button)
+      } else if (isPlainObject(button)) {
+        if (Array.isArray(button.children)) {
+          return renderDropdownButton(button)
+        } else {
+          return renderSingleButton(button)
+        }
       }
     }
 
-    function renderSingleButton(button: FilterButton) {
-      const { text, buttonAttrs } = normalizeButton(button)
-      return <ElButton {...buttonAttrs}>{text}</ElButton>
+    function renderSingleButton(button: FilterButtonConfig) {
+      const { text, attrs } = normalizeButton(button)
+      return <ElButton {...attrs}>{text}</ElButton>
     }
 
-    function renderDropdownButton(button: FilterButton) {
-      const { text, children, buttonAttrs } = normalizeButton(button)
+    function renderDropdownButton(button: FilterButtonConfig) {
+      const { text, children, attrs } = normalizeButton(button)
       return h(
         ElDropdown,
         {
-          ...buttonAttrs,
+          ...attrs,
           trigger: 'click',
           placement: 'bottom',
         },
         {
           default: () => {
             const content = []
-            buttonAttrs.icon && content.push(buttonAttrs.icon)
+            attrs.icon && content.push(<ElIcon>{h(attrs.icon)}</ElIcon>)
             content.push(<span>{text}</span>)
 
-            return buttonAttrs.splitButton ? (
+            return attrs.splitButton ? (
               content
             ) : (
-              <ElButton {...buttonAttrs}>
+              <ElButton {...attrs}>
                 {content}
                 <ElIcon class="ElIcon--right">
                   <ArrowDown />
@@ -127,12 +117,8 @@ export default defineComponent({
           dropdown: () => (
             <ElDropdownMenu>
               {children.map((child) => {
-                const { text, buttonAttrs } = child
-                return (
-                  <ElDropdownItem {...(buttonAttrs as any)}>
-                    {text}
-                  </ElDropdownItem>
-                )
+                const { text, attrs } = child
+                return <ElDropdownItem {...attrs}>{text}</ElDropdownItem>
               })}
             </ElDropdownMenu>
           ),

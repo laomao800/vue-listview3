@@ -1,17 +1,7 @@
 import { VNode } from 'vue'
+import { ButtonProps } from 'element-plus'
 
-type ButtonType = 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'text'
-
-export interface FilterButton {
-  /** 按钮样式类型 */
-  type?: ButtonType
-
-  /** 按钮图标 */
-  icon?: string
-
-  /** 是否显示为线框按钮 */
-  plain?: boolean
-
+interface FilterButtonConfig extends ButtonProps {
   /** 按钮文本 */
   text?: string
 
@@ -25,15 +15,12 @@ export interface FilterButton {
   splitButton?: boolean
 
   /** 子按钮 */
-  children?: {
-    icon?: FilterButton['icon']
-    text?: FilterButton['text']
-    onClick?: FilterButton['onClick']
-
-    /** @deprecated 按钮点击事件，请使用 onClick 属性代替 */
-    click?: FilterButton['click']
-  }[]
+  children?: Omit<FilterButton, 'children' | 'splitButton'>
 
   /** 自定义渲染方法 */
   render?: () => VNode
 }
+
+type FilterButton = FilterButtonConfig | VNode | (() => VNode)
+
+export { FilterButton, FilterButtonConfig }
