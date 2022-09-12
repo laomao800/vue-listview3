@@ -1,5 +1,7 @@
 # Vue Listview 3.x
 
+> Vue 2 使用请查看 [Listview 2.x](https://github.com/laomao800/vue-listview) 版本。
+
 Demo： https://laomao800.github.io/vue-listview3/demo/
 
 ## 安装

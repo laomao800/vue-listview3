@@ -37,7 +37,7 @@ app.component('CustomListview', CustomListview)
 - `usePage`
 - `pageSize`
 - `pageSizes`
-- `pageProps`
+- `pageAttrs`
 - `pagePosition`
 - `replaceComponents`
 - `height`
