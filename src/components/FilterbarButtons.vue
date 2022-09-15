@@ -36,7 +36,7 @@ function normalizeButton(button: FilterButtonConfig): NormalizedButton {
   let onClick = button.onClick
   if (click) {
     warn(
-      `[Migration][filterButtons]: 'click' will remove in next minor version, use 'onClick' instead.`,
+      `[Migration][filterButtons]: 请使用 'onClick' 代替 'click' 属性。`,
       button
     )
     onClick = button.click

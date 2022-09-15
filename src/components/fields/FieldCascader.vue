@@ -26,12 +26,12 @@ const { value, componentAttrs } = useFilterField<string>(props.field)
 const isMultiple = !!props.field.multiple
 
 const mergedAttrs = computed(() => ({
-  ...unref(componentAttrs),
   clearable: true,
   style: { width: '240px' },
   props: { expandTrigger: 'hover', multiple: isMultiple } as CascaderProps,
   collapseTags: isMultiple,
   collapseTagsTooltip: isMultiple,
+  ...unref(componentAttrs),
 }))
 const options = ref<any[]>([])
 const loading = ref(false)

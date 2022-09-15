@@ -30,12 +30,12 @@ if (props.field.type === 'multipleSelect') {
 const isMultiple = !!props.field.multiple
 
 const mergedAttrs = computed(() => ({
-  ...unref(componentAttrs),
   clearable: true,
   filterable: true,
   style: { width: '180px' },
   multiple: isMultiple,
   collapseTags: isMultiple,
+  ...unref(componentAttrs),
 }))
 const options = ref<any[]>([])
 const loading = ref(false)

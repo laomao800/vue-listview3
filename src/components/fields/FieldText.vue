@@ -12,13 +12,13 @@ import type { PropType } from 'vue'
 import { isVNode, computed } from 'vue'
 import { ElInput } from 'element-plus'
 import { useFilterField } from '@/utils'
-import { FilterField } from '~/types'
+import { FilterFieldConfig } from '~/types'
 import { unref } from 'vue'
 
 defineOptions({ name: 'FieldText' })
 
 const props = defineProps({
-  field: { type: Object as PropType<FilterField>, default: () => ({}) },
+  field: { type: Object as PropType<FilterFieldConfig>, default: () => ({}) },
 })
 
 const { value, componentAttrs, componentSlots } = useFilterField<string>(
@@ -34,8 +34,8 @@ const onBlur = () => {
 }
 
 const mergedAttrs = computed(() => ({
-  ...unref(componentAttrs),
   clearable: true,
   style: { width: '180px' },
+  ...unref(componentAttrs),
 }))
 </script>
