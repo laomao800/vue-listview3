@@ -10,7 +10,7 @@ describe('Methods', () => {
       },
       filterFields: [
         { type: 'text', model: 'text' },
-        { type: 'multipleSelect', model: 'multiple' },
+        { type: 'select', multiple: true, model: 'multiple' },
       ],
     })
 

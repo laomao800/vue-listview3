@@ -3,7 +3,7 @@ import type { FilterField } from '~/types'
 import { VNode, PropType, ref, defineComponent } from 'vue'
 import { isVNode } from 'vue'
 import { isFunction } from 'is-what'
-import { hasOwn, error } from '@/utils'
+import { hasOwn, error, isObjField } from '@/utils'
 import { getFieldComponent } from './fields/index'
 import FilterbarField from './FilterbarField.vue'
 
@@ -28,8 +28,6 @@ function isValidFieldConfig(field: any) {
   )
 }
 
-let uid = 0
-
 export default defineComponent({
   name: 'FilterbarFields',
 
@@ -41,6 +39,7 @@ export default defineComponent({
   },
 
   setup(props, { expose }) {
+    let uid = 0
     const fieldRefs = ref<any[]>([])
 
     function renderFieldsGroup(group: FilterField[] = []) {
@@ -54,9 +53,11 @@ export default defineComponent({
       ) : null
     }
 
-    function renderField(field = {} as FilterField) {
+    function renderField(field: FilterField) {
       if (!isValidFieldConfig(field)) return null
-      const key = field.key || field.model || `unnamed-field-${uid++}`
+      const key =
+        (isObjField(field) && (field.key || field.model)) ||
+        `unnamed-field-${uid++}`
       return (
         <FilterbarField
           {...{ ref: (ref: any) => fieldRefs.value.push(ref), key, field }}

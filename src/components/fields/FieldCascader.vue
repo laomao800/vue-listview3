@@ -13,21 +13,25 @@ import { computed, PropType, unref } from 'vue'
 import { ref, watch } from 'vue'
 import { ElCascader } from 'element-plus'
 import { resolveOptions, useFilterField } from '@/utils'
-import { FilterField } from '~/types'
+import { FilterFieldConfig } from '~/types'
 
 defineOptions({ name: 'FieldCascader' })
 
 const props = defineProps({
-  field: { type: Object as PropType<FilterField>, default: () => ({}) },
+  field: { type: Object as PropType<FilterFieldConfig>, default: () => ({}) },
 })
 
 const { value, componentAttrs } = useFilterField<string>(props.field)
 
+const isMultiple = !!props.field.multiple
+
 const mergedAttrs = computed(() => ({
   ...unref(componentAttrs),
   clearable: true,
-  style: { width: '180px' },
-  props: { expandTrigger: 'hover' } as CascaderProps,
+  style: { width: '240px' },
+  props: { expandTrigger: 'hover', multiple: isMultiple } as CascaderProps,
+  collapseTags: isMultiple,
+  collapseTagsTooltip: isMultiple,
 }))
 const options = ref<any[]>([])
 const loading = ref(false)

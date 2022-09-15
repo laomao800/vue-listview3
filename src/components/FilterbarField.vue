@@ -6,19 +6,16 @@
 </template>
 
 <script lang="tsx" setup>
-import type { FilterField } from '~/types'
-import type { PropType, VNode } from 'vue'
+import type { FilterField, FilterFieldConfig } from '~/types'
+import type { PropType, VNode, Ref } from 'vue'
 
 import { computed, unref, isVNode, Transition, h } from 'vue'
 import { ElFormItem } from 'element-plus'
 import hasValues from 'has-values'
 import { isPlainObject, isFunction } from 'is-what'
-import { get } from '@/utils'
+import { get, isObjField } from '@/utils'
 import { useLvStore } from '@/useLvStore'
 import { getFieldComponent } from './fields/index'
-
-const _isFieldObj = (payload: typeof props.field): payload is FilterField =>
-  isPlainObject(payload)
 
 const lvStore = useLvStore()
 
@@ -39,14 +36,14 @@ const showLabelRef = computed(() => {
   return false
 })
 
-function _renderField(field: FilterField) {
+function _renderField(field: FilterFieldConfig) {
   const Label = field.label ? (
     <Transition name="lv__field-label-trans">
       {unref(showLabelRef) && <div class="lv__field-label">{field.label}</div>}
     </Transition>
   ) : null
 
-  let Content: VNode | null = null
+  let Content: VNode | Ref<VNode> | null = null
 
   if (isFunction(field)) {
     Content = field()
@@ -71,12 +68,12 @@ function _renderField(field: FilterField) {
   return [Label, Content]
 }
 
-let InnerLabel: VNode | null = null
-let InnerContent: VNode | null = null
+let InnerLabel: VNode | Ref<VNode> | null = null
+let InnerContent: VNode | Ref<VNode> | null = null
 
 if (isVNode(props.field)) {
   InnerContent = h(props.field)
-} else if (_isFieldObj(props.field)) {
+} else if (isObjField(props.field)) {
   ;[InnerLabel, InnerContent] = _renderField(props.field)
 } else if (isFunction(props.field)) {
   InnerContent = props.field()
@@ -134,6 +131,9 @@ if (isVNode(props.field)) {
     > .el-cascader .el-input__inner {
       vertical-align: top;
       box-sizing: border-box;
+    }
+    > .el-cascader .el-input__inner {
+      height: inherit !important;
     }
   }
 }
