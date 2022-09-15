@@ -1,5 +1,5 @@
 import type { Ref } from 'vue'
-import type { FilterField, LvStore } from '~/types'
+import type { FilterField, FilterFieldConfig, LvStore } from '~/types'
 import { inject, unref } from 'vue'
 import {
   isPlainObject,
@@ -90,7 +90,7 @@ export function ensurePromise<T>(data: T) {
   return isPromise(data) ? data : Promise.resolve(data)
 }
 
-type FilterFieldOptions = FilterField['options']
+type FilterFieldOptions = FilterFieldConfig['options']
 export function resolveOptions(
   optionsConfig: FilterFieldOptions | Ref<FilterFieldOptions>,
   done: (options: any[]) => void
@@ -123,3 +123,7 @@ export const toDisplayString = (val: unknown): string => {
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const useLvStore = () => inject<LvStore>('lvStore')!
+
+export const isObjField = (
+  payload: FilterField
+): payload is FilterFieldConfig => isPlainObject(payload)

@@ -12,7 +12,6 @@ export type FieldType =
   | 'text'
   | 'number'
   | 'select'
-  | 'multipleSelect'
   | 'date'
   | 'dateRange'
   | 'timeSelect'
@@ -27,37 +26,53 @@ interface FieldEffectPayload {
   filterModel: Record<string, any>
 }
 
-export interface FilterField {
-  type: FieldType
+export interface FilterFieldConfig {
+  /** 内置字段类型 */
+  type?: FieldType
 
   /** 字段参数名 */
-  model: string
+  model?: string
 
   /** 字段文本说明 */
   label?: string
 
+  /** 同 vue 组件的 `:key` 属性，若不设置会直接使用子项的 `model` 值 */
   key?: string
 
+  /** 组件宽度 */
   width?: string | number
-
-  trim?: boolean
 
   /** 显示为禁用状态 */
   disabled?: boolean
 
-  /** 类型为 select 或 multipleSelect 时的选项配置 */
+  /** 可传入对应控件原始的 attrs */
+  componentAttrs?: Record<string, any>
+
+  /** 可传入对应控件原始的 slots */
+  componentSlots?: Record<string, any>
+
+  /**
+   * text 类型字段是否删除头尾空格
+   * @default true
+   */
+  trim?: boolean
+
+  /** select/cascader 选项配置 */
   options?:
     | SelectOption[]
     | Promise<SelectOption[]>
     | ((done: (options: SelectOption[]) => void) => void)
 
-  /** 可传入对应控件原始的 attrs */
-  componentAttrs?: { [k: string]: any }
-
-  /** 可传入对应控件原始的 slots */
-  componentSlots?: { [k: string]: any }
+  /** select/cascader 字段类型多选 */
+  multiple?: boolean
 
   effect?: (effectPayload: FieldEffectPayload) => void
 
-  render?: () => VNode
+  render?: () => VNode | Ref<VNode>
 }
+
+export type FilterField =
+  | FilterFieldConfig
+  | FilterFieldConfig[]
+  | VNode
+  | (() => VNode)

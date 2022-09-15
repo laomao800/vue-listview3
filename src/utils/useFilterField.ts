@@ -1,4 +1,4 @@
-import type { FilterField } from '~/types'
+import type { FilterFieldConfig } from '~/types'
 
 import { computed, onMounted, ref, unref } from 'vue'
 import { merge } from 'lodash-es'
@@ -6,7 +6,7 @@ import { isPlainObject, isFunction } from 'is-what'
 import { useLvStore } from '@/useLvStore'
 import { error, get } from './index'
 
-export function useFilterField<T = any>(field: FilterField) {
+export function useFilterField<T = any>(field: FilterFieldConfig) {
   const lvStore = useLvStore()
 
   const fieldRef = ref(field)
@@ -38,7 +38,7 @@ export function useFilterField<T = any>(field: FilterField) {
     },
   })
 
-  const componentAttrs = computed<FilterField['componentAttrs']>(() => {
+  const componentAttrs = computed<FilterFieldConfig['componentAttrs']>(() => {
     const componentAttrs = isPlainObject(unref(fieldRef).componentAttrs)
       ? unref(fieldRef).componentAttrs
       : {}
@@ -47,7 +47,7 @@ export function useFilterField<T = any>(field: FilterField) {
       placeholder: unref(placeholder),
     })
   })
-  const componentSlots = computed<FilterField['componentSlots']>(() => {
+  const componentSlots = computed<FilterFieldConfig['componentSlots']>(() => {
     return unref(fieldRef).componentSlots || {}
   })
 
@@ -56,7 +56,7 @@ export function useFilterField<T = any>(field: FilterField) {
       field.effect({
         fieldRef,
         filterModel: lvStore.filterModel,
-      } as any)
+      })
     }
   })
 
