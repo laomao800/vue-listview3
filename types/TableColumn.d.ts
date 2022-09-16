@@ -1,6 +1,7 @@
 import { VNode } from 'vue'
+import { ElTableColumn } from 'element-plus'
 
-export interface TableColumn {
+export interface TableColumn extends ElTableColumn {
   /* 显示于列头文本 */
   label?: string
 

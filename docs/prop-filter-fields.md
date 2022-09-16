@@ -5,7 +5,7 @@
 
 配置搜索栏搜索字段，相关参数会提交至查询接口。支持 Object 配置或 JSX。
 
-## FilterFieldConfig Types
+## Types
 
 以 object 类型配置所有支持的属性：
 
