@@ -1,4 +1,5 @@
 import { VNode } from 'vue'
+import { MaybeRef } from '@vueuse/shared'
 import { ButtonProps } from 'element-plus'
 
 interface FilterButtonConfig extends ButtonProps {
@@ -21,6 +22,8 @@ interface FilterButtonConfig extends ButtonProps {
   render?: () => VNode
 }
 
-type FilterButton = FilterButtonConfig | VNode | (() => VNode)
+type FilterButton =
+  | MaybeRef<FilterButtonConfig | VNode>
+  | (() => MaybeRef<VNode>)
 
 export { FilterButton, FilterButtonConfig }

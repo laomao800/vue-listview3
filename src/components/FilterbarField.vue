@@ -13,7 +13,7 @@ import { computed, unref, isVNode, Transition, h } from 'vue'
 import { ElFormItem } from 'element-plus'
 import hasValues from 'has-values'
 import { isPlainObject, isFunction } from 'is-what'
-import { get, isObjField } from '@/utils'
+import { get, isObjType } from '@/utils'
 import { useLvStore } from '@/useLvStore'
 import { getFieldComponent } from './fields/index'
 
@@ -71,12 +71,14 @@ function _renderField(field: FilterFieldConfig) {
 let InnerLabel: VNode | Ref<VNode> | null = null
 let InnerContent: VNode | Ref<VNode> | null = null
 
-if (isVNode(props.field)) {
-  InnerContent = h(props.field)
-} else if (isObjField(props.field)) {
-  ;[InnerLabel, InnerContent] = _renderField(props.field)
-} else if (isFunction(props.field)) {
-  InnerContent = props.field()
+const rawField = unref(props.field)
+
+if (isVNode(rawField)) {
+  InnerContent = h(rawField)
+} else if (isObjType<FilterFieldConfig>(rawField)) {
+  ;[InnerLabel, InnerContent] = _renderField(rawField)
+} else if (isFunction(rawField)) {
+  InnerContent = rawField()
 }
 </script>
 

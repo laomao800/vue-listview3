@@ -1,6 +1,7 @@
 <script lang="tsx">
+import type { MaybeRef } from '@vueuse/shared'
 import type { PropType } from 'vue'
-import { isVNode, defineComponent, h } from 'vue'
+import { isVNode, defineComponent, h, unref } from 'vue'
 import {
   ElDropdown,
   ElDropdownMenu,
@@ -11,7 +12,7 @@ import {
 } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { isPlainObject, isFunction } from 'is-what'
-import { warn } from '@/utils'
+import { isObjType, warn } from '@/utils'
 import { FilterButton, FilterButtonConfig } from '~/types'
 
 interface NormalizedButton {
@@ -20,7 +21,8 @@ interface NormalizedButton {
   attrs: Record<string, any>
 }
 
-function isValidButtonConfig(button: any) {
+function isValidButtonConfig(_button: MaybeRef<any>) {
+  const button = unref(_button)
   return (
     button &&
     (isPlainObject(button) ||
@@ -67,14 +69,15 @@ export default defineComponent({
   },
 
   setup(props) {
-    function renderButton(button: FilterButton) {
+    function renderButton(_button: MaybeRef<FilterButton>) {
+      const button = unref(_button)
       if (!isValidButtonConfig(button)) return null
 
       if (isFunction(button)) {
-        return h(button())
+        return h(unref(button()))
       } else if (isVNode(button)) {
         return h(button)
-      } else if (isPlainObject(button)) {
+      } else if (isObjType<FilterButtonConfig>(button)) {
         if (Array.isArray(button.children)) {
           return renderDropdownButton(button)
         } else {

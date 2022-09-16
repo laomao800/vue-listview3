@@ -124,6 +124,5 @@ export const toDisplayString = (val: unknown): string => {
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const useLvStore = () => inject<LvStore>('lvStore')!
 
-export const isObjField = (
-  payload: FilterField
-): payload is FilterFieldConfig => isPlainObject(payload)
+export const isObjType = <T>(payload: any): payload is T =>
+  isPlainObject(payload)

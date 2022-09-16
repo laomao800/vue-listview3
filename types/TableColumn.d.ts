@@ -31,5 +31,5 @@ export interface TableColumn {
   }) => VNode
 
   /** 子列 */
-  children?: TableColumn
+  children?: TableColumn[]
 }

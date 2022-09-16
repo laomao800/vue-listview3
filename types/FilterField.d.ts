@@ -1,4 +1,5 @@
 import { VNode, Ref } from 'vue'
+import { MaybeRef } from '@vueuse/shared'
 
 interface SelectOption {
   label: string
@@ -72,7 +73,5 @@ export interface FilterFieldConfig {
 }
 
 export type FilterField =
-  | FilterFieldConfig
-  | FilterFieldConfig[]
-  | VNode
-  | (() => VNode)
+  | MaybeRef<FilterFieldConfig | FilterFieldConfig[] | VNode>
+  | (() => MaybeRef<VNode>)

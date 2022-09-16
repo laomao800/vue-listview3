@@ -1,4 +1,4 @@
-import { h } from 'vue'
+import { computed, h } from 'vue'
 import { describe, it, expect, vi } from 'vitest'
 import mitt from 'mitt'
 import { mount } from '@vue/test-utils'
@@ -107,10 +107,14 @@ describe('Filter buttons', () => {
     const filterButtons = [
       () => <div class="function-type">text</div>,
       <div class="jsx-type">text</div>,
+      () => computed(() => <div class="ref-function-type">text</div>),
+      computed(() => <div class="ref-jsx-type">text</div>),
     ]
     const wrapper = _mount(ListviewFilterbar, { filterButtons })
     expect(wrapper.find('div.function-type').exists()).toBe(true)
     expect(wrapper.find('div.jsx-type').exists()).toBe(true)
+    expect(wrapper.find('div.ref-function-type').exists()).toBe(true)
+    expect(wrapper.find('div.ref-jsx-type').exists()).toBe(true)
   })
 })
 
@@ -285,6 +289,8 @@ describe('Filter fields', () => {
       },
       () => <input class="function-type" />,
       <input class="vnode-type" />,
+      () => computed(() => <input class="ref-function-type" />),
+      computed(() => <input class="ref-vnode-type" />),
     ]
     const wrapper = _mount(ListviewFilterbar, {
       filterFields,
@@ -292,6 +298,10 @@ describe('Filter fields', () => {
     expect(wrapper.find('.lv__field input.object-type').exists()).toBe(true)
     expect(wrapper.find('.lv__field input.function-type').exists()).toBe(true)
     expect(wrapper.find('.lv__field input.vnode-type').exists()).toBe(true)
+    expect(wrapper.find('.lv__field input.ref-function-type').exists()).toBe(
+      true
+    )
+    expect(wrapper.find('.lv__field input.ref-vnode-type').exists()).toBe(true)
   })
 
   it('effect', async () => {

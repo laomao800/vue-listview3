@@ -1,13 +1,16 @@
 <script lang="tsx">
-import type { FilterField } from '~/types'
-import { VNode, PropType, ref, defineComponent } from 'vue'
+import type { MaybeRef } from '@vueuse/shared'
+import type { FilterField, FilterFieldConfig } from '~/types'
+import { VNode, PropType, ref, unref, defineComponent } from 'vue'
 import { isVNode } from 'vue'
 import { isFunction } from 'is-what'
-import { hasOwn, error, isObjField } from '@/utils'
+import { hasOwn, error, isObjType } from '@/utils'
 import { getFieldComponent } from './fields/index'
 import FilterbarField from './FilterbarField.vue'
 
-function isValidFieldConfig(field: any) {
+function isValidFieldConfig(_field: MaybeRef<any>) {
+  const field = unref(_field)
+
   if (!field) return false
 
   if (isVNode(field)) return true
@@ -56,7 +59,7 @@ export default defineComponent({
     function renderField(field: FilterField) {
       if (!isValidFieldConfig(field)) return null
       const key =
-        (isObjField(field) && (field.key || field.model)) ||
+        (isObjType<FilterFieldConfig>(field) && (field.key || field.model)) ||
         `unnamed-field-${uid++}`
       return (
         <FilterbarField
