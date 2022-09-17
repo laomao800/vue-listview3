@@ -31,6 +31,7 @@ import {
   onBeforeUnmount,
   onActivated,
   onDeactivated,
+  provide,
 } from 'vue'
 import { vLoading } from 'element-plus'
 import { parseSize } from '@/utils'
@@ -70,6 +71,7 @@ const props = defineProps({
 const emit = defineEmits(['update-layout'])
 
 const lvStore = useLvStore()
+provide('lvStore', lvStore)
 
 const scopeProps = computed(() => ({
   contentHeight: unref(lvStore.contentHeight),
