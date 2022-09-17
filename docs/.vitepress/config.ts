@@ -1,11 +1,11 @@
-const version =
-  process.env.TARGET_VERSION || require('../../package.json').version
+import { defineConfig } from 'vitepress'
 
-export default {
+export default defineConfig({
   themeConfig: {
     siteTitle: `Vue Listview 3`,
-    repo: 'laomao800/vue-listview',
-    repoLabel: '仓库地址',
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/laomao800/vue-listview3' },
+    ],
     nav: [
       {
         text: 'Changelog',
@@ -15,6 +15,7 @@ export default {
     sidebar: [
       {
         text: 'Listview',
+        collapsible: true,
         items: [
           { text: '使用', link: '/' },
           { text: 'Props', link: '/props' },
@@ -27,8 +28,17 @@ export default {
       },
       {
         text: 'Listview Container',
-        items: [{ text: 'Props', link: '/listview-container' }],
+        collapsible: true,
+        items: [{ text: '使用', link: '/listview-container' }],
+      },
+      {
+        text: '定制',
+        collapsible: true,
+        items: [
+          { text: 'create', link: '/create' },
+          { text: 'lvStore', link: '/lv-store' },
+        ],
       },
     ],
   },
-}
+})
