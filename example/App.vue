@@ -11,13 +11,16 @@
     :filter-model="filterModel"
     :table-columns="tableColumns"
     :page-props="{ pagerCount: 5 }"
-    :content-attrs="{ rowClassName: 'row-view-class' }"
+    :content-attrs="contentAttrs"
     :validate-response1="() => true"
     :table-selection-column="{ selectable: (row: any, index:number) => index !== 1 }"
-  ></ListviewComponent>
+  />
 </template>
 
 <script lang="tsx" setup>
+/* eslint-disable no-console */
+import type { FilterField, TableColumn } from '~/types'
+
 import mitt from 'mitt'
 import { ref, unref, shallowRef, computed } from 'vue'
 import { ElMessage, ElButton, ElSelect, ElOption } from 'element-plus'
@@ -27,7 +30,11 @@ import { CirclePlus, Remove } from '@element-plus/icons-vue'
 // @ts-ignore
 import { Listview as ListviewComponent } from '../src'
 
-const selection = ref([])
+const contentAttrs = ref({
+  rowClassName: 'row-view-class',
+})
+
+const selection = ref<any[]>([])
 const loadingSelection = ref(false)
 
 const filterModel = ref({
@@ -100,7 +107,7 @@ const filterButtons = shallowRef([
 ])
 
 const emitter = mitt<any>()
-const filterFields = shallowRef([
+const filterFields = shallowRef<FilterField[]>([
   {
     label: 'Module',
     model: 'module_id',
@@ -135,7 +142,7 @@ const filterFields = shallowRef([
     ],
     label: '搜索类型',
     componentAttrs: {
-      onChange: (val) => {
+      onChange: (val: any) => {
         emitter.emit('search-type-change', val)
       },
     },
@@ -218,7 +225,8 @@ const filterFields = shallowRef([
     ],
   },
   {
-    type: 'multipleSelect',
+    type: 'select',
+    multiple: true,
     model: 'multipleSelect',
     label: '多选字段',
     options: [
@@ -243,7 +251,8 @@ const filterFields = shallowRef([
     }),
   },
   {
-    type: 'multipleSelect',
+    type: 'select',
+    multiple: true,
     model: 'asyncOptions',
     label: 'asyncOptions',
     options: (done) => {
@@ -322,7 +331,7 @@ const filterFields = shallowRef([
   },
 ])
 
-const tableColumns = shallowRef([
+const tableColumns = shallowRef<TableColumn[]>([
   {
     label: 'id',
     prop: 'id',
@@ -368,11 +377,11 @@ const tableColumns = shallowRef([
   { label: '零售价格', prop: 'sale_price' },
   {
     label: '折扣率',
-    formatter: (row) => row.discount.toFixed(2),
+    formatter: (row: any) => row.discount.toFixed(2),
   },
   {
     label: '折后价',
-    formatter: (row) => (row.discount * row.sale_price).toFixed(2),
+    formatter: (row: any) => (row.discount * row.sale_price).toFixed(2),
   },
   {
     label: '折扣时间',
@@ -384,7 +393,7 @@ const tableColumns = shallowRef([
   { label: '数量', prop: 'quantity' },
   {
     label: '是否启用',
-    render: (prop) => {
+    render: (prop: any) => {
       if (prop.row.enable) {
         return <div style="color:#67c23a">启用</div>
       } else {
