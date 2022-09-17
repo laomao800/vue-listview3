@@ -26,7 +26,7 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
     const currentPage = ref(1)
     const currentPageSize = ref(props.pageSize)
     const contentData = ref<Record<string, any>>({ items: [], total: 0 })
-    const internalContentMessage = ref({ type: '', text: '' })
+    const contentMessage = ref({ type: '', text: '' })
     const filterModel = reactive(props.filterModel)
 
     watch(selection, () => emitter.emit('update:selection', unref(selection)))
@@ -189,7 +189,7 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
     }
 
     function setContentMessage(text = '', type = '', cleanData = false) {
-      internalContentMessage.value = { text, type }
+      contentMessage.value = { text, type }
       cleanData && cleanContentData()
     }
 
@@ -205,7 +205,7 @@ const [useProvideLvStore, _useLvStore] = createInjectionState(
     const lvStore: LvStore = {
       contentHeight,
       contentLoading,
-      internalContentMessage,
+      contentMessage,
       selection,
       contentData,
       emitter,

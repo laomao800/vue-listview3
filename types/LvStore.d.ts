@@ -15,7 +15,7 @@ export declare class LvStore {
   currentPageSize: Ref<ListviewProps['currentPageSize']>
   contentHeight: Ref<number>
   contentLoading: Ref<boolean>
-  internalContentMessage: Ref<{ type: string; text: string }>
+  contentMessage: Ref<{ type: string; text: string }>
   selection: Ref<any[]>
   contentData: Ref<Record<string, any>>
 

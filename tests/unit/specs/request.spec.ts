@@ -197,7 +197,7 @@ describe('Response', () => {
         }
       },
     })
-    expect(unref(lvStore.internalContentMessage)).toEqual({
+    expect(unref(lvStore.contentMessage)).toEqual({
       type: 'error',
       text: 'error: (error info)',
     })

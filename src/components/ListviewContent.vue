@@ -94,7 +94,7 @@ const selection = computed({
   set: (newVal) => (lvStore.selection.value = newVal),
 })
 const contentData = lvStore.contentData
-const contentMessage = lvStore.internalContentMessage
+const contentMessage = lvStore.contentMessage
 
 /**
  * 规范化表格选择列配置

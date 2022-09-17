@@ -33,7 +33,6 @@ import {
   onDeactivated,
 } from 'vue'
 import { vLoading } from 'element-plus'
-import { pick } from 'lodash-es'
 import { parseSize } from '@/utils'
 import { useLvStore } from '@/useLvStore'
 
@@ -72,16 +71,13 @@ const emit = defineEmits(['update-layout'])
 
 const lvStore = useLvStore()
 
-// TODO: test 用例检查传值
-const scopeProps = computed(() =>
-  pick(lvStore, [
-    'contentHeight',
-    'contentLoading',
-    'contentData',
-    'filterModel',
-    'contentMessage',
-  ])
-)
+const scopeProps = computed(() => ({
+  contentHeight: unref(lvStore.contentHeight),
+  contentLoading: unref(lvStore.contentLoading),
+  contentData: unref(lvStore.contentData),
+  filterModel: unref(lvStore.filterModel),
+  contentMessage: unref(lvStore.contentMessage),
+}))
 
 const wrapperRef = ref<Element | null>(null)
 const contentRef = ref<Element | null>(null)
