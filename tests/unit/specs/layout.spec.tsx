@@ -203,6 +203,15 @@ describe('slots', () => {
       return result
     }, {} as any)
 
+  it('basic block slots', () => {
+    const slots = genSlots(['default', 'header', 'filterbar', 'footer'])
+    const wrapper = mount(Listview, { slots })
+    expect(wrapper.find('.default').exists()).toBeTruthy()
+    expect(wrapper.find('.header').exists()).toBeTruthy()
+    expect(wrapper.find('.filterbar').exists()).toBeTruthy()
+    expect(wrapper.find('.footer').exists()).toBeTruthy()
+  })
+
   it('filterbar slots', () => {
     Object.defineProperty(window, 'innerWidth', {
       writable: true,
@@ -231,12 +240,6 @@ describe('slots', () => {
     expect(wrapper.find('.append-submit').exists()).toBeTruthy()
     expect(wrapper.find('.prepend-more').exists()).toBeTruthy()
     expect(wrapper.find('.append-more').exists()).toBeTruthy()
-  })
-
-  it('content default slot', () => {
-    const slots = genSlots(['default'])
-    const wrapper = mount(Listview, { slots })
-    expect(wrapper.find('.default').exists()).toBeTruthy()
   })
 
   it('content empty slot', () => {

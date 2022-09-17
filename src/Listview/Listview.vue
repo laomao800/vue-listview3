@@ -5,41 +5,46 @@
       v-bind="mergedAttrs"
       @update-layout="handleUpdateLayout"
     >
-      <template #header>
-        <component :is="headerComponent" v-bind="mergedAttrs" />
+      <template #header="scopedProps">
+        <slot name="header" v-bind="scopedProps">
+          <component :is="headerComponent" v-bind="mergedAttrs" />
+        </slot>
       </template>
-      <template #filterbar>
-        <component
-          :is="filterbarComponent"
-          ref="filterbarRef"
-          v-bind="mergedAttrs"
-          @fold-change="handleFilterFold"
-        >
-          <template v-if="$slots['filterbar-top']" #filterbar-top>
-            <slot name="filterbar-top" />
-          </template>
-          <template v-if="$slots['filterbar-bottom']" #filterbar-bottom>
-            <slot name="filterbar-bottom" />
-          </template>
-          <template v-if="$slots['filterbar-left']" #filterbar-left>
-            <slot name="filterbar-left" />
-          </template>
-          <template v-if="$slots['filterbar-right']" #filterbar-right>
-            <slot name="filterbar-right" />
-          </template>
-          <template v-if="$slots['prepend-more']" #prepend-more>
-            <slot name="prepend-more" />
-          </template>
-          <template v-if="$slots['append-more']" #append-more>
-            <slot name="append-more" />
-          </template>
-          <template v-if="$slots['prepend-submit']" #prepend-submit>
-            <slot name="prepend-submit" />
-          </template>
-          <template v-if="$slots['append-submit']" #append-submit>
-            <slot name="append-submit" />
-          </template>
-        </component>
+
+      <template #filterbar="scopedProps">
+        <slot name="filterbar" v-bind="scopedProps">
+          <component
+            :is="filterbarComponent"
+            ref="filterbarRef"
+            v-bind="mergedAttrs"
+            @fold-change="handleFilterFold"
+          >
+            <template v-if="$slots['filterbar-top']" #filterbar-top>
+              <slot name="filterbar-top" />
+            </template>
+            <template v-if="$slots['filterbar-bottom']" #filterbar-bottom>
+              <slot name="filterbar-bottom" />
+            </template>
+            <template v-if="$slots['filterbar-left']" #filterbar-left>
+              <slot name="filterbar-left" />
+            </template>
+            <template v-if="$slots['filterbar-right']" #filterbar-right>
+              <slot name="filterbar-right" />
+            </template>
+            <template v-if="$slots['prepend-more']" #prepend-more>
+              <slot name="prepend-more" />
+            </template>
+            <template v-if="$slots['append-more']" #append-more>
+              <slot name="append-more" />
+            </template>
+            <template v-if="$slots['prepend-submit']" #prepend-submit>
+              <slot name="prepend-submit" />
+            </template>
+            <template v-if="$slots['append-submit']" #append-submit>
+              <slot name="append-submit" />
+            </template>
+          </component>
+        </slot>
       </template>
 
       <template #content="scopedProps">
@@ -52,18 +57,20 @@
         </slot>
       </template>
 
-      <template #footer>
-        <component :is="footerComponent" v-bind="mergedAttrs">
-          <template v-if="$slots['footer-left']" #footer-left>
-            <slot name="footer-left" />
-          </template>
-          <template v-if="$slots['footer-center']" #footer-center>
-            <slot name="footer-center" />
-          </template>
-          <template v-if="$slots['footer-right']" #footer-right>
-            <slot name="footer-right" />
-          </template>
-        </component>
+      <template #footer="scopedProps">
+        <slot name="footer" v-bind="scopedProps">
+          <component :is="footerComponent" v-bind="mergedAttrs">
+            <template v-if="$slots['footer-left']" #footer-left>
+              <slot name="footer-left" />
+            </template>
+            <template v-if="$slots['footer-center']" #footer-center>
+              <slot name="footer-center" />
+            </template>
+            <template v-if="$slots['footer-right']" #footer-right>
+              <slot name="footer-right" />
+            </template>
+          </component>
+        </slot>
       </template>
     </ListviewLayout>
   </ElConfigProvider>
