@@ -11,8 +11,6 @@ const depNames = Object.keys(pkg.dependencies)
 depNames.push('vue')
 const depNamesReg = new RegExp(`^(${depNames.join('|')})`)
 
-process.env.NODE_ENV = 'development'
-
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
   const plugins = [VueMacros(), vue(), vueJsx(), cssInjectedByJsPlugin()]
