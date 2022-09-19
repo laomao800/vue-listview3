@@ -73,25 +73,18 @@ const emit = defineEmits(['update-layout'])
 const lvStore = useLvStore()
 provide('lvStore', lvStore)
 
-const scopeProps = computed(() => ({
-  contentHeight: unref(lvStore.contentHeight),
-  contentLoading: unref(lvStore.contentLoading),
-  contentData: unref(lvStore.contentData),
-  filterModel: unref(lvStore.filterModel),
-  contentMessage: unref(lvStore.contentMessage),
-}))
-
+const scopeProps = computed(() => lvStore)
 const wrapperRef = ref<Element | null>(null)
 const contentRef = ref<Element | null>(null)
 const footerRef = ref<Element | null>(null)
 const wrapperHeight = ref<number | string | null>(null)
 const contentHeight = computed({
-  get: () => unref(lvStore.contentHeight),
+  get: () => unref(lvStore.state.contentHeight),
   set(newVal) {
-    lvStore.contentHeight.value = newVal
+    lvStore.state.contentHeight = newVal
   },
 })
-const contentLoading = computed(() => !!unref(lvStore.contentLoading))
+const contentLoading = computed(() => !!unref(lvStore.state.contentLoading))
 const bottomOffset = computed<number>(() =>
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   getElBottomOffset(unref(wrapperRef)!)

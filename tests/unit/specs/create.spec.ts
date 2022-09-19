@@ -52,9 +52,9 @@ describe('Create api', () => {
     )
     expect(requestSpy.mock).toHaveProperty('calls[0][0].global_page_index')
     expect(requestSpy.mock).toHaveProperty('calls[0][0].global_page_size')
-    expect(lvStore.contentData.value).toHaveProperty('addon')
-    expect(lvStore.contentData.value).toHaveProperty('items')
-    expect(lvStore.contentData.value).toHaveProperty('total')
+    expect(lvStore.state.contentData).toHaveProperty('addon')
+    expect(lvStore.state.contentData).toHaveProperty('items')
+    expect(lvStore.state.contentData).toHaveProperty('total')
   })
 
   it('requestConfig', async () => {

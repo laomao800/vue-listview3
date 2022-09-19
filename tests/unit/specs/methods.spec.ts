@@ -16,7 +16,7 @@ describe('Methods', () => {
 
     vm.resetFilter()
     await wait()
-    expect(lvStore.filterModel).toEqual({
+    expect(lvStore.state.filterModel).toEqual({
       text: undefined,
       multiple: [],
     })

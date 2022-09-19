@@ -74,7 +74,7 @@ describe('Request params', () => {
       requestUrl: '/mock/list',
     })
     await wait(400)
-    expect(unref(lvStore.contentData)).toHaveProperty('total', 800)
+    expect(unref(lvStore.state.contentData)).toHaveProperty('total', 800)
   })
 })
 
@@ -128,7 +128,7 @@ describe('分页参数', () => {
     const $pagination = wrapper.findComponent({ name: 'ElPagination' })
     $pagination.vm.$emit('update:page-size', 3)
 
-    expect(lvStore.currentPageSize.value).toBe(3)
+    expect(lvStore.state.currentPageSize).toBe(3)
   })
 
   it('search(true) 保持当前页码', async () => {
@@ -141,9 +141,9 @@ describe('分页参数', () => {
       .findComponent({ name: 'ElPagination' })
       .vm.$emit('update:current-page', newCurPage)
     await vm.search(true)
-    expect(unref(lvStore.currentPage)).toBe(newCurPage)
+    expect(unref(lvStore.state.currentPage)).toBe(newCurPage)
     await vm.search()
-    expect(unref(lvStore.currentPage)).toBe(1)
+    expect(unref(lvStore.state.currentPage)).toBe(1)
   })
 })
 
@@ -157,7 +157,7 @@ describe('Response', () => {
         custom_unknow: 'result.unknow.prop',
       },
     })
-    expect(unref(lvStore.contentData)).toEqual({
+    expect(unref(lvStore.state.contentData)).toEqual({
       custom_items: mockDataList,
       custom_total: 40,
       custom_success: true,
@@ -178,7 +178,7 @@ describe('Response', () => {
         }),
       validateResponse: (response) => response.custom_is_success === 'done',
     })
-    expect(unref(lvStore.contentData)).toEqual(result)
+    expect(unref(lvStore.state.contentData)).toEqual(result)
   })
 
   it('resolveResponseErrorMessage', async () => {
@@ -197,7 +197,7 @@ describe('Response', () => {
         }
       },
     })
-    expect(unref(lvStore.contentMessage)).toEqual({
+    expect(unref(lvStore.state.contentMessage)).toEqual({
       type: 'error',
       text: 'error: (error info)',
     })
@@ -220,7 +220,7 @@ describe('Response', () => {
         },
       }),
     })
-    expect(unref(lvStore.contentData)).toEqual({
+    expect(unref(lvStore.state.contentData)).toEqual({
       success: true,
       items: mockDataList,
       total: 40,

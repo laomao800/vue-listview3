@@ -68,10 +68,10 @@ app.component('CustomListview', CustomListview)
 
 支持的替换区域有：
 
-- `'header'`: 顶部标题栏区域
-- `'filterbar'`: 搜索栏区域
-- `'content'`: 正文区域
-- `'footer'`: 底部页码区域
+- `header`: 顶部标题栏区域
+- `filterbar`: 搜索栏区域
+- `content`: 正文区域
+- `footer`: 底部页码区域
 
 ::: tip 注意
 

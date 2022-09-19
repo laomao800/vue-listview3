@@ -96,8 +96,8 @@ import { ref, unref, computed, useSlots, watch, nextTick, markRaw } from 'vue'
 import { ElForm, ElButton } from 'element-plus'
 import { Search, CaretTop } from '@element-plus/icons-vue'
 import { isPlainObject } from 'is-what'
-import { FilterButton, FilterField } from '~/types'
-import { hasOwn } from '@/utils'
+import { FilterButton, FilterField, FilterFieldConfig } from '~/types'
+import { hasOwn, isObjType } from '@/utils'
 import { useLvStore } from '@/useLvStore'
 import FilterbarButtons from './FilterbarButtons.vue'
 import FilterbarFields from './FilterbarFields.vue'
@@ -198,7 +198,7 @@ watch(
 const rootEmitProxy = lvStore?.rootEmitProxy?.bind(lvStore)
 
 function handleSubmit() {
-  lvStore.pressEnterSearch && handleFilterSearch()
+  lvStore.state.pressEnterSearch && handleFilterSearch()
 }
 
 function handleFilterSearch() {
@@ -207,8 +207,10 @@ function handleFilterSearch() {
 }
 
 function resetFilter() {
-  const filterModel = lvStore.filterModel
+  const filterModel = lvStore.state.filterModel
   const _resetField = (field: FilterField) => {
+    if (!isObjType<FilterFieldConfig>(field)) return
+
     const name = field.model
     if (name && hasOwn(filterModel, name)) {
       const value = filterModel[name]

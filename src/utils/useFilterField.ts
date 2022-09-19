@@ -17,14 +17,14 @@ export function useFilterField<T = any>(field: FilterFieldConfig) {
       const key = unref(fieldRef).model
       let value = null
       if (key) {
-        value = get(lvStore.filterModel, key)
+        value = get(lvStore.state.filterModel, key)
       }
       return value
     },
     set(newVal) {
       const key = unref(fieldRef).model
       if (key) {
-        lvStore.filterModel[key] = newVal
+        lvStore.state.filterModel[key] = newVal
       } else {
         /* istanbul ignore next */
         if (process.env.NODE_ENV !== 'production') {
@@ -55,7 +55,7 @@ export function useFilterField<T = any>(field: FilterFieldConfig) {
     if (isFunction(field.effect)) {
       field.effect({
         fieldRef,
-        filterModel: lvStore.filterModel,
+        filterModel: lvStore.state.filterModel,
       })
     }
   })

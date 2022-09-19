@@ -11,25 +11,25 @@ export default defineComponent({
 
   setup(_, { slots }) {
     const lvStore = useLvStore()
-    const usePage = computed(() => lvStore.usePage)
-    const pagePosition = computed(() => lvStore.pagePosition)
+    const usePage = computed(() => lvStore.state.usePage)
+    const pagePosition = computed(() => lvStore.state.pagePosition)
     const currentPage = computed({
-      get: () => unref(lvStore.currentPage),
-      set: (val: number) => (lvStore.currentPage.value = val),
+      get: () => unref(lvStore.state.currentPage),
+      set: (val: number) => (lvStore.state.currentPage = val),
     })
     const currentPageSize = computed({
-      get: () => unref(lvStore.currentPageSize),
-      set: (val: number) => (lvStore.currentPageSize.value = val),
+      get: () => unref(lvStore.state.currentPageSize),
+      set: (val: number) => (lvStore.state.currentPageSize = val),
     })
     const mergedAttrs = computed(() => {
-      let total = unref(lvStore.contentData).total
+      let total = unref(lvStore.state.contentData).total
       total = isNumber(total) ? total : 0
       return {
         pageSize: unref(currentPageSize),
-        pageSizes: lvStore.pageSizes,
+        pageSizes: lvStore.state.pageSizes,
         background: true,
         layout: 'total, sizes, prev, pager, next, jumper',
-        ...lvStore.pageAttrs,
+        ...lvStore.state.pageAttrs,
         total,
         currentPage: unref(currentPage),
         'onUpdate:currentPage': (page: number) => {

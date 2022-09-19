@@ -29,7 +29,7 @@ const props = defineProps({
 const showLabelRef = computed(() => {
   const modelName = get(props.field, 'model')
   if (modelName) {
-    const value = get(lvStore.filterModel, modelName)
+    const value = get(lvStore.state.filterModel, modelName)
     // hasValues(null) -> true
     return value !== null && hasValues(value)
   }

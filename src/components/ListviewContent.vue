@@ -87,14 +87,14 @@ const props = defineProps({
 
 const contentTableRef = ref<any>(null)
 const _height = computed(
-  () => parseSize(unref(lvStore.contentHeight)) || undefined
+  () => parseSize(unref(lvStore.state.contentHeight)) || undefined
 )
 const selection = computed({
-  get: () => unref(lvStore.selection),
-  set: (newVal) => (lvStore.selection.value = newVal),
+  get: () => unref(lvStore.state.selection),
+  set: (newVal) => (lvStore.state.selection = newVal),
 })
-const contentData = lvStore.contentData
-const contentMessage = lvStore.contentMessage
+const contentData = computed(() => lvStore.state.contentData)
+const contentMessage = computed(() => lvStore.state.contentMessage)
 
 /**
  * 规范化表格选择列配置

@@ -264,8 +264,8 @@ describe('Filter fields', () => {
     _findVm('FieldSelect').value = 'option1'
     _findVm('FieldCascader').value = [1, 2, 3, 4]
 
-    const lvStore = wrapper.__store
-    expect(lvStore.filterModel).toStrictEqual({
+    const fakeStore = wrapper.__store
+    expect(fakeStore.filterModel).toStrictEqual({
       text: 'text',
       number: 9527,
       date: DATE1,

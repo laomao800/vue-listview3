@@ -147,14 +147,14 @@ const props = defineProps({
 
 const layoutRef = ref<any>(null)
 const filterbarRef = ref(null)
-const lvStore = computed(() => unref(layoutRef)?.lvStore)
+const lvStoreRef = computed(() => unref(layoutRef)?.lvStore)
 
-const unwatchStore = watch(lvStore, () => {
-  if (unref(lvStore)) {
-    unref(lvStore).emitter.on('root-emit', ({ event, payload }: any) => {
+const unwatchStore = watch(lvStoreRef, () => {
+  if (unref(lvStoreRef)) {
+    unref(lvStoreRef).emitter.on('root-emit', ({ event, payload }: any) => {
       emits(event, payload)
     })
-    unref(lvStore).emitter.on('update:selection', (selection: any) => {
+    unref(lvStoreRef).emitter.on('update:selection', (selection: any) => {
       emits('update:selection', selection)
     })
     unwatchStore()
@@ -191,9 +191,9 @@ const handleFilterFold = () => nextTick().then(_updateWrapperLayout)
 
 const updateLayout = useThrottleFn(_updateWrapperLayout, 100)
 const resetFilter = () => unref<any>(filterbarRef)?.resetFilter.call()
-const search = (keepInPage: boolean) => lvStore.value.search(keepInPage)
+const search = (keepInPage: boolean) => unref(lvStoreRef).search(keepInPage)
 const setContentMessage = (text: string, type: string, cleanData = false) =>
-  lvStore.value.setContentMessage(text, type, cleanData)
+  unref(lvStoreRef).setContentMessage(text, type, cleanData)
 
 // TODO: type fix
 useProvideLvStore(unref(mergedAttrs) as any)

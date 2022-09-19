@@ -294,7 +294,7 @@ Axios [Request Config](https://github.com/axios/axios#request-config)。
   }
   ```
 
-## 数据请求 - 高级配置
+## 数据请求 - 自定义
 
 如果对于数据接口请求在发送前、接受后有特殊的处理流程，或者接口数据格式与规范不一致，可通过以下几个 props 对数据进行加工处理。
 

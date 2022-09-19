@@ -3,23 +3,27 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Emitter } from 'mitt'
 import { ListviewProps } from './Props'
 
-export declare class LvStore {
+export interface LvStore {
   emitter: Emitter
-  pressEnterSearch: ListviewProps['pressEnterSearch']
-  filterModel: UnwrapNestedRefs<ListviewProps['filterModel']>
-  usePage: ListviewProps['usePage']
-  pagePosition: ListviewProps['pagePosition']
-  pageSizes: ListviewProps['pageSizes']
-  pageAttrs: ListviewProps['pageAttrs']
-  currentPage: Ref<number>
-  currentPageSize: Ref<ListviewProps['currentPageSize']>
-  contentHeight: Ref<number>
-  contentLoading: Ref<boolean>
-  contentMessage: Ref<{ type: string; text: string }>
-  selection: Ref<any[]>
-  contentData: Ref<Record<string, any>>
 
-  rootEmitProxy: (eventName: string, payload: any) => void
+  state: {
+    pressEnterSearch: ListviewProps['pressEnterSearch']
+    filterModel: UnwrapNestedRefs<ListviewProps['filterModel']>
+    usePage: ListviewProps['usePage']
+    pagePosition: ListviewProps['pagePosition']
+    pageSizes: ListviewProps['pageSizes']
+    pageAttrs: ListviewProps['pageAttrs']
+    currentPage: number
+    currentPageSize: ListviewProps['currentPageSize']
+    contentHeight: number
+    contentLoading: boolean
+    /** @default { type: string; text: string } */
+    contentMessage: Record<string, any>
+    selection: any[]
+    contentData: Record<string, any>
+  }
+
+  rootEmitProxy: (event: string, payload?: any) => void
   search: (keepInPage?: boolean) => Promise<any>
   setContentMessage: (
     text: string,
