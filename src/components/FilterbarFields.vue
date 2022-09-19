@@ -3,29 +3,15 @@ import type { MaybeRef } from '@vueuse/shared'
 import type { FilterField, FilterFieldConfig } from '~/types'
 import { VNode, PropType, ref, unref, defineComponent } from 'vue'
 import { isVNode } from 'vue'
-import { isFunction } from 'is-what'
-import { hasOwn, error, isObjType } from '@/utils'
-import { getFieldComponent } from './fields/index'
+import { isPlainObject, isFunction } from 'is-what'
+import { isObjType } from '@/utils'
 import FilterbarField from './FilterbarField.vue'
 
 function isValidFieldConfig(_field: MaybeRef<any>) {
   const field = unref(_field)
-
-  if (!field) return false
-
-  if (isVNode(field)) return true
-
-  if (hasOwn(field, 'type')) {
-    if (getFieldComponent(field.type)) {
-      return true
-    } else {
-      error(`Invalid filter field type '${field.type}'`, field)
-      return false
-    }
-  }
-
   return (
-    (hasOwn(field, 'render') && isFunction(field.render)) ||
+    isPlainObject(field) ||
+    isVNode(field) ||
     isFunction(field) ||
     Array.isArray(field)
   )

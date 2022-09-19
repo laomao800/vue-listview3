@@ -1,5 +1,5 @@
 <template>
-  <div class="lv__field">
+  <div v-if="InnerContent" class="lv__field">
     <component :is="InnerContent" />
     <component :is="InnerLabel" />
   </div>
@@ -13,7 +13,7 @@ import { computed, unref, isVNode, Transition, h } from 'vue'
 import { ElFormItem } from 'element-plus'
 import hasValues from 'has-values'
 import { isPlainObject, isFunction } from 'is-what'
-import { get, isObjType } from '@/utils'
+import { get, isObjType, error } from '@/utils'
 import { useLvStore } from '@/useLvStore'
 import { getFieldComponent } from './fields/index'
 
@@ -61,6 +61,8 @@ function _renderField(field: FilterFieldConfig) {
             <FieldComponent {...{ field, style }} />
           </ElFormItem>
         )
+      } else {
+        error(`Invalid filter field type '${field.type}'`, field)
       }
     }
   }
