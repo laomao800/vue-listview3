@@ -1,5 +1,7 @@
 # Slots
 
+其中 `filterbar` 、`footer` 与 [`replaceComponent`](./create.md#replacecomponents) 类似，会渲染于整个完整区域，既设置后下方其他内部 slot `filterbar-*` ， `footer-*` 等不再显示。
+
 | name             | 说明                                         |
 | ---------------- | -------------------------------------------- |
 | default          | 内容主体区域                                 |
@@ -17,9 +19,6 @@
 | footer-left      | 底部页码栏左侧，该插槽会覆盖居左显示页码组件 |
 | footer-center    | 底部页码栏中间位置                           |
 | footer-right     | 底部页码栏右侧，该插槽会覆盖居右显示页码组件 |
-
-其中 `filterbar` 、`footer` 与 [`replaceComponent`](./create.md#replacecomponents) 类似，会渲染于整个完整区域，既设置后下方其他内部 slot `filterbar-*` ， `footer-*` 等不再显示。
-
 
 ## Slot props
 
