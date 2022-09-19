@@ -1,7 +1,5 @@
 # Slots
 
-## slots
-
 | name             | 说明                                         |
 | ---------------- | -------------------------------------------- |
 | default          | 内容主体区域                                 |
@@ -21,3 +19,26 @@
 | footer-right     | 底部页码栏右侧，该插槽会覆盖居右显示页码组件 |
 
 其中 `filterbar` 、`footer` 与 [`replaceComponent`](./create.md#replacecomponents) 类似，会渲染于整个完整区域，既设置后下方其他内部 slot `filterbar-*` ， `footer-*` 等不再显示。
+
+
+## Slot props
+
+所有 slot 都接收内部 [lvStore](./lv-store.md) 实例作为 slot props 。
+
+用例：
+
+```vue
+<template>
+  <listview>
+    <template #default="{ state }">
+      <div v-if="state.contentLoading">Loading...</div>
+      <div v-else-if="state.contentMessage.text">{{ state.contentMessage }}</div>
+      <ul v-else>
+        <li v-for="(item, index) in state.contentData.items" :key="index">
+          {{ item.name }}
+        </li>
+      </ul>
+    </template>
+  </listview>
+</template>
+```
