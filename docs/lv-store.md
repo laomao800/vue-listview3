@@ -28,7 +28,10 @@ Listivew 内部底层数据及方法存储于名为 `lvStore` 的 provider。在
 
 与 Listview 实例同名 [setContentMessage](methods-and-events.md#setContentMessage) 方法一致。
 
-
 ### `cleanContentData`
 
 清空内容数据。
+
+### `resetFilterModel`
+
+清空搜索栏数据。

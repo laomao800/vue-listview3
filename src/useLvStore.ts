@@ -1,4 +1,4 @@
-import { ListviewProps, LvStore } from '~/types'
+import { ListviewProps, LvStore, FilterField, FilterFieldConfig } from '~/types'
 
 import { reactive, watch } from 'vue'
 import { createInjectionState } from '@vueuse/shared'
@@ -12,6 +12,8 @@ import {
   isValidFieldValue,
   ensurePromise,
   toDisplayString,
+  isObjType,
+  hasOwn,
 } from '@/utils'
 
 const [useProvideLvStore, _useLvStore] = createInjectionState<
@@ -40,6 +42,8 @@ const [useProvideLvStore, _useLvStore] = createInjectionState<
     selection: [],
     ...stateFromProps,
   })
+
+  props.autoload && search()
 
   watch(
     () => state.selection,
@@ -217,7 +221,30 @@ const [useProvideLvStore, _useLvStore] = createInjectionState<
     return doRequest()
   }
 
-  props.autoload && search()
+  function resetFilterModel() {
+    const filterModel = state.filterModel
+    const _resetField = (field: FilterField) => {
+      if (!isObjType<FilterFieldConfig>(field)) return
+
+      const name = field.model
+      if (name && hasOwn(filterModel, name)) {
+        const value = filterModel[name]
+        if (Array.isArray(value)) {
+          filterModel[name] = []
+        } else {
+          filterModel[name] = undefined
+        }
+      }
+    }
+    props.filterFields.forEach((field) => {
+      if (Array.isArray(field)) {
+        field.forEach(_resetField)
+      } else {
+        _resetField(field)
+      }
+    })
+    rootEmitProxy('filter-reset')
+  }
 
   return {
     state,
@@ -226,6 +253,7 @@ const [useProvideLvStore, _useLvStore] = createInjectionState<
     setContentMessage,
     rootEmitProxy,
     cleanContentData,
+    resetFilterModel,
   }
 })
 

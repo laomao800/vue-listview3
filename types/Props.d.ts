@@ -81,10 +81,10 @@ declare class ListviewProps extends ComponentWithInstall {
   resolveResponseErrorMessage: (response?: any) => any
 
   /** 搜索栏左侧按钮配置。 default: [] */
-  filterButtons: FilterButton[] | (() => VNode) | VNode
+  filterButtons: FilterButton[]
 
   /** 搜索栏搜索字段配置。 default: [] */
-  filterFields: FilterField[] | (() => VNode) | VNode
+  filterFields: FilterField[]
 
   /** 可选，存储搜索栏的搜索条件值。 default: {} */
   filterModel: Record<string, any>

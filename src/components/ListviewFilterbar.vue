@@ -96,8 +96,7 @@ import { ref, unref, computed, useSlots, watch, nextTick, markRaw } from 'vue'
 import { ElForm, ElButton } from 'element-plus'
 import { Search, CaretTop } from '@element-plus/icons-vue'
 import { isPlainObject } from 'is-what'
-import { FilterButton, FilterField, FilterFieldConfig } from '~/types'
-import { hasOwn, isObjType } from '@/utils'
+import { FilterButton, FilterField } from '~/types'
 import { useLvStore } from '@/useLvStore'
 import FilterbarButtons from './FilterbarButtons.vue'
 import FilterbarFields from './FilterbarFields.vue'
@@ -130,11 +129,11 @@ const props = defineProps({
   },
   filterButtons: {
     type: Array as PropType<FilterButton[]>,
-    default: /* istanbul ignore next */ () => [],
+    default: () => [],
   },
   filterFields: {
     type: Array as PropType<FilterField[]>,
-    default: /* istanbul ignore next */ () => [],
+    default: () => [],
   },
   searchButton: {
     type: [Object, Boolean],
@@ -207,28 +206,7 @@ function handleFilterSearch() {
 }
 
 function resetFilter() {
-  const filterModel = lvStore.state.filterModel
-  const _resetField = (field: FilterField) => {
-    if (!isObjType<FilterFieldConfig>(field)) return
-
-    const name = field.model
-    if (name && hasOwn(filterModel, name)) {
-      const value = filterModel[name]
-      if (Array.isArray(value)) {
-        filterModel[name] = []
-      } else {
-        filterModel[name] = undefined
-      }
-    }
-  }
-  props.filterFields.forEach((field) => {
-    if (Array.isArray(field)) {
-      field.forEach(_resetField)
-    } else {
-      _resetField(field)
-    }
-  })
-  rootEmitProxy('filter-reset')
+  lvStore.resetFilterModel()
 }
 
 function toggleFilterbar() {

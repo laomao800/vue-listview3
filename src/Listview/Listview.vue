@@ -77,7 +77,7 @@
 </template>
 
 <script lang="tsx" setup>
-import type { Component } from 'vue'
+import type { Component, PropType } from 'vue'
 import { watch } from 'vue'
 import { ref, unref, computed, nextTick, useAttrs } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
@@ -90,6 +90,7 @@ import ListviewFilterbar from '@/components/ListviewFilterbar.vue'
 import ListviewContent from '@/components/ListviewContent.vue'
 import ListviewContentFooter from '@/components/ListviewContentFooter.vue'
 import { useProvideLvStore } from '@/useLvStore'
+import { FilterField } from '~/types'
 
 defineOptions({
   name: 'ListviewMain',
@@ -115,6 +116,10 @@ const props = defineProps({
   requestMethod: { type: String, default: 'post' },
   requestConfig: { type: Object, default: () => ({}) },
   filterModel: { type: Object, default: () => ({}) },
+  filterFields: {
+    type: Array as PropType<FilterField[]>,
+    default: () => [],
+  },
 
   // Adv request
   requestHandler: { type: Function, default: null },
@@ -146,7 +151,7 @@ const props = defineProps({
 })
 
 const layoutRef = ref<any>(null)
-const filterbarRef = ref(null)
+const filterbarRef = ref<any>(null)
 const lvStoreRef = computed(() => unref(layoutRef)?.lvStore)
 
 const unwatchStore = watch(lvStoreRef, () => {
@@ -184,13 +189,13 @@ const footerComponent = computed(() =>
   _getReplaceComponent('footer', ListviewContentFooter)
 )
 
-const _updateWrapperLayout = () => unref<any>(layoutRef)?.updateLayout?.call()
-const _updateFilterLayout = () => unref<any>(filterbarRef)?.updateLayout?.call()
+const _updateWrapperLayout = () => unref(layoutRef)?.updateLayout?.call()
+const _updateFilterLayout = () => unref(filterbarRef)?.updateLayout?.call()
 const handleUpdateLayout = () => nextTick().then(_updateFilterLayout)
 const handleFilterFold = () => nextTick().then(_updateWrapperLayout)
 
 const updateLayout = useThrottleFn(_updateWrapperLayout, 100)
-const resetFilter = () => unref<any>(filterbarRef)?.resetFilter.call()
+const resetFilter = () => unref(filterbarRef)?.resetFilter.call()
 const search = (keepInPage: boolean) => unref(lvStoreRef).search(keepInPage)
 const setContentMessage = (text: string, type: string, cleanData = false) =>
   unref(lvStoreRef).setContentMessage(text, type, cleanData)

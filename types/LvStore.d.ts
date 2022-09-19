@@ -27,7 +27,8 @@ export interface LvStore {
   search: (keepInPage?: boolean) => Promise<any>
   setContentMessage: (
     text: string,
-    type?: ContentMessageObject['type'],
+    type?: 'warning' | 'info' | 'error',
     cleanData?: boolean
   ) => void
+  resetFilterModel: () => void
 }
