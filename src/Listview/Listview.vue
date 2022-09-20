@@ -78,8 +78,7 @@
 
 <script lang="tsx" setup>
 import type { Component, PropType } from 'vue'
-import { watch } from 'vue'
-import { ref, unref, computed, nextTick, useAttrs } from 'vue'
+import { ref, unref, computed, nextTick, useAttrs, watch } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
 import { ElConfigProvider } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
