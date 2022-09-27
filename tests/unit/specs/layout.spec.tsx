@@ -19,7 +19,7 @@ describe('height', () => {
     })
 
     await wait()
-    expect(wrapper.find('.lv__wrapper').element.style.height).toBe('800px')
+    expect(wrapper.find('.lv-wrapper').element.style.height).toBe('800px')
 
     Object.defineProperty(window, 'innerHeight', {
       writable: true,
@@ -28,7 +28,7 @@ describe('height', () => {
     })
     window.dispatchEvent(new Event('resize'))
     await wait()
-    expect(wrapper.find('.lv__wrapper').element.style.height).toBe('500px')
+    expect(wrapper.find('.lv-wrapper').element.style.height).toBe('500px')
   })
 
   it('auto height', async () => {
@@ -37,7 +37,7 @@ describe('height', () => {
       usePage: false,
       fullHeight: false,
     })
-    expect(wrapper.find('.lv__wrapper').element.style?.height).toBeFalsy()
+    expect(wrapper.find('.lv-wrapper').element.style?.height).toBeFalsy()
   })
 
   it('specify height', async () => {
@@ -46,7 +46,7 @@ describe('height', () => {
       usePage: false,
       height: 500,
     })
-    expect(wrapper.find('.lv__wrapper').element.style.height).toBe('500px')
+    expect(wrapper.find('.lv-wrapper').element.style.height).toBe('500px')
   })
 })
 
@@ -83,8 +83,8 @@ describe('contentMessage', () => {
       autoload: false,
       contentMessage,
     })
-    const messageBlock = wrapper.find('.lv__message')
-    expect(messageBlock.find('.lv__message-text')?.text()).toMatch(
+    const messageBlock = wrapper.find('.lv-message')
+    expect(messageBlock.find('.lv-message__text')?.text()).toMatch(
       contentMessage
     )
   })
@@ -99,8 +99,8 @@ describe('contentMessage', () => {
       autoload: false,
       contentMessage,
     })
-    const messageBlock = wrapper.find('.lv__message')
-    expect(messageBlock.find('.lv__message-text')?.text()).toMatch(
+    const messageBlock = wrapper.find('.lv-message')
+    expect(messageBlock.find('.lv-message__text')?.text()).toMatch(
       contentMessage.text
     )
   })
@@ -142,21 +142,21 @@ describe('row class name', () => {
 describe('listview footer', () => {
   it('pager off', async () => {
     const { wrapper } = await createListviewWrapper({ usePage: false })
-    expect(wrapper.find('.lv__pager').exists()).toBeFalsy()
+    expect(wrapper.find('.lv-pager').exists()).toBeFalsy()
   })
 
   it('pager on left', async () => {
     const { wrapper } = await createListviewWrapper({ pagePosition: 'left' })
-    expect(wrapper.find('.lv__footer-left .lv__pager').exists()).toBe(true)
-    expect(wrapper.find('.lv__footer-right .lv__pager').exists()).toBe(false)
+    expect(wrapper.find('.lv-footer__left .lv-pager').exists()).toBe(true)
+    expect(wrapper.find('.lv-footer__right .lv-pager').exists()).toBe(false)
   })
 
   it('pager on right', async () => {
     const { wrapper } = await createListviewWrapper({
       pagePosition: 'right',
     })
-    expect(wrapper.find('.lv__footer-left .lv__pager').exists()).toBe(false)
-    expect(wrapper.find('.lv__footer-right .lv__pager').exists()).toBe(true)
+    expect(wrapper.find('.lv-footer__left .lv-pager').exists()).toBe(false)
+    expect(wrapper.find('.lv-footer__right .lv-pager').exists()).toBe(true)
   })
 })
 
@@ -170,11 +170,11 @@ describe('listview container', () => {
         '<Listview headerTitle="title2" />' +
         '</ListviewContainer>',
     })
-    expect(wrapper.findAll('div.lvc__tab').length).toBe(2)
-    expect(wrapper.findAll('div.lvc__tab').at(0).element.textContent).toBe(
+    expect(wrapper.findAll('div.lvc-tab').length).toBe(2)
+    expect(wrapper.findAll('div.lvc-tab').at(0).element.textContent).toBe(
       'title1'
     )
-    expect(wrapper.findAll('div.lvc__tab').at(1).element.textContent).toBe(
+    expect(wrapper.findAll('div.lvc-tab').at(1).element.textContent).toBe(
       'title2'
     )
   })
@@ -189,10 +189,10 @@ describe('listview container', () => {
         '</ListviewContainer>',
     })
     expect(wrapper.find('div.content1').exists()).toBe(true)
-    expect(wrapper.find('div.lv_wrapper').exists()).toBe(false)
-    await (wrapper.findAll('div.lvc__tab').at(1).element as HTMLElement).click()
+    expect(wrapper.find('div.lv-wrapper').exists()).toBe(false)
+    await (wrapper.findAll('div.lvc-tab').at(1).element as HTMLElement).click()
     expect(wrapper.find('div.content1').exists()).toBe(false)
-    expect(wrapper.find('div.lv__wrapper').exists()).toBe(true)
+    expect(wrapper.find('div.lv-wrapper').exists()).toBe(true)
   })
 })
 

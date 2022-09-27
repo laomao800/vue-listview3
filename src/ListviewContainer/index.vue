@@ -1,19 +1,19 @@
 <template>
-  <div class="lvc__wrapper">
+  <div class="lvc-wrapper">
     <ListviewHeader :header-title="headerTitle" :header-nav="headerNav" />
     <div
       :class="{
-        lvc__tabs: true,
-        [`lvc__tabs--${type}`]: type,
-        [`lvc__tabs--${tabPosition}`]: tabPosition,
+        'lvc-tabs': true,
+        [`lvc-tabs--${type}`]: type,
+        [`lvc-tabs--${tabPosition}`]: tabPosition,
       }"
     >
       <div
         v-for="(title, index) in tabTitles"
         :key="index"
         :class="{
-          lvc__tab: true,
-          'lvc__tab--active': index === unref(activeTab),
+          'lvc-tab': true,
+          'lvc-tab--active': index === unref(activeTab),
         }"
         @click="() => (activeTab = index)"
       >
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <div class="lvc__content">
+    <div class="lvc-content">
       <KeepAlive>
         <component :is="activeView" :key="activeTab" />
       </KeepAlive>

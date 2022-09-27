@@ -38,7 +38,7 @@ export default defineComponent({
         vm && subFieldsVm.push(vm)
       })
       return subFieldsVm.length > 0 ? (
-        <div class="lv__field-group">{subFieldsVm}</div>
+        <div class="lv-field-group">{subFieldsVm}</div>
       ) : null
     }
 
@@ -59,7 +59,7 @@ export default defineComponent({
     })
 
     return () => (
-      <div class="lv__fields-wrapper">
+      <div class="lv-fields-wrapper">
         {props.fields.map((item) =>
           // 仅对第一层嵌套的 array 作组合
           Array.isArray(item) ? renderFieldsGroup(item) : renderField(item)
@@ -71,7 +71,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-.lv__field-group {
+.lv-field-group {
   display: inline-block;
   margin: 0;
   vertical-align: top;

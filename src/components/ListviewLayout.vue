@@ -1,20 +1,20 @@
 <template>
   <div
     ref="wrapperRef"
+    class="lv-wrapper"
     :style="{ height: parseSize(wrapperHeight) }"
-    class="lv__wrapper"
   >
-    <div ref="headerRef" class="lv__header-wrapper">
+    <div ref="headerRef" class="lv-header-wrapper">
       <slot name="header" v-bind="scopeProps" />
     </div>
-    <div ref="filterbarRef" class="lv__filterbar-wrapper">
+    <div ref="filterbarRef" class="lv-filterbar-wrapper">
       <slot name="filterbar" v-bind="scopeProps" />
     </div>
-    <div v-loading="contentLoading" class="lv__body-wrapper">
-      <div ref="contentRef" class="lv__content-wrapper">
+    <div v-loading="contentLoading" class="lv-body-wrapper">
+      <div ref="contentRef" class="lv-content-wrapper">
         <slot name="content" v-bind="scopeProps" />
       </div>
-      <div ref="footerRef" class="lv__footer-wrapper">
+      <div ref="footerRef" class="lv-footer-wrapper">
         <slot name="footer" v-bind="scopeProps" />
       </div>
     </div>
@@ -164,26 +164,18 @@ defineExpose({
 </script>
 
 <style>
-.lv__wrapper {
-  overflow: hidden;
-  box-sizing: border-box;
-  padding: 10px;
-  padding-bottom: 5px;
-  background-color: #fff;
+.lv-header-wrapper {
+  margin: -10px -10px 10px;
 }
 
-.lv__wrapper > * {
-  box-sizing: border-box;
-}
-
-.lv__body-wrapper {
+.lv-body-wrapper {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.lv__content-wrapper {
+.lv-content-wrapper {
   flex: 1;
   overflow: auto;
 }

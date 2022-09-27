@@ -1,5 +1,5 @@
 <template>
-  <div v-if="InnerContent" class="lv__field">
+  <div v-if="InnerContent" class="lv-field">
     <component :is="InnerContent" />
     <component :is="InnerLabel" />
   </div>
@@ -38,8 +38,8 @@ const showLabelRef = computed(() => {
 
 function _renderField(field: FilterFieldConfig) {
   const Label = field.label ? (
-    <Transition name="lv__field-label-trans">
-      {unref(showLabelRef) && <div class="lv__field-label">{field.label}</div>}
+    <Transition name="lv-field__label-trans">
+      {unref(showLabelRef) && <div class="lv-field__label">{field.label}</div>}
     </Transition>
   ) : null
 
@@ -87,13 +87,13 @@ if (isVNode(rawField)) {
 <style lang="less">
 @filter-gap-size: 10px;
 
-.lv__field {
+.lv-field {
   position: relative;
   display: inline-block;
   margin: 0 @filter-gap-size @filter-gap-size 0;
   vertical-align: top;
 
-  &-label {
+  &__label {
     position: absolute;
     top: 0;
     left: 10px;

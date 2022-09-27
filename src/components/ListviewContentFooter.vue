@@ -48,19 +48,19 @@ export default defineComponent({
         <ElPagination
           {...unref(mergedAttrs)}
           ref="pagination"
-          class="lv__pager"
+          class="lv-pager"
         />
       )
 
     return () => (
-      <div class="lv__footer">
-        <div class="lv__footer-left">
+      <div class="lv-footer">
+        <div class="lv-footer__left">
           {_renderSlot('footer-left') || _renderPager('left')}
         </div>
 
-        <div class="lv__footer-center">{_renderSlot('footer-center')}</div>
+        <div class="lv-footer__center">{_renderSlot('footer-center')}</div>
 
-        <div class="lv__footer-right">
+        <div class="lv-footer__right">
           {_renderSlot('footer-right') || _renderPager('right')}
         </div>
       </div>
@@ -70,26 +70,26 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-.lv__footer {
+.lv-footer {
   display: flex;
   padding-top: 5px;
 
-  &-left,
-  &-center,
-  &-right {
+  &__left,
+  &__center,
+  &__right {
     display: flex;
     flex: 1;
     align-items: center;
   }
 
-  &-left {
+  &__left {
     justify-content: flex-start;
   }
-  &-center {
+  &__center {
     flex: inherit;
     justify-content: center;
   }
-  &-right {
+  &__right {
     justify-content: flex-end;
   }
 }

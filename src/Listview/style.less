@@ -1,6 +1,15 @@
-.lv__wrapper {
+.lv-wrapper {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 10px;
+  padding-bottom: 5px;
+  background-color: #fff;
+
+  > * {
+    box-sizing: border-box;
+  }
 
   .el-table .el-table__body tr.el-table__row.lv-row--selected td {
     background-color: #ffd;

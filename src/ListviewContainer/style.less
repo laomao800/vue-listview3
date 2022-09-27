@@ -1,10 +1,10 @@
 .lvc {
-  &__wrapper {
+  &-wrapper {
     display: flex;
     flex-direction: column;
   }
 
-  &__tabs {
+  &-tabs {
     height: 40px;
     line-height: 40px;
     border-bottom: 2px solid #e4e7ed;
@@ -21,7 +21,7 @@
       border-bottom: 1px solid #e2e6ec;
       box-sizing: border-box;
 
-      .lvc__tab {
+      .lvc-tab {
         padding: 0 16px;
         margin-bottom: -1px;
         margin-left: -1px;
@@ -40,7 +40,7 @@
     }
 
     &--line {
-      .lvc__tab {
+      .lvc-tab {
         padding: 0 20px;
 
         &--active {
@@ -56,7 +56,7 @@
     }
   }
 
-  &__tab {
+  &-tab {
     display: inline-block;
     vertical-align: top;
     font-size: 14px;
@@ -73,11 +73,11 @@
     }
   }
 
-  &__content {
+  &-content {
     flex: 1;
     overflow: hidden;
 
-    .lv__header {
+    .lv-header {
       display: none;
     }
   }

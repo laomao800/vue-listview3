@@ -23,14 +23,12 @@ function _mount(comp: any, props = {}, store = { filterModel: {} }) {
 describe('Filterbar layout', () => {
   it('filterbarFold', () => {
     const wrapper = _mount(ListviewFilterbar, { filterbarFold: false })
-    expect(wrapper.element.classList.contains('lv__filterbar--fold')).toBe(
-      false
-    )
+    expect(wrapper.element.classList.contains('lv-filterbar--fold')).toBe(false)
   })
   it('filterbarFoldable', () => {
     const wrapper = _mount(ListviewFilterbar, { filterbarFoldable: false })
-    expect(wrapper.find('.lv__filterbar--fold').exists()).toBe(false)
-    expect(wrapper.find('.lv__filterbar-action-more').exists()).toBe(false)
+    expect(wrapper.find('.lv-filterbar--fold').exists()).toBe(false)
+    expect(wrapper.find('.lv-filterbar__action-more').exists()).toBe(false)
   })
 })
 
@@ -219,7 +217,7 @@ describe('Filter fields', () => {
     const wrapper = _mount(ListviewFilterbar, {
       filterFields: [{ type: 'text_x' }, { type: 'number_x' }],
     })
-    expect(wrapper.findAll('.lv__field').length).toBe(0)
+    expect(wrapper.findAll('.lv-field').length).toBe(0)
   })
 
   it('Group fields render', () => {
@@ -231,7 +229,7 @@ describe('Filter fields', () => {
         ],
       ],
     })
-    expect(wrapper.find('.lv__field-group').exists()).toBe(true)
+    expect(wrapper.find('.lv-field-group').exists()).toBe(true)
   })
 
   it('Filter fields set value', () => {
@@ -295,13 +293,13 @@ describe('Filter fields', () => {
     const wrapper = _mount(ListviewFilterbar, {
       filterFields,
     })
-    expect(wrapper.find('.lv__field input.object-type').exists()).toBe(true)
-    expect(wrapper.find('.lv__field input.function-type').exists()).toBe(true)
-    expect(wrapper.find('.lv__field input.vnode-type').exists()).toBe(true)
-    expect(wrapper.find('.lv__field input.ref-function-type').exists()).toBe(
+    expect(wrapper.find('.lv-field input.object-type').exists()).toBe(true)
+    expect(wrapper.find('.lv-field input.function-type').exists()).toBe(true)
+    expect(wrapper.find('.lv-field input.vnode-type').exists()).toBe(true)
+    expect(wrapper.find('.lv-field input.ref-function-type').exists()).toBe(
       true
     )
-    expect(wrapper.find('.lv__field input.ref-vnode-type').exists()).toBe(true)
+    expect(wrapper.find('.lv-field input.ref-vnode-type').exists()).toBe(true)
   })
 
   it('effect', async () => {

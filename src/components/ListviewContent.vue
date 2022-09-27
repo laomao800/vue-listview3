@@ -1,5 +1,5 @@
 <template>
-  <div class="lv__content lv__table-content">
+  <div class="lv-content lv-content-table">
     <ElTable
       ref="contentTableRef"
       border
@@ -199,7 +199,7 @@ function handleRowClick(row: any, column: any, event: MouseEvent) {
 </script>
 
 <style lang="less">
-.lv__content {
+.lv-content {
   overflow: auto;
 
   .el-scrollbar__view {
