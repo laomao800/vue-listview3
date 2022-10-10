@@ -102,6 +102,7 @@ import FilterbarButtons from './FilterbarButtons.vue'
 import FilterbarFields from './FilterbarFields.vue'
 
 const lvStore = useLvStore()
+lvStore.emitter.on('updateFilterLayout', updateLayout)
 
 const DEFAULT_SEARCH_BUTTON = markRaw({
   text: '搜索',
@@ -260,11 +261,6 @@ function updateActionOffset() {
     actionOffsetLeft.value = $action.getBoundingClientRect().left
   }
 }
-
-defineExpose({
-  updateLayout,
-  resetFilter,
-})
 </script>
 
 <style lang="less">

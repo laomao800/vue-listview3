@@ -4,7 +4,7 @@
 
 | name             | 说明                                         |
 | ---------------- | -------------------------------------------- |
-| default          | 内容主体区域                                 |
+| content          | 内容主体区域                                 |
 | header           | 顶部页面标题、面包屑主体区域                 |
 | filterbar        | 搜索栏主体区域                               |
 | footer           | 底部页码栏主体区域                           |
@@ -29,7 +29,7 @@
 ```vue
 <template>
   <listview>
-    <template #default="{ state }">
+    <template #content="{ state }">
       <div v-if="state.contentLoading">Loading...</div>
       <div v-else-if="state.contentMessage.text">{{ state.contentMessage }}</div>
       <ul v-else>

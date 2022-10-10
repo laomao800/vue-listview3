@@ -204,11 +204,11 @@ describe('slots', () => {
     }, {} as any)
 
   it('basic block slots', () => {
-    const slots = genSlots(['default', 'header', 'filterbar', 'footer'])
+    const slots = genSlots(['header', 'filterbar', 'content', 'footer'])
     const wrapper = mount(Listview, { slots })
-    expect(wrapper.find('.default').exists()).toBeTruthy()
     expect(wrapper.find('.header').exists()).toBeTruthy()
     expect(wrapper.find('.filterbar').exists()).toBeTruthy()
+    expect(wrapper.find('.content').exists()).toBeTruthy()
     expect(wrapper.find('.footer').exists()).toBeTruthy()
   })
 

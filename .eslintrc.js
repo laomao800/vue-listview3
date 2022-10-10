@@ -14,6 +14,7 @@ module.exports = {
   ],
   globals: {
     defineOptions: 'readonly',
+    defineRender: 'readonly',
   },
   parserOptions: {
     ecmaVersion: 2020,

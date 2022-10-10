@@ -13,7 +13,7 @@
       @row-click="handleRowClick"
     >
       <template #empty>
-        <slot name="content-empty" v-bind="{ contentMessage }">
+        <slot name="content-empty">
           <MessageBlock
             v-if="contentMessage.text"
             :type="contentMessage.type"

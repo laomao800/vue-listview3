@@ -104,6 +104,7 @@ async function updateLayout() {
   updateContentHeight()
   emit('update-layout')
 }
+lvStore.emitter.on('updateLayout', updateLayout)
 
 function updateWrapperHeight() {
   if (props.height) {
@@ -158,7 +159,6 @@ onDeactivated(() => {
 })
 
 defineExpose({
-  updateLayout,
   lvStore,
 })
 </script>
