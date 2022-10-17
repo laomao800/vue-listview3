@@ -36,7 +36,6 @@ export const handlers = [
         {
           id: /\d{6}/,
           name: '@ctitle(10, 30)',
-          'warehouse|1': ['中仓', '英仓', '美仓', '香港仓'],
           sale_price: '@integer(100, 2000)',
           discount: '@float(0, 0, 1, 99)',
           seller: '@cname',

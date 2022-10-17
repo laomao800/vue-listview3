@@ -26,7 +26,7 @@ import { hasOwn, get } from '@/utils'
 type Data = Record<string, unknown>
 
 defineOptions({
-  name: 'ListviewMain',
+  name: 'Listview',
   inheritAttrs: false,
 })
 

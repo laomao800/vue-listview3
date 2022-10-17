@@ -99,7 +99,7 @@ describe('Create api', () => {
       ListviewCustom
     )
     const curProps = pick(
-      wrapper.findComponent({ name: 'ListviewMain' }).props(),
+      wrapper.findComponent({ name: 'Listview' }).props(),
       Object.keys(propsData)
     )
     expect(curProps).toEqual(propsData)
