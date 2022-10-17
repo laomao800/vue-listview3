@@ -137,8 +137,12 @@ const tableColumns = shallowRef([
     align: 'center',
     render: () => (
       <div>
-        <ElButton type="success">审核</ElButton>
-        <ElButton type="danger">删除</ElButton>
+        <ElButton style="height:24px;padding:0 6px;" type="success">
+          审核
+        </ElButton>
+        <ElButton style="height:24px;padding:0 6px;" type="danger">
+          删除
+        </ElButton>
       </div>
     ),
   },

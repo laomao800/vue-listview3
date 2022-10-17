@@ -6,6 +6,8 @@
 <script setup lang="tsx">
 import { shallowRef, defineComponent, ref, unref, computed } from 'vue'
 import { ElDialog, ElButton } from 'element-plus'
+import 'element-plus/theme-chalk/el-dialog.css'
+import 'element-plus/theme-chalk/el-overlay.css'
 import { Download } from '@element-plus/icons-vue'
 
 const dialogVisible = ref(false)
