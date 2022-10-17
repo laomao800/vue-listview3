@@ -107,24 +107,17 @@ const mergedAttrs = computed<Data>(() => ({
 // TODO: type fix
 useProvideLvStore(unref(props) as any)
 
-const _updateWrapperLayout = () =>
-  unref(lvStoreRef).emitter.emit('updateLayout')
-const _updateFilterLayout = () =>
-  unref(lvStoreRef).emitter.emit('updateFilterLayout')
-const handleUpdateLayout = () => nextTick(_updateFilterLayout)
-const handleFilterFold = () => nextTick(_updateWrapperLayout)
-
-const updateLayout = useThrottleFn(_updateWrapperLayout, 100)
-const resetFilter = () => unref(lvStoreRef).resetFilterModel()
-const search = (keepInPage: boolean) => unref(lvStoreRef).search(keepInPage)
-const setContentMessage = (text: string, type: string, cleanData = false) =>
-  unref(lvStoreRef).setContentMessage(text, type, cleanData)
+const _updateLayout = () => unref(lvStoreRef).emitter.emit('updateLayout')
+const handleFilterFold = () => nextTick(_updateLayout)
+const updateFilterLayout = () =>
+  nextTick(() => unref(lvStoreRef).emitter.emit('updateFilterLayout'))
 
 defineExpose({
-  updateLayout,
-  resetFilter,
-  search,
-  setContentMessage,
+  updateLayout: useThrottleFn(_updateLayout, 100),
+  resetFilter: () => unref(lvStoreRef).resetFilterModel(),
+  search: (keepInPage: boolean) => unref(lvStoreRef).search(keepInPage),
+  setContentMessage: (text: string, type: string, cleanData = false) =>
+    unref(lvStoreRef).setContentMessage(text, type, cleanData),
 })
 
 const REPLACE_COMPONENTS_MAP = {
@@ -164,7 +157,7 @@ defineRender(() => (
     <ListviewLayout
       ref={(vm: any) => (layoutRef.value = vm)}
       {...unref(mergedAttrs)}
-      onUpdateLayout={handleUpdateLayout}
+      onUpdateLayout={updateFilterLayout}
     >
       {{
         header: (props: Data) => renderLvSlot('header', props),

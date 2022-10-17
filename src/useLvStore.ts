@@ -104,7 +104,12 @@ const [useProvideLvStore, _useLvStore] = createInjectionState<
           rootEmitProxy('request-success')
         })
         .catch(handleResponseError)
-        .finally(() => rootEmitProxy('requested'))
+        .finally(() => {
+          if (!props.fullHeight) {
+            emitter.emit('updateLayout')
+          }
+          rootEmitProxy('requested')
+        })
     )
   }
 

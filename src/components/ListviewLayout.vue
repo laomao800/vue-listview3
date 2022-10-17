@@ -90,11 +90,8 @@ const bottomOffset = computed<number>(() =>
   getElBottomOffset(unref(wrapperRef)!)
 )
 
-const _initListener = () => {
-  props.fullHeight && window.addEventListener('resize', updateLayout)
-}
-const _cleanupListener = () =>
-  window.removeEventListener('resize', updateLayout)
+const _initListener = () => window.addEventListener('resize', updateLayout)
+const _cleanListener = () => window.removeEventListener('resize', updateLayout)
 
 async function updateLayout() {
   await nextTick()
@@ -151,11 +148,11 @@ onActivated(() => {
 })
 
 onBeforeUnmount(() => {
-  _cleanupListener()
+  _cleanListener()
 })
 
 onDeactivated(() => {
-  _cleanupListener()
+  _cleanListener()
 })
 
 defineExpose({
