@@ -10,13 +10,13 @@ describe('Methods', () => {
       },
       filterFields: [
         { type: 'text', model: 'text' },
-        { type: 'multipleSelect', model: 'multiple' },
+        { type: 'select', multiple: true, model: 'multiple' },
       ],
     })
 
     vm.resetFilter()
     await wait()
-    expect(lvStore.filterModel).toEqual({
+    expect(lvStore.state.filterModel).toEqual({
       text: undefined,
       multiple: [],
     })
@@ -28,7 +28,7 @@ describe('Methods', () => {
       const messageText = 'message text'
       vm.setContentMessage(messageText)
       await wait()
-      expect(wrapper.find('.lv__message-text').text().trim()).toBe(messageText)
+      expect(wrapper.find('.lv-message__text').text().trim()).toBe(messageText)
     })
 
     it('setContentMessage("text", "error")', async () => {
@@ -36,7 +36,7 @@ describe('Methods', () => {
       vm.setContentMessage('text', 'error')
       await wait()
       expect(
-        wrapper.find('.lv__message.lv__message--error').exists()
+        wrapper.find('.lv-message.lv-message--error').exists()
       ).toBeTruthy()
     })
 
@@ -49,10 +49,10 @@ describe('Methods', () => {
       })
       vm.setContentMessage('text')
       await wait()
-      expect(wrapper.find('.lv__message').exists()).toBe(false)
+      expect(wrapper.find('.lv-message').exists()).toBe(false)
       vm.setContentMessage('text', null, true)
       await wait()
-      expect(wrapper.find('.lv__message').exists()).toBe(true)
+      expect(wrapper.find('.lv-message').exists()).toBe(true)
     })
   })
 })

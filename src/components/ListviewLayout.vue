@@ -1,20 +1,20 @@
 <template>
   <div
     ref="wrapperRef"
+    class="lv-wrapper"
     :style="{ height: parseSize(wrapperHeight) }"
-    class="lv__wrapper"
   >
-    <div ref="headerRef" class="lv__header-wrapper">
+    <div ref="headerRef" class="lv-header-wrapper">
       <slot name="header" v-bind="scopeProps" />
     </div>
-    <div ref="filterbarRef" class="lv__filterbar-wrapper">
+    <div ref="filterbarRef" class="lv-filterbar-wrapper">
       <slot name="filterbar" v-bind="scopeProps" />
     </div>
-    <div v-loading="contentLoading" class="lv__body-wrapper">
-      <div ref="contentRef" class="lv__content-wrapper">
+    <div v-loading="contentLoading" class="lv-body-wrapper">
+      <div ref="contentRef" class="lv-content-wrapper">
         <slot name="content" v-bind="scopeProps" />
       </div>
-      <div ref="footerRef" class="lv__footer-wrapper">
+      <div ref="footerRef" class="lv-footer-wrapper">
         <slot name="footer" v-bind="scopeProps" />
       </div>
     </div>
@@ -31,9 +31,9 @@ import {
   onBeforeUnmount,
   onActivated,
   onDeactivated,
+  provide,
 } from 'vue'
 import { vLoading } from 'element-plus'
-import { pick } from 'lodash-es'
 import { parseSize } from '@/utils'
 import { useLvStore } from '@/useLvStore'
 
@@ -56,6 +56,7 @@ function getElBottomOffset(el: Element) {
 }
 
 defineOptions({
+  name: 'ListviewLayout',
   inheritAttrs: false,
   directives: {
     loading: vLoading,
@@ -69,41 +70,28 @@ const props = defineProps({
 
 const emit = defineEmits(['update-layout'])
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const lvStore = useLvStore()!
+const lvStore = useLvStore()
+provide('lvStore', lvStore)
 
-// TODO: test 用例检查传值
-const scopeProps = computed(() =>
-  pick(lvStore, [
-    'contentHeight',
-    'contentLoading',
-    'contentData',
-    'filterModel',
-    'contentMessage',
-  ])
-)
-
+const scopeProps = computed(() => lvStore)
 const wrapperRef = ref<Element | null>(null)
 const contentRef = ref<Element | null>(null)
 const footerRef = ref<Element | null>(null)
 const wrapperHeight = ref<number | string | null>(null)
 const contentHeight = computed({
-  get: () => unref(lvStore.contentHeight),
+  get: () => unref(lvStore.state.contentHeight),
   set(newVal) {
-    lvStore.contentHeight.value = newVal
+    lvStore.state.contentHeight = newVal
   },
 })
-const contentLoading = computed(() => !!unref(lvStore.contentLoading))
+const contentLoading = computed(() => !!unref(lvStore.state.contentLoading))
 const bottomOffset = computed<number>(() =>
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   getElBottomOffset(unref(wrapperRef)!)
 )
 
-const _initListener = () => {
-  props.fullHeight && window.addEventListener('resize', updateLayout)
-}
-const _cleanupListener = () =>
-  window.removeEventListener('resize', updateLayout)
+const _initListener = () => window.addEventListener('resize', updateLayout)
+const _cleanListener = () => window.removeEventListener('resize', updateLayout)
 
 async function updateLayout() {
   await nextTick()
@@ -113,6 +101,7 @@ async function updateLayout() {
   updateContentHeight()
   emit('update-layout')
 }
+lvStore.emitter.on('updateLayout', updateLayout)
 
 function updateWrapperHeight() {
   if (props.height) {
@@ -159,40 +148,31 @@ onActivated(() => {
 })
 
 onBeforeUnmount(() => {
-  _cleanupListener()
+  _cleanListener()
 })
 
 onDeactivated(() => {
-  _cleanupListener()
+  _cleanListener()
 })
 
 defineExpose({
-  updateLayout,
   lvStore,
 })
 </script>
 
 <style>
-.lv__wrapper {
-  overflow: hidden;
-  box-sizing: border-box;
-  padding: 10px;
-  padding-bottom: 5px;
-  background-color: #fff;
+.lv-header-wrapper {
+  margin: -10px -10px 10px;
 }
 
-.lv__wrapper > * {
-  box-sizing: border-box;
-}
-
-.lv__body-wrapper {
+.lv-body-wrapper {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.lv__content-wrapper {
+.lv-content-wrapper {
   flex: 1;
   overflow: auto;
 }

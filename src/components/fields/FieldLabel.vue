@@ -4,11 +4,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
-import { FilterField } from '~/types'
+import { FilterFieldConfig } from '~/types'
 
 defineOptions({ name: 'FieldLabel' })
 
 defineProps({
-  field: { type: Object as PropType<FilterField>, default: () => ({}) },
+  field: { type: Object as PropType<FilterFieldConfig>, default: () => ({}) },
 })
 </script>

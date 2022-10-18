@@ -4,10 +4,18 @@ import path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import DefineOptions from 'unplugin-vue-define-options/vite'
+import VueMacros from 'unplugin-vue-macros/vite'
 
 export default defineConfig({
-  plugins: [vue(), vueJsx(), DefineOptions()],
+  plugins: [
+    VueMacros({
+      setupSFC: {
+        exclude: 'vitest.setup.ts',
+      },
+    }),
+    vue(),
+    vueJsx(),
+  ],
   resolve: {
     alias: {
       '~': path.resolve(__dirname),
@@ -22,6 +30,8 @@ export default defineConfig({
       web: [/\.[jt]sx$/],
     },
     coverage: {
+      provider: 'istanbul',
+      reporter: ['lcov'],
       reportsDirectory: path.resolve(__dirname, 'tests/unit/coverage'),
     },
     deps: {

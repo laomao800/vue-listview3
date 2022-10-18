@@ -1,5 +1,5 @@
 <template>
-  <div class="lv__content lv__table-content">
+  <div class="lv-content lv-content-table">
     <ElTable
       ref="contentTableRef"
       border
@@ -13,7 +13,7 @@
       @row-click="handleRowClick"
     >
       <template #empty>
-        <slot name="empty" v-bind="contentMessage">
+        <slot name="content-empty">
           <MessageBlock
             v-if="contentMessage.text"
             :type="contentMessage.type"
@@ -65,7 +65,7 @@
 
 <script lang="tsx" setup>
 import type { PropType } from 'vue'
-import { computed, ref, unref, watch, h } from 'vue'
+import { computed, ref, unref, watch, h, isVNode } from 'vue'
 import { isPlainObject, isFunction, isString } from 'is-what'
 import parseSize from '@laomao800/parse-size-with-unit'
 import { ElTable, ElTableColumn, ElRadio } from 'element-plus'
@@ -87,14 +87,14 @@ const props = defineProps({
 
 const contentTableRef = ref<any>(null)
 const _height = computed(
-  () => parseSize(unref(lvStore.contentHeight)) || undefined
+  () => parseSize(unref(lvStore.state.contentHeight)) || undefined
 )
 const selection = computed({
-  get: () => unref(lvStore.selection),
-  set: (newVal) => (lvStore.selection.value = newVal),
+  get: () => unref(lvStore.state.selection),
+  set: (newVal) => (lvStore.state.selection = newVal),
 })
-const contentData = lvStore.contentData
-const contentMessage = lvStore.internalContentMessage
+const contentData = computed(() => lvStore.state.contentData)
+const contentMessage = computed(() => lvStore.state.contentMessage)
 
 /**
  * 规范化表格选择列配置
@@ -156,7 +156,11 @@ function renderTableColumn(tableColumn: any) {
     const { render, children, ...restOptions } = column
     const slots: Record<string, any> = {}
     if (render) {
-      slots.default = (props: any) => render(props)
+      if (isFunction(render)) {
+        slots.default = (props: any) => render(props)
+      } else if (isVNode(render)) {
+        slots.default = () => render
+      }
     } else if (Array.isArray(children)) {
       slots.default = () => children.map((child) => _createColumn(child))
     }
@@ -195,7 +199,7 @@ function handleRowClick(row: any, column: any, event: MouseEvent) {
 </script>
 
 <style lang="less">
-.lv__content {
+.lv-content {
   overflow: auto;
 
   .el-scrollbar__view {

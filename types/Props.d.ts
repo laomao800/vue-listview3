@@ -68,7 +68,7 @@ declare class ListviewProps extends ComponentWithInstall {
   /** 对原始响应数据的加工方法 default: null */
   transformResponseData: (responseData: Dic) => void
 
-  /** 数据接口响应内容属性映射。 default: { items: 'result.items', total: 'result.total_count' } */
+  /** 数据接口响应内容属性映射。 default: { items: 'result.items', total: 'result.total' } */
   contentDataMap: { [k: string]: string }
 
   /** 可用在 autoload 为 false 时候，初始显示的提示信息。 default: null */
@@ -81,10 +81,10 @@ declare class ListviewProps extends ComponentWithInstall {
   resolveResponseErrorMessage: (response?: any) => any
 
   /** 搜索栏左侧按钮配置。 default: [] */
-  filterButtons: FilterButton[] | (() => VNode) | VNode
+  filterButtons: FilterButton[]
 
   /** 搜索栏搜索字段配置。 default: [] */
-  filterFields: FilterField[] | (() => VNode) | VNode
+  filterFields: FilterField[]
 
   /** 可选，存储搜索栏的搜索条件值。 default: {} */
   filterModel: Record<string, any>
@@ -133,8 +133,8 @@ declare class ListviewProps extends ComponentWithInstall {
   /** 页码位置。 default: 'left' */
   pagePosition: 'left' | 'right'
 
-  /** el-pagination Props */
-  pageProps: Record<string, any>
+  /** el-pagination Attrs */
+  pageAttrs: Record<string, any>
 }
 
 export declare class ListviewContainerProps extends ComponentWithInstall {

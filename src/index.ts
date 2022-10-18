@@ -6,6 +6,7 @@ import 'element-plus/es/components/dropdown/style/css'
 import 'element-plus/es/components/input/style/css'
 import 'element-plus/es/components/input-number/style/css'
 import 'element-plus/es/components/select/style/css'
+import 'element-plus/es/components/cascader/style/css'
 import 'element-plus/es/components/date-picker/style/css'
 import 'element-plus/es/components/time-picker/style/css'
 import 'element-plus/es/components/time-select/style/css'
@@ -30,6 +31,7 @@ const create = (
   createArgs: Parameters<typeof _create>[0],
   registerName = 'Listview'
 ) => bindInstall(registerName, _create(createArgs))
+
 const Listview = bindInstall('Listview', _Listview as any)
 const ListviewContainer = bindInstall('ListviewContainer', _ListviewContainer)
 

@@ -1,4 +1,4 @@
-import { h } from 'vue'
+import { computed, h } from 'vue'
 import { describe, it, expect, vi } from 'vitest'
 import mitt from 'mitt'
 import { mount } from '@vue/test-utils'
@@ -23,14 +23,12 @@ function _mount(comp: any, props = {}, store = { filterModel: {} }) {
 describe('Filterbar layout', () => {
   it('filterbarFold', () => {
     const wrapper = _mount(ListviewFilterbar, { filterbarFold: false })
-    expect(wrapper.element.classList.contains('lv__filterbar--fold')).toBe(
-      false
-    )
+    expect(wrapper.element.classList.contains('lv-filterbar--fold')).toBe(false)
   })
   it('filterbarFoldable', () => {
     const wrapper = _mount(ListviewFilterbar, { filterbarFoldable: false })
-    expect(wrapper.find('.lv__filterbar--fold').exists()).toBe(false)
-    expect(wrapper.find('.lv__filterbar-action-more').exists()).toBe(false)
+    expect(wrapper.find('.lv-filterbar--fold').exists()).toBe(false)
+    expect(wrapper.find('.lv-filterbar__action-more').exists()).toBe(false)
   })
 })
 
@@ -107,10 +105,14 @@ describe('Filter buttons', () => {
     const filterButtons = [
       () => <div class="function-type">text</div>,
       <div class="jsx-type">text</div>,
+      () => computed(() => <div class="ref-function-type">text</div>),
+      computed(() => <div class="ref-jsx-type">text</div>),
     ]
     const wrapper = _mount(ListviewFilterbar, { filterButtons })
     expect(wrapper.find('div.function-type').exists()).toBe(true)
     expect(wrapper.find('div.jsx-type').exists()).toBe(true)
+    expect(wrapper.find('div.ref-function-type').exists()).toBe(true)
+    expect(wrapper.find('div.ref-jsx-type').exists()).toBe(true)
   })
 })
 
@@ -215,7 +217,7 @@ describe('Filter fields', () => {
     const wrapper = _mount(ListviewFilterbar, {
       filterFields: [{ type: 'text_x' }, { type: 'number_x' }],
     })
-    expect(wrapper.findAll('.lv__field').length).toBe(0)
+    expect(wrapper.findAll('.lv-field').length).toBe(0)
   })
 
   it('Group fields render', () => {
@@ -227,7 +229,7 @@ describe('Filter fields', () => {
         ],
       ],
     })
-    expect(wrapper.find('.lv__field-group').exists()).toBe(true)
+    expect(wrapper.find('.lv-field-group').exists()).toBe(true)
   })
 
   it('Filter fields set value', () => {
@@ -260,8 +262,8 @@ describe('Filter fields', () => {
     _findVm('FieldSelect').value = 'option1'
     _findVm('FieldCascader').value = [1, 2, 3, 4]
 
-    const lvStore = wrapper.__store
-    expect(lvStore.filterModel).toStrictEqual({
+    const fakeStore = wrapper.__store
+    expect(fakeStore.filterModel).toStrictEqual({
       text: 'text',
       number: 9527,
       date: DATE1,
@@ -285,13 +287,19 @@ describe('Filter fields', () => {
       },
       () => <input class="function-type" />,
       <input class="vnode-type" />,
+      () => computed(() => <input class="ref-function-type" />),
+      computed(() => <input class="ref-vnode-type" />),
     ]
     const wrapper = _mount(ListviewFilterbar, {
       filterFields,
     })
-    expect(wrapper.find('.lv__field input.object-type').exists()).toBe(true)
-    expect(wrapper.find('.lv__field input.function-type').exists()).toBe(true)
-    expect(wrapper.find('.lv__field input.vnode-type').exists()).toBe(true)
+    expect(wrapper.find('.lv-field input.object-type').exists()).toBe(true)
+    expect(wrapper.find('.lv-field input.function-type').exists()).toBe(true)
+    expect(wrapper.find('.lv-field input.vnode-type').exists()).toBe(true)
+    expect(wrapper.find('.lv-field input.ref-function-type').exists()).toBe(
+      true
+    )
+    expect(wrapper.find('.lv-field input.ref-vnode-type').exists()).toBe(true)
   })
 
   it('effect', async () => {

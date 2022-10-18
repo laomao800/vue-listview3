@@ -14,7 +14,11 @@
     "preview": "vite preview",
     "lint": "eslint ./src/**/*.{ts,js,vue} --fix",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "release": "node scripts/release.js",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "docs:dev": "npm run build & vitepress dev docs --port=5000",
+    "docs:build": "npm run build & vitepress build docs"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",
@@ -22,7 +26,7 @@
     "@vueuse/core": "9.0.0-beta.0",
     "@vueuse/shared": "9.0.0-beta.0",
     "axios": "^0.26.1",
-    "element-plus": "^2.2.8",
+    "element-plus": "^2.2.17",
     "has-values": "^2.0.1",
     "is-what": "^4.1.7",
     "lodash-es": "^4.17.21",
@@ -35,17 +39,21 @@
     "@types/node": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
-    "@vitejs/plugin-vue": "3.0.1",
-    "@vitejs/plugin-vue-jsx": "2.0.0",
-    "@vitest/ui": "^0.19.1",
+    "@vitejs/plugin-vue": "3.1.0",
+    "@vitejs/plugin-vue-jsx": "2.0.1",
+    "@vitest/coverage-istanbul": "^0.23.4",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
     "@vue/test-utils": "^2.0.2",
     "@vue/tsconfig": "^0.1.3",
-    "c8": "^7.11.3",
+    "chalk": "^4.1.1",
+    "codesandbox": "^2.2.3",
+    "conventional-changelog-cli": "^2.2.2",
+    "enquirer": "^2.3.6",
     "eslint": "^8.20.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.2.0",
+    "execa": "^5.1.1",
     "jsdom": "^20.0.0",
     "less": "^4.1.3",
     "mitt": "^3.0.0",
@@ -53,14 +61,15 @@
     "msw": "^0.44.1",
     "prettier": "^2.7.1",
     "resize-observer-polyfill": "^1.5.1",
-    "rollup-plugin-visualizer": "^5.7.1",
+    "semver": "^7.3.7",
     "typescript": "^4.7.4",
-    "unplugin-vue-define-options": "^0.6.2",
-    "vite": "3.0.1",
+    "unplugin-vue-macros": "^0.11.1",
+    "vite": "3.1.6",
     "vite-plugin-css-injected-by-js": "^1.5.1",
-    "vitest": "^0.19.1",
-    "vue": "^3.2.37",
-    "vue-tsc": "^0.38.8"
+    "vitepress": "1.0.0-alpha.21",
+    "vitest": "^0.23.4",
+    "vue": "^3.2.40",
+    "vue-tsc": "^1.0.3"
   },
   "peerDependencies": {
     "axios": "^0.26.1",
@@ -69,5 +78,12 @@
   },
   "msw": {
     "workerDirectory": "public"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@algolia/client-search"
+      ]
+    }
   }
 }

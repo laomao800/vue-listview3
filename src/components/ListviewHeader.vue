@@ -1,10 +1,10 @@
 <template>
-  <div class="lv__header">
-    <h1 v-if="headerTitle" class="lv__header-title">{{ headerTitle }}</h1>
+  <div class="lv-header">
+    <h1 v-if="headerTitle" class="lv-header__title">{{ headerTitle }}</h1>
     <ElBreadcrumb
       v-if="internalNav.length > 0"
       separator="/"
-      class="lv__header-breadcrumb"
+      class="lv-header__breadcrumb"
     >
       <ElBreadcrumbItem
         v-for="(item, index) in internalNav"
@@ -55,10 +55,7 @@ const internalNav = computed(() => {
 </script>
 
 <style lang="less">
-.lv__wrapper .lv__header {
-  margin: -10px -10px 10px;
-}
-.lv__header {
+.lv-header {
   padding: 8px 12px;
   line-height: 1.5;
   background-color: #fff;
@@ -68,14 +65,14 @@ const internalNav = computed(() => {
     display: none;
   }
 
-  .lv__header-title {
+  .lv-header__title {
     display: inline-block;
     padding: 0 1em 0 0;
     margin: 0 1em 0 0;
     font-size: 16px;
     border-right: 1px solid #dcdfe6;
   }
-  .lv__header-breadcrumb {
+  .lv-header__breadcrumb {
     display: inline-block;
     vertical-align: middle;
   }

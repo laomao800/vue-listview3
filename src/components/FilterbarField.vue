@@ -1,24 +1,21 @@
 <template>
-  <div class="lv__field">
+  <div v-if="InnerContent" class="lv-field">
     <component :is="InnerContent" />
     <component :is="InnerLabel" />
   </div>
 </template>
 
 <script lang="tsx" setup>
-import type { FilterField } from '~/types'
-import type { PropType, VNode } from 'vue'
+import type { FilterField, FilterFieldConfig } from '~/types'
+import type { PropType, VNode, Ref } from 'vue'
 
 import { computed, unref, isVNode, Transition, h } from 'vue'
 import { ElFormItem } from 'element-plus'
 import hasValues from 'has-values'
 import { isPlainObject, isFunction } from 'is-what'
-import { get } from '@/utils'
+import { get, isObjType, error } from '@/utils'
 import { useLvStore } from '@/useLvStore'
 import { getFieldComponent } from './fields/index'
-
-const _isFieldObj = (payload: typeof props.field): payload is FilterField =>
-  isPlainObject(payload)
 
 const lvStore = useLvStore()
 
@@ -32,21 +29,21 @@ const props = defineProps({
 const showLabelRef = computed(() => {
   const modelName = get(props.field, 'model')
   if (modelName) {
-    const value = get(lvStore.filterModel, modelName)
+    const value = get(lvStore.state.filterModel, modelName)
     // hasValues(null) -> true
     return value !== null && hasValues(value)
   }
   return false
 })
 
-function _renderField(field: FilterField) {
+function _renderField(field: FilterFieldConfig) {
   const Label = field.label ? (
-    <Transition name="lv__field-label-trans">
-      {unref(showLabelRef) && <div class="lv__field-label">{field.label}</div>}
+    <Transition name="lv-field__label-trans">
+      {unref(showLabelRef) && <div class="lv-field__label">{field.label}</div>}
     </Transition>
   ) : null
 
-  let Content: VNode | null = null
+  let Content: VNode | Ref<VNode> | null = null
 
   if (isFunction(field)) {
     Content = field()
@@ -64,6 +61,8 @@ function _renderField(field: FilterField) {
             <FieldComponent {...{ field, style }} />
           </ElFormItem>
         )
+      } else {
+        error(`Invalid filter field type '${field.type}'`, field)
       }
     }
   }
@@ -71,28 +70,30 @@ function _renderField(field: FilterField) {
   return [Label, Content]
 }
 
-let InnerLabel: VNode | null = null
-let InnerContent: VNode | null = null
+let InnerLabel: VNode | Ref<VNode> | null = null
+let InnerContent: VNode | Ref<VNode> | null = null
 
-if (isVNode(props.field)) {
-  InnerContent = h(props.field)
-} else if (_isFieldObj(props.field)) {
-  ;[InnerLabel, InnerContent] = _renderField(props.field)
-} else if (isFunction(props.field)) {
-  InnerContent = props.field()
+const rawField = unref(props.field)
+
+if (isVNode(rawField)) {
+  InnerContent = h(rawField)
+} else if (isObjType<FilterFieldConfig>(rawField)) {
+  ;[InnerLabel, InnerContent] = _renderField(rawField)
+} else if (isFunction(rawField)) {
+  InnerContent = rawField()
 }
 </script>
 
 <style lang="less">
 @filter-gap-size: 10px;
 
-.lv__field {
+.lv-field {
   position: relative;
   display: inline-block;
   margin: 0 @filter-gap-size @filter-gap-size 0;
   vertical-align: top;
 
-  &-label {
+  &__label {
     position: absolute;
     top: 0;
     left: 10px;
@@ -134,6 +135,9 @@ if (isVNode(props.field)) {
     > .el-cascader .el-input__inner {
       vertical-align: top;
       box-sizing: border-box;
+    }
+    > .el-cascader .el-input__inner {
+      height: inherit !important;
     }
   }
 }

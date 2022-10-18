@@ -1,87 +1,32 @@
-<template>
-  <ElConfigProvider :locale="zhCn">
-    <ListviewLayout
-      ref="layoutRef"
-      v-bind="mergedAttrs"
-      @update-layout="handleUpdateLayout"
-    >
-      <template #header>
-        <component :is="headerComponent" v-bind="mergedAttrs" />
-      </template>
-      <template #filterbar>
-        <component
-          :is="filterbarComponent"
-          ref="filterbarRef"
-          v-bind="mergedAttrs"
-          @fold-change="handleFilterFold"
-        >
-          <template v-if="$slots['filterbar-top']" #filterbar-top>
-            <slot name="filterbar-top" />
-          </template>
-          <template v-if="$slots['filterbar-bottom']" #filterbar-bottom>
-            <slot name="filterbar-bottom" />
-          </template>
-          <template v-if="$slots['filterbar-left']" #filterbar-left>
-            <slot name="filterbar-left" />
-          </template>
-          <template v-if="$slots['filterbar-right']" #filterbar-right>
-            <slot name="filterbar-right" />
-          </template>
-          <template v-if="$slots['prepend-more']" #prepend-more>
-            <slot name="prepend-more" />
-          </template>
-          <template v-if="$slots['append-more']" #append-more>
-            <slot name="append-more" />
-          </template>
-          <template v-if="$slots['prepend-submit']" #prepend-submit>
-            <slot name="prepend-submit" />
-          </template>
-          <template v-if="$slots['append-submit']" #append-submit>
-            <slot name="append-submit" />
-          </template>
-        </component>
-      </template>
-
-      <template #content="scopedProps">
-        <slot v-bind="scopedProps">
-          <component :is="contentComponent" v-bind="mergedAttrs" />
-        </slot>
-      </template>
-
-      <template #footer>
-        <component :is="footerComponent" v-bind="mergedAttrs">
-          <template v-if="$slots['footer-left']" #footer-left>
-            <slot name="footer-left" />
-          </template>
-          <template v-if="$slots['footer-center']" #footer-center>
-            <slot name="footer-center" />
-          </template>
-          <template v-if="$slots['footer-right']" #footer-right>
-            <slot name="footer-right" />
-          </template>
-        </component>
-      </template>
-    </ListviewLayout>
-  </ElConfigProvider>
-</template>
-
 <script lang="tsx" setup>
-import type { Component } from 'vue'
-import { watch } from 'vue'
-import { ref, unref, computed, nextTick, useAttrs } from 'vue'
+import type { PropType } from 'vue'
+import type { FilterField } from '~/types'
+import {
+  ref,
+  unref,
+  computed,
+  nextTick,
+  useAttrs,
+  watch,
+  useSlots,
+  renderSlot,
+} from 'vue'
 import { useThrottleFn } from '@vueuse/core'
 import { ElConfigProvider } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-import { get } from '@/utils'
+import zipObject from 'lodash-es/zipObject'
 import ListviewLayout from '@/components/ListviewLayout.vue'
 import ListviewHeader from '@/components/ListviewHeader.vue'
 import ListviewFilterbar from '@/components/ListviewFilterbar.vue'
 import ListviewContent from '@/components/ListviewContent.vue'
 import ListviewContentFooter from '@/components/ListviewContentFooter.vue'
 import { useProvideLvStore } from '@/useLvStore'
+import { hasOwn, get } from '@/utils'
+
+type Data = Record<string, unknown>
 
 defineOptions({
-  name: 'ListviewMain',
+  name: 'Listview',
   inheritAttrs: false,
 })
 
@@ -104,6 +49,10 @@ const props = defineProps({
   requestMethod: { type: String, default: 'post' },
   requestConfig: { type: Object, default: () => ({}) },
   filterModel: { type: Object, default: () => ({}) },
+  filterFields: {
+    type: Array as PropType<FilterField[]>,
+    default: () => [],
+  },
 
   // Adv request
   requestHandler: { type: Function, default: null },
@@ -128,69 +77,116 @@ const props = defineProps({
   usePage: { type: [Object, Boolean], default: true },
   pageSize: { type: Number, default: 20 },
   pageSizes: { type: Array, default: () => [20, 50, 100] },
-  pageProps: { type: Object, default: () => ({}) },
+  pageAttrs: { type: Object, default: () => ({}) },
   pagePosition: { type: String, default: 'left' },
 
-  replaceComponents: { type: Object, default: null },
+  replaceComponents: { type: Object, default: () => ({}) },
 })
 
 const layoutRef = ref<any>(null)
-const filterbarRef = ref(null)
-const lvStore = computed(() => unref(layoutRef)?.lvStore)
+const lvStoreRef = computed(() => unref(layoutRef)?.lvStore)
 
-const unwatchStore = watch(lvStore, () => {
-  if (unref(lvStore)) {
-    unref(lvStore).emitter.on('root-emit', ({ event, payload }: any) => {
+const _unwatchStore = watch(lvStoreRef, () => {
+  if (unref(lvStoreRef)) {
+    unref(lvStoreRef).emitter.on('root-emit', ({ event, payload }: any) => {
       emits(event, payload)
     })
-    unref(lvStore).emitter.on('update:selection', (selection: any) => {
+    unref(lvStoreRef).emitter.on('update:selection', (selection: any) => {
       emits('update:selection', selection)
     })
-    unwatchStore()
+    _unwatchStore()
   }
 })
 
-function _getReplaceComponent(name: string, defaultComp: Component) {
-  return get(props.replaceComponents, name, defaultComp)
-}
-
-// ListviewProps
 const attrs = useAttrs()
-const mergedAttrs = computed<Record<string, any>>(() => ({
+const mergedAttrs = computed<Data>(() => ({
   ...props,
   ...attrs,
 }))
-const headerComponent = computed(() =>
-  _getReplaceComponent('header', ListviewHeader)
-)
-const filterbarComponent = computed(() =>
-  _getReplaceComponent('filterbar', ListviewFilterbar)
-)
-const contentComponent = computed(() =>
-  _getReplaceComponent('content', ListviewContent)
-)
-const footerComponent = computed(() =>
-  _getReplaceComponent('footer', ListviewContentFooter)
-)
-
-const _updateWrapperLayout = () => unref<any>(layoutRef)?.updateLayout?.call()
-const _updateFilterLayout = () => unref<any>(filterbarRef)?.updateLayout?.call()
-const handleUpdateLayout = () => nextTick().then(_updateFilterLayout)
-const handleFilterFold = () => nextTick().then(_updateWrapperLayout)
-
-const updateLayout = useThrottleFn(_updateWrapperLayout, 100)
-const resetFilter = () => unref<any>(filterbarRef)?.resetFilter.call()
-const search = (keepInPage: boolean) => lvStore.value.search(keepInPage)
-const setContentMessage = (text: string, type: string, cleanData = false) =>
-  lvStore.value.setContentMessage(text, type, cleanData)
 
 // TODO: type fix
-useProvideLvStore(unref(mergedAttrs) as any)
+useProvideLvStore(unref(props) as any)
+
+const _updateLayout = () => unref(lvStoreRef).emitter.emit('updateLayout')
+const handleFilterFold = () => nextTick(_updateLayout)
+const updateFilterLayout = () =>
+  nextTick(() => unref(lvStoreRef).emitter.emit('updateFilterLayout'))
 
 defineExpose({
-  updateLayout,
-  resetFilter,
-  search,
-  setContentMessage,
+  updateLayout: useThrottleFn(_updateLayout, 100),
+  resetFilter: () => unref(lvStoreRef).resetFilterModel(),
+  search: (keepInPage: boolean) => unref(lvStoreRef).search(keepInPage),
+  setContentMessage: (text: string, type: string, cleanData = false) =>
+    unref(lvStoreRef).setContentMessage(text, type, cleanData),
 })
+
+const REPLACE_COMPONENTS_MAP = {
+  header: ListviewHeader,
+  filterbar: ListviewFilterbar,
+  content: ListviewContent,
+  footer: ListviewContentFooter,
+}
+const slots = useSlots()
+const renderLvSlot = (
+  name: keyof typeof REPLACE_COMPONENTS_MAP,
+  slotProps: Data,
+  childSlotNames: string[] = [],
+  extProps: Data = {}
+) => {
+  const fallback = () => {
+    const DefaultComponent = get(
+      props.replaceComponents,
+      name,
+      REPLACE_COMPONENTS_MAP[name]
+    )
+    childSlotNames = childSlotNames.filter((name) => hasOwn(slots, name))
+    return [
+      <DefaultComponent {...{ ...unref(mergedAttrs), ...extProps }}>
+        {zipObject(
+          childSlotNames,
+          childSlotNames.map((name) => () => renderSlot(slots, name, slotProps))
+        )}
+      </DefaultComponent>,
+    ]
+  }
+  return renderSlot(slots, name, slotProps, fallback)
+}
+
+defineRender(() => (
+  <ElConfigProvider locale={zhCn}>
+    <ListviewLayout
+      ref={(vm: any) => (layoutRef.value = vm)}
+      {...unref(mergedAttrs)}
+      onUpdateLayout={updateFilterLayout}
+    >
+      {{
+        header: (props: Data) => renderLvSlot('header', props),
+        filterbar: (props: Data) =>
+          renderLvSlot(
+            'filterbar',
+            props,
+            [
+              'filterbar-top',
+              'filterbar-bottom',
+              'filterbar-left',
+              'filterbar-right',
+              'prepend-more',
+              'append-more',
+              'prepend-submit',
+              'append-submit',
+            ],
+            { onFoldChange: handleFilterFold }
+          ),
+        content: (props: Data) =>
+          renderLvSlot('content', props, ['content-empty']),
+        footer: (props: Data) =>
+          renderLvSlot('footer', props, [
+            'footer-left',
+            'footer-center',
+            'footer-right',
+          ]),
+      }}
+    </ListviewLayout>
+  </ElConfigProvider>
+))
 </script>

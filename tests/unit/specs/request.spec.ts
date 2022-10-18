@@ -74,7 +74,7 @@ describe('Request params', () => {
       requestUrl: '/mock/list',
     })
     await wait(400)
-    expect(unref(lvStore.contentData)).toHaveProperty('total', 800)
+    expect(unref(lvStore.state.contentData)).toHaveProperty('total', 800)
   })
 })
 
@@ -121,14 +121,14 @@ describe('分页参数', () => {
     expect(requestSpy.mock).toHaveProperty('calls[0][0].page_size', 2)
   })
 
-  it.skip('切换 pageSize', async () => {
+  it('切换 pageSize', async () => {
     const { wrapper, lvStore } = await createListviewWrapper({
       pageSize: 2,
     })
     const $pagination = wrapper.findComponent({ name: 'ElPagination' })
     $pagination.vm.$emit('update:page-size', 3)
 
-    expect(lvStore.currentPageSize).toBe(3)
+    expect(lvStore.state.currentPageSize).toBe(3)
   })
 
   it('search(true) 保持当前页码', async () => {
@@ -141,9 +141,9 @@ describe('分页参数', () => {
       .findComponent({ name: 'ElPagination' })
       .vm.$emit('update:current-page', newCurPage)
     await vm.search(true)
-    expect(unref(lvStore.currentPage)).toBe(newCurPage)
+    expect(unref(lvStore.state.currentPage)).toBe(newCurPage)
     await vm.search()
-    expect(unref(lvStore.currentPage)).toBe(1)
+    expect(unref(lvStore.state.currentPage)).toBe(1)
   })
 })
 
@@ -152,12 +152,12 @@ describe('Response', () => {
     const { lvStore } = await createListviewWrapper({
       contentDataMap: {
         custom_items: 'result.items',
-        custom_total: 'result.total_count',
+        custom_total: 'result.total',
         custom_success: 'success',
         custom_unknow: 'result.unknow.prop',
       },
     })
-    expect(unref(lvStore.contentData)).toEqual({
+    expect(unref(lvStore.state.contentData)).toEqual({
       custom_items: mockDataList,
       custom_total: 40,
       custom_success: true,
@@ -178,7 +178,7 @@ describe('Response', () => {
         }),
       validateResponse: (response) => response.custom_is_success === 'done',
     })
-    expect(unref(lvStore.contentData)).toEqual(result)
+    expect(unref(lvStore.state.contentData)).toEqual(result)
   })
 
   it('resolveResponseErrorMessage', async () => {
@@ -197,7 +197,7 @@ describe('Response', () => {
         }
       },
     })
-    expect(unref(lvStore.internalContentMessage)).toEqual({
+    expect(unref(lvStore.state.contentMessage)).toEqual({
       type: 'error',
       text: 'error: (error info)',
     })
@@ -215,12 +215,12 @@ describe('Response', () => {
         is_success: true,
         new_data: {
           items: response.result.items,
-          total: response.result.total_count,
+          total: response.result.total,
           addon: 'addon data',
         },
       }),
     })
-    expect(unref(lvStore.contentData)).toEqual({
+    expect(unref(lvStore.state.contentData)).toEqual({
       success: true,
       items: mockDataList,
       total: 40,

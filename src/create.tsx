@@ -1,4 +1,4 @@
-import { defineComponent, h, useAttrs, useSlots, ref, unref } from 'vue'
+import { defineComponent, useSlots, ref, unref } from 'vue'
 import { isPlainObject } from 'is-what'
 import { pick } from 'lodash-es'
 import { Listview } from '@/index'
@@ -18,7 +18,7 @@ const allowPresetProps = [
   'usePage',
   'pageSize',
   'pageSizes',
-  'pageProps',
+  'pageAttrs',
   'pagePosition',
   'replaceComponents',
 

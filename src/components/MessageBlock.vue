@@ -1,11 +1,11 @@
 <template>
-  <span class="lv__message" :class="{ [`lv__message--${type}`]: type }">
-    <span class="lv__message-icon">
+  <span class="lv-message" :class="{ [`lv-message--${type}`]: type }">
+    <span class="lv-message__icon">
       <ElIcon>
         <Icon />
       </ElIcon>
     </span>
-    <span class="lv__message-text">{{ text || '' }}</span>
+    <span class="lv-message__text">{{ text || '' }}</span>
   </span>
 </template>
 
@@ -38,14 +38,14 @@ const Icon = iconMap[props.type as keyof typeof iconMap] || iconMap['warning']
 </script>
 
 <style lang="less">
-.lv__message {
+.lv-message {
   display: flex;
   padding: 15px 20px;
   line-height: 30px;
   border-radius: 5px;
   box-shadow: 0 0 15px #ddd;
 
-  &-icon {
+  &__icon {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -53,20 +53,20 @@ const Icon = iconMap[props.type as keyof typeof iconMap] || iconMap['warning']
     font-size: 24px;
   }
 
-  &-icon {
+  &__icon {
     color: #459ffc;
   }
 
-  &-text {
+  &__text {
     font-size: 14px;
     text-align: left;
   }
 
-  &--warning &-icon {
+  &--warning &__icon {
     color: #f90;
   }
 
-  &--error &-icon {
+  &--error &__icon {
     color: #f56c6c;
   }
 }

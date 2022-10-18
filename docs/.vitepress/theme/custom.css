@@ -1,0 +1,11 @@
+.lv-wrapper .el-table .el-button {
+  padding: 0px 6px;
+  height: 24px;
+  line-height: 24px;
+  font-size: 12px;
+}
+
+.lv-wrapper select {
+  appearance: auto;
+  border: 1px solid #666;
+}

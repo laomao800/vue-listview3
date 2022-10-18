@@ -1,6 +1,7 @@
 <script lang="tsx">
+import type { MaybeRef } from '@vueuse/shared'
 import type { PropType } from 'vue'
-import { isVNode, defineComponent, h } from 'vue'
+import { isVNode, defineComponent, h, unref } from 'vue'
 import {
   ElDropdown,
   ElDropdownMenu,
@@ -11,16 +12,17 @@ import {
 } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { isPlainObject, isFunction } from 'is-what'
-import { warn } from '@/utils'
-import { FilterButton } from '~/types'
+import { isObjType, warn } from '@/utils'
+import { FilterButton, FilterButtonConfig } from '~/types'
 
 interface NormalizedButton {
   text: string
   children: NormalizedButton[]
-  buttonAttrs: Record<string, any>
+  attrs: Record<string, any>
 }
 
-function isValidButtonConfig(button: any) {
+function isValidButtonConfig(_button: MaybeRef<any>) {
+  const button = unref(_button)
   return (
     button &&
     (isPlainObject(button) ||
@@ -30,21 +32,13 @@ function isValidButtonConfig(button: any) {
   )
 }
 
-function normalizeButton(button: FilterButton): NormalizedButton {
-  const {
-    click,
-    type,
-    text = '',
-    icon: _icon,
-    children: _children,
-    ...buttonAttrs
-  } = button
-  const icon = _icon ? <ElIcon>{h(_icon)}</ElIcon> : null
+function normalizeButton(button: FilterButtonConfig): NormalizedButton {
+  const { click, text = '', children: _children, ...attrs } = button
 
   let onClick = button.onClick
   if (click) {
     warn(
-      `[Migration][filterButtons]: 'click' will remove in next minor version, use 'onClick' instead.`,
+      `[Migration][filterButtons]: 请使用 'onClick' 代替 'click' 属性。`,
       button
     )
     onClick = button.click
@@ -57,11 +51,9 @@ function normalizeButton(button: FilterButton): NormalizedButton {
   return {
     text,
     children,
-    buttonAttrs: {
-      type,
-      icon,
+    attrs: {
       onClick,
-      ...buttonAttrs,
+      ...attrs,
     },
   }
 }
@@ -77,46 +69,47 @@ export default defineComponent({
   },
 
   setup(props) {
-    function renderButton(button: FilterButton) {
+    function renderButton(_button: MaybeRef<FilterButton>) {
+      const button = unref(_button)
       if (!isValidButtonConfig(button)) return null
 
       if (isFunction(button)) {
-        return h(button())
-      } else if (isFunction(button.render)) {
-        return h(button.render())
+        return h(unref(button()))
       } else if (isVNode(button)) {
         return h(button)
-      } else if (Array.isArray(button.children)) {
-        return renderDropdownButton(button)
-      } else {
-        return renderSingleButton(button)
+      } else if (isObjType<FilterButtonConfig>(button)) {
+        if (Array.isArray(button.children)) {
+          return renderDropdownButton(button)
+        } else {
+          return renderSingleButton(button)
+        }
       }
     }
 
-    function renderSingleButton(button: FilterButton) {
-      const { text, buttonAttrs } = normalizeButton(button)
-      return <ElButton {...buttonAttrs}>{text}</ElButton>
+    function renderSingleButton(button: FilterButtonConfig) {
+      const { text, attrs } = normalizeButton(button)
+      return <ElButton {...attrs}>{text}</ElButton>
     }
 
-    function renderDropdownButton(button: FilterButton) {
-      const { text, children, buttonAttrs } = normalizeButton(button)
+    function renderDropdownButton(button: FilterButtonConfig) {
+      const { text, children, attrs } = normalizeButton(button)
       return h(
         ElDropdown,
         {
-          ...buttonAttrs,
+          ...attrs,
           trigger: 'click',
           placement: 'bottom',
         },
         {
           default: () => {
             const content = []
-            buttonAttrs.icon && content.push(buttonAttrs.icon)
+            attrs.icon && content.push(<ElIcon>{h(attrs.icon)}</ElIcon>)
             content.push(<span>{text}</span>)
 
-            return buttonAttrs.splitButton ? (
+            return attrs.splitButton ? (
               content
             ) : (
-              <ElButton {...buttonAttrs}>
+              <ElButton {...attrs}>
                 {content}
                 <ElIcon class="ElIcon--right">
                   <ArrowDown />
@@ -127,12 +120,8 @@ export default defineComponent({
           dropdown: () => (
             <ElDropdownMenu>
               {children.map((child) => {
-                const { text, buttonAttrs } = child
-                return (
-                  <ElDropdownItem {...(buttonAttrs as any)}>
-                    {text}
-                  </ElDropdownItem>
-                )
+                const { text, attrs } = child
+                return <ElDropdownItem {...attrs}>{text}</ElDropdownItem>
               })}
             </ElDropdownMenu>
           ),

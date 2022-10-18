@@ -1,37 +1,37 @@
 <template>
   <ElForm
     :inline="true"
-    :class="{ 'lv__filterbar--fold': isFold }"
-    class="lv__filterbar"
+    :class="{ 'lv-filterbar--fold': isFold }"
+    class="lv-filterbar"
     @submit.prevent
     @keydown.enter="handleSubmit"
   >
-    <div v-if="$slots['filterbar-top']" class="lv__filterbar-top">
+    <div v-if="$slots['filterbar-top']" class="lv-filterbar__top">
       <slot name="filterbar-top" />
     </div>
 
-    <div class="lv__filterbar-main">
-      <div v-if="$slots['filterbar-left']" class="lv__filterbar-left">
+    <div class="lv-filterbar__main">
+      <div v-if="$slots['filterbar-left']" class="lv-filterbar__left">
         <slot name="filterbar-left" />
       </div>
 
       <div
         v-if="isShowFilterButtons || isShowFilterSubmit || isShowFilterFields"
-        class="lv__filterbar-inner"
+        class="lv-filterbar__inner"
       >
         <!-- 提交、重置按钮区域 -->
         <div
           v-if="isShowFilterSubmit"
           ref="actionRef"
-          class="lv__filterbar-action"
+          class="lv-filterbar__action"
           :class="{
-            'lv__filterbar-action--nomore': isNoMore,
-            'lv__filterbar-action--onleft': isNoneFields,
+            'lv-filterbar__action--nomore': isNoMore,
+            'lv-filterbar__action--onleft': isNoneFields,
           }"
         >
           <div
             :style="{ transform: `translateX(${searchBtnOffset}px)` }"
-            class="lv__filterbar-action-submit"
+            class="lv-filterbar__submit"
           >
             <slot name="prepend-submit" />
             <ElButton
@@ -50,13 +50,13 @@
             </ElButton>
             <slot name="append-submit" />
           </div>
-          <div class="lv__filterbar-action-ext">
+          <div class="lv-filterbar__action-ext">
             <slot name="prepend-more" />
             <ElButton
               v-if="filterbarFoldable"
               :icon="CaretTop"
               type="primary"
-              class="lv__filterbar-action-more"
+              class="lv-filterbar__action-more"
               @click="toggleFilterbar"
             />
             <slot name="append-more" />
@@ -67,7 +67,7 @@
         <FilterbarButtons
           v-if="isShowFilterButtons"
           :buttons="filterButtons"
-          class="lv__filterbar-buttons"
+          class="lv-filterbar__buttons"
         />
 
         <!-- 搜索栏控件区域 -->
@@ -75,16 +75,16 @@
           v-if="isShowFilterFields"
           ref="filterbarFieldsRef"
           :fields="filterFields"
-          class="lv__filterbar-fields"
+          class="lv-filterbar__fields"
         />
       </div>
 
-      <div v-if="$slots['filterbar-right']" class="lv__filterbar-right">
+      <div v-if="$slots['filterbar-right']" class="lv-filterbar__right">
         <slot name="filterbar-right" />
       </div>
     </div>
 
-    <div v-if="$slots['filterbar-bottom']" class="lv__filterbar-bottom">
+    <div v-if="$slots['filterbar-bottom']" class="lv-filterbar__bottom">
       <slot name="filterbar-bottom" />
     </div>
   </ElForm>
@@ -97,12 +97,12 @@ import { ElForm, ElButton } from 'element-plus'
 import { Search, CaretTop } from '@element-plus/icons-vue'
 import { isPlainObject } from 'is-what'
 import { FilterButton, FilterField } from '~/types'
-import { hasOwn } from '@/utils'
 import { useLvStore } from '@/useLvStore'
 import FilterbarButtons from './FilterbarButtons.vue'
 import FilterbarFields from './FilterbarFields.vue'
 
 const lvStore = useLvStore()
+lvStore.emitter.on('updateFilterLayout', updateLayout)
 
 const DEFAULT_SEARCH_BUTTON = markRaw({
   text: '搜索',
@@ -130,11 +130,11 @@ const props = defineProps({
   },
   filterButtons: {
     type: Array as PropType<FilterButton[]>,
-    default: /* istanbul ignore next */ () => [],
+    default: () => [],
   },
   filterFields: {
     type: Array as PropType<FilterField[]>,
-    default: /* istanbul ignore next */ () => [],
+    default: () => [],
   },
   searchButton: {
     type: [Object, Boolean],
@@ -198,7 +198,7 @@ watch(
 const rootEmitProxy = lvStore?.rootEmitProxy?.bind(lvStore)
 
 function handleSubmit() {
-  lvStore.pressEnterSearch && handleFilterSearch()
+  lvStore.state.pressEnterSearch && handleFilterSearch()
 }
 
 function handleFilterSearch() {
@@ -207,26 +207,7 @@ function handleFilterSearch() {
 }
 
 function resetFilter() {
-  const filterModel = lvStore.filterModel
-  const _resetField = (field: FilterField) => {
-    const name = field.model
-    if (name && hasOwn(filterModel, name)) {
-      const value = filterModel[name]
-      if (Array.isArray(value)) {
-        filterModel[name] = []
-      } else {
-        filterModel[name] = undefined
-      }
-    }
-  }
-  props.filterFields.forEach((field) => {
-    if (Array.isArray(field)) {
-      field.forEach(_resetField)
-    } else {
-      _resetField(field)
-    }
-  })
-  rootEmitProxy('filter-reset')
+  lvStore.resetFilterModel()
 }
 
 function toggleFilterbar() {
@@ -280,35 +261,30 @@ function updateActionOffset() {
     actionOffsetLeft.value = $action.getBoundingClientRect().left
   }
 }
-
-defineExpose({
-  updateLayout,
-  resetFilter,
-})
 </script>
 
 <style lang="less">
 @filter-gap-size: 10px;
 
-.lv__filterbar-top {
+.lv-filterbar__top {
   margin-bottom: @filter-gap-size;
 }
-.lv__filterbar-bottom {
+.lv-filterbar__bottom {
   margin-bottom: @filter-gap-size;
 }
-.lv__filterbar-left {
+.lv-filterbar__left {
   margin-right: @filter-gap-size;
   margin-bottom: @filter-gap-size;
 }
-.lv__filterbar-right {
+.lv-filterbar__right {
   margin-left: @filter-gap-size;
   margin-bottom: @filter-gap-size;
 }
-.lv__filterbar-main {
+.lv-filterbar__main {
   display: flex;
 }
 
-.lv__filterbar {
+.lv-filterbar {
   .el-button {
     .el-icon {
       vertical-align: top;
@@ -337,8 +313,8 @@ defineExpose({
   }
 }
 
-.lv__filterbar {
-  &-buttons {
+.lv-filterbar {
+  &__buttons {
     float: left;
     margin-right: 0;
 
@@ -354,14 +330,14 @@ defineExpose({
     }
   }
 
-  &-action {
+  &__action {
     display: flex;
     float: right;
     margin: 0;
     margin-bottom: 10px;
 
     &--nomore {
-      .lv__filterbar-action-more {
+      .lv-filterbar__action-more {
         display: none;
       }
     }
@@ -372,8 +348,8 @@ defineExpose({
     }
   }
 
-  &-action-submit .el-form-item__content,
-  &-action-ext {
+  &__submit .el-form-item__content,
+  &__action-ext {
     display: flex;
     & > * {
       display: inline-block;
@@ -384,19 +360,19 @@ defineExpose({
     }
   }
 
-  &-action-ext {
+  &__action-ext {
     float: right;
     margin-left: 10px;
   }
 
-  & &-action-more {
+  & &__action-more {
     width: 40px;
     padding: 0;
     transition: none;
   }
 }
 
-.lv__filterbar-inner {
+.lv-filterbar__inner {
   flex: 1;
   padding-top: @filter-gap-size;
   margin-top: -@filter-gap-size;
@@ -408,15 +384,15 @@ defineExpose({
   }
 }
 
-.lv__filterbar--fold {
-  .lv__filterbar-inner {
+.lv-filterbar--fold {
+  .lv-filterbar__inner {
     box-sizing: content-box;
     height: 32px;
     overflow: hidden;
     margin-bottom: @filter-gap-size;
   }
 
-  .lv__filterbar-action-more {
+  .lv-filterbar__action-more {
     transform: rotate(180deg);
   }
 }

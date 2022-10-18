@@ -1,55 +1,34 @@
-import { Ref } from 'vue'
+import { Ref, UnwrapNestedRefs } from 'vue'
 import { AxiosRequestConfig, AxiosResponse } from 'axios'
+import { Emitter } from 'mitt'
+import { ListviewProps } from './Props'
 
-interface ContentMessageObject {
-  text: string
-  type: 'warning' | 'info' | 'error'
-}
+export interface LvStore {
+  emitter: Emitter
 
-export declare class LvStore {
-  // Props
-  // /** @default true */
-  // pressEnterSearch: boolean
-  // /** @default true */
-  // autoload: boolean
-  // requestUrl: AxiosRequestConfig['url']
-  // requestMethod: AxiosRequestConfig['method']
-  // filterModel: AxiosRequestConfig['data'] | AxiosRequestConfig['params']
-  // requestConfig: AxiosRequestConfig
-  // /** @default null */
-  // requestHandler: null | ((reqData: Record<string, any>) => any)
-  // /** @default null */
-  // transformRequestData: null | ((reqData: Record<string, any>) => any)
-  // /** @default null */
-  // transformResponseData: null | ((reqData: Record<string, any>) => any)
-  // contentDataMap: Record<string, string>
-  // contentMessage: string | { text: string; type: 'warning' | 'info' | 'error' }
-  // /** @default null */
-  // validateResponse: null | ((res: AxiosResponse) => boolean)
-  // /** @default null */
-  // resolveResponseErrorMessage: null | ((err: any) => any)
-  // /** @default true */
-  // usePage: boolean | { pageIndex: string; pageSize: string }
-  // pageSize: number
-  // pageSizes: number[]
-  // pageProps: Record<string, any>
-  // pagePosition: 'left' | 'right'
+  state: {
+    pressEnterSearch: ListviewProps['pressEnterSearch']
+    filterModel: UnwrapNestedRefs<ListviewProps['filterModel']>
+    usePage: ListviewProps['usePage']
+    pagePosition: ListviewProps['pagePosition']
+    pageSizes: ListviewProps['pageSizes']
+    pageAttrs: ListviewProps['pageAttrs']
+    currentPage: number
+    currentPageSize: ListviewProps['currentPageSize']
+    contentHeight: number
+    contentLoading: boolean
+    /** @default { type: string; text: string } */
+    contentMessage: Record<string, any>
+    selection: any[]
+    contentData: Record<string, any>
+  }
 
-  // Data
-  contentHeight: Ref<number>
-  contentLoading: Ref<boolean>
-  selection: Ref<any[]>
-  currentPage: Ref<number>
-  currentPageSize: Ref<number>
-  contentData: Ref<Record<string, any>>
-  internalContentMessage: Ref<ContentMessageObject>
-
-  // Methods
-  rootEmitProxy: (eventName: string, ...args: any[]) => void
+  rootEmitProxy: (event: string, payload?: any) => void
   search: (keepInPage?: boolean) => Promise<any>
   setContentMessage: (
     text: string,
-    type?: ContentMessageObject['type'],
+    type?: 'warning' | 'info' | 'error',
     cleanData?: boolean
   ) => void
+  resetFilterModel: () => void
 }

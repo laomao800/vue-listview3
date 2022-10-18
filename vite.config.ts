@@ -3,24 +3,20 @@ import type { UserConfig } from 'vite'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import DefineOptions from 'unplugin-vue-define-options/vite'
+import VueMacros from 'unplugin-vue-macros/vite'
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
-import { visualizer } from 'rollup-plugin-visualizer'
 import pkg from './package.json'
 
 const depNames = Object.keys(pkg.dependencies)
 depNames.push('vue')
 const depNamesReg = new RegExp(`^(${depNames.join('|')})`)
 
-process.env.NODE_ENV = 'development'
-
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
-  const plugins = [vue(), vueJsx(), DefineOptions(), cssInjectedByJsPlugin()]
+  const plugins = [VueMacros(), vue(), vueJsx(), cssInjectedByJsPlugin()]
   let publicDir: UserConfig['publicDir'] = 'public'
 
   if (command === 'build') {
-    // plugins.push(visualizer())
     publicDir = false
   }
 

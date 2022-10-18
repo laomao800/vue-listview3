@@ -4,7 +4,6 @@ import fieldDateRange from './FieldDateRange.vue'
 import fieldDateTime from './FieldDateTime.vue'
 import fieldDateTimeRange from './FieldDateTimeRange.vue'
 import fieldLabel from './FieldLabel.vue'
-import fieldMultipleSelect from './FieldMultipleSelect.vue'
 import fieldNumber from './FieldNumber.vue'
 import fieldSelect from './FieldSelect.vue'
 import fieldText from './FieldText.vue'
@@ -19,13 +18,15 @@ const fieldComponentsMap = {
   dateTime: fieldDateTime,
   dateTimeRange: fieldDateTimeRange,
   label: fieldLabel,
-  multipleSelect: fieldMultipleSelect,
   number: fieldNumber,
   select: fieldSelect,
   text: fieldText,
   timePicker: fieldTimePicker,
   timePickerRange: fieldTimePickerRange,
   timeSelect: fieldTimeSelect,
+
+  /** @deprecated */
+  multipleSelect: fieldSelect,
 }
 
 export function getFieldComponent(type: keyof typeof fieldComponentsMap) {

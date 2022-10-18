@@ -1,6 +1,37 @@
-<script lang="tsx">
-import type { VNode } from 'vue'
-import { defineComponent, KeepAlive, ref, unref, computed } from 'vue'
+<template>
+  <div class="lvc-wrapper">
+    <ListviewHeader :header-title="headerTitle" :header-nav="headerNav" />
+    <div
+      :class="{
+        'lvc-tabs': true,
+        [`lvc-tabs--${type}`]: type,
+        [`lvc-tabs--${tabPosition}`]: tabPosition,
+      }"
+    >
+      <div
+        v-for="(title, index) in tabTitles"
+        :key="index"
+        :class="{
+          'lvc-tab': true,
+          'lvc-tab--active': index === unref(activeTab),
+        }"
+        @click="() => (activeTab = index)"
+      >
+        <span>{{ title }}</span>
+      </div>
+    </div>
+
+    <div class="lvc-content">
+      <KeepAlive>
+        <component :is="activeView" :key="activeTab" />
+      </KeepAlive>
+    </div>
+  </div>
+</template>
+
+<script setup lang="tsx">
+import { useSlots, VNode } from 'vue'
+import { ref, unref, computed } from 'vue'
 import ListviewHeader from '@/components/ListviewHeader.vue'
 import { get } from '@/utils'
 
@@ -12,67 +43,22 @@ function getListviewTitle(node: VNode, defaultTitle = '') {
   )
 }
 
-export default defineComponent({
+defineOptions({
   name: 'ListviewContainer',
-
-  props: {
-    headerTitle: { type: String, default: '' },
-    headerNav: { type: Array, default: () => [] },
-    type: { type: String, default: '' },
-    tabPosition: { type: String, default: 'left' },
-  },
-
-  setup(props, { slots }) {
-    const activeTab = ref(0)
-
-    const childViews = computed<VNode[]>(() => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const _children = (slots.default && slots.default()) || []
-      return _children.map((item, index) => {
-        item.key = `view-${index}`
-        return item
-      })
-    })
-    const tabTitles = computed<string[]>(() =>
-      unref(childViews).map((node) => getListviewTitle(node, '未命名'))
-    )
-
-    return () => (
-      <div class="lvc__wrapper">
-        <ListviewHeader
-          header-title={props.headerTitle}
-          header-nav={props.headerNav}
-        />
-        <div
-          class={{
-            lvc__tabs: true,
-            'lvc__tabs--line': props.type === 'line',
-            'lvc__tabs--card': props.type !== 'line',
-            'lvc__tabs--center': props.tabPosition === 'center',
-          }}
-        >
-          {unref(tabTitles).map((title, index) => (
-            <div
-              class={{
-                lvc__tab: true,
-                'lvc__tab--active': index === unref(activeTab),
-              }}
-              onClick={() => (activeTab.value = index)}
-            >
-              <span>{title}</span>
-            </div>
-          ))}
-        </div>
-
-        <div class="lvc__content">
-          <KeepAlive>
-            {unref(childViews).map((item, index) =>
-              index === unref(activeTab) ? item : null
-            )}
-          </KeepAlive>
-        </div>
-      </div>
-    )
-  },
 })
+
+defineProps({
+  headerTitle: { type: String, default: '' },
+  headerNav: { type: Array, default: () => [] },
+  type: { type: String, default: 'card' },
+  tabPosition: { type: String, default: 'left' },
+})
+
+const slots = useSlots()
+const activeTab = ref(0)
+const views = computed<VNode[]>(() => slots?.default?.() || [])
+const activeView = computed(() => unref(views)[unref(activeTab)])
+const tabTitles = computed<string[]>(() =>
+  unref(views).map((node) => getListviewTitle(node, '未命名'))
+)
 </script>

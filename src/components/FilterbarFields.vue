@@ -1,34 +1,21 @@
 <script lang="tsx">
-import type { FilterField } from '~/types'
-import { VNode, PropType, ref, defineComponent } from 'vue'
+import type { MaybeRef } from '@vueuse/shared'
+import type { FilterField, FilterFieldConfig } from '~/types'
+import { VNode, PropType, ref, unref, defineComponent } from 'vue'
 import { isVNode } from 'vue'
-import { isFunction } from 'is-what'
-import { hasOwn, error } from '@/utils'
-import { getFieldComponent } from './fields/index'
+import { isPlainObject, isFunction } from 'is-what'
+import { isObjType } from '@/utils'
 import FilterbarField from './FilterbarField.vue'
 
-function isValidFieldConfig(field: any) {
-  if (!field) return false
-
-  if (isVNode(field)) return true
-
-  if (hasOwn(field, 'type')) {
-    if (getFieldComponent(field.type)) {
-      return true
-    } else {
-      error(`Invalid filter field type '${field.type}'`, field)
-      return false
-    }
-  }
-
+function isValidFieldConfig(_field: MaybeRef<any>) {
+  const field = unref(_field)
   return (
-    (hasOwn(field, 'render') && isFunction(field.render)) ||
+    isPlainObject(field) ||
+    isVNode(field) ||
     isFunction(field) ||
     Array.isArray(field)
   )
 }
-
-let uid = 0
 
 export default defineComponent({
   name: 'FilterbarFields',
@@ -41,6 +28,7 @@ export default defineComponent({
   },
 
   setup(props, { expose }) {
+    let uid = 0
     const fieldRefs = ref<any[]>([])
 
     function renderFieldsGroup(group: FilterField[] = []) {
@@ -50,13 +38,15 @@ export default defineComponent({
         vm && subFieldsVm.push(vm)
       })
       return subFieldsVm.length > 0 ? (
-        <div class="lv__field-group">{subFieldsVm}</div>
+        <div class="lv-field-group">{subFieldsVm}</div>
       ) : null
     }
 
-    function renderField(field = {} as FilterField) {
+    function renderField(field: FilterField) {
       if (!isValidFieldConfig(field)) return null
-      const key = field.key || field.model || `unnamed-field-${uid++}`
+      const key =
+        (isObjType<FilterFieldConfig>(field) && (field.key || field.model)) ||
+        `unnamed-field-${uid++}`
       return (
         <FilterbarField
           {...{ ref: (ref: any) => fieldRefs.value.push(ref), key, field }}
@@ -69,7 +59,7 @@ export default defineComponent({
     })
 
     return () => (
-      <div class="lv__fields-wrapper">
+      <div class="lv-fields-wrapper">
         {props.fields.map((item) =>
           // 仅对第一层嵌套的 array 作组合
           Array.isArray(item) ? renderFieldsGroup(item) : renderField(item)
@@ -81,7 +71,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-.lv__field-group {
+.lv-field-group {
   display: inline-block;
   margin: 0;
   vertical-align: top;
