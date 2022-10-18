@@ -17,8 +17,8 @@
     "coverage": "vitest run --coverage",
     "release": "node scripts/release.js",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "docs:dev": "vitepress dev docs --port=5000",
-    "docs:build": "vitepress build docs"
+    "docs:dev": "npm run build & vitepress dev docs --port=5000",
+    "docs:build": "npm run build & vitepress build docs"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",

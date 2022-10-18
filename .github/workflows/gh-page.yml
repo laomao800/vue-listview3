@@ -1,0 +1,59 @@
+name: Publish GH Pages
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+  release:
+    types:
+      - published
+
+  workflow_dispatch:
+    inputs:
+      target_version_path:
+        description: 'Specify build to gh-pages version path. (e.g. 2.0)'
+        required: false
+        default: ''
+
+env:
+  TARGET_VERSION_PATH: /
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Update TARGET_VERSION_PATH
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        run: echo TARGET_VERSION_PATH=/version/$(echo $GITHUB_REF | cut -d / -f 3 | cut -d v -f 2- | cut -d . -f 1,2)/ >> $GITHUB_ENV
+
+      - name: Specify TARGET_VERSION_PATH
+        if: ${{ github.event.inputs.target_version_path != '' }}
+        run: echo TARGET_VERSION_PATH=/version/${{ github.event.inputs.target_version_path }}/ >> $GITHUB_ENV
+
+      - run: echo TARGET_VERSION_PATH is ${{ env.TARGET_VERSION_PATH }}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - uses: c-hive/gha-yarn-cache@v2
+
+      - name: Yarn install
+        run: yarn
+
+      - name: Build doc
+        run: |
+          yarn build:component
+          yarn docs:build
+
+      - name: Deploy doc
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: docs/.vuepress/dist # The folder the action should deploy.
+          target-folder: ${{ env.TARGET_VERSION_PATH }}
+          clean-exclude: version/*

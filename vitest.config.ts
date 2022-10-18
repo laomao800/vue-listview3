@@ -31,6 +31,7 @@ export default defineConfig({
     },
     coverage: {
       provider: 'istanbul',
+      reporter: ['lcov'],
       reportsDirectory: path.resolve(__dirname, 'tests/unit/coverage'),
     },
     deps: {
