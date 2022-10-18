@@ -11,8 +11,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.30.6
   '@vitejs/plugin-vue': 3.1.0
   '@vitejs/plugin-vue-jsx': 2.0.1
-  '@vitest/coverage-istanbul': ^0.23.1
-  '@vitest/ui': ^0.19.1
+  '@vitest/coverage-istanbul': ^0.23.4
   '@vue/eslint-config-prettier': ^7.0.0
   '@vue/eslint-config-typescript': ^11.0.0
   '@vue/test-utils': ^2.0.2
@@ -46,7 +45,7 @@ specifiers:
   vite: 3.1.6
   vite-plugin-css-injected-by-js: ^1.5.1
   vitepress: 1.0.0-alpha.21
-  vitest: ^0.23.1
+  vitest: ^0.23.4
   vue: ^3.2.40
   vue-tsc: ^1.0.3
 
@@ -71,8 +70,7 @@ devDependencies:
   '@typescript-eslint/parser': 5.30.6_he2ccbldppg44uulnyq4rwocfa
   '@vitejs/plugin-vue': 3.1.0_vite@3.1.6+vue@3.2.40
   '@vitejs/plugin-vue-jsx': 2.0.1_vite@3.1.6+vue@3.2.40
-  '@vitest/coverage-istanbul': 0.23.1_hg3o2uceb3gh63g53mlavob6ne
-  '@vitest/ui': 0.19.1
+  '@vitest/coverage-istanbul': registry.npmjs.org/@vitest/coverage-istanbul/0.23.4_jsdom@20.0.0+less@4.1.3
   '@vue/eslint-config-prettier': 7.0.0_vvfpqh5kol6rhqy7beehv5uezq
   '@vue/eslint-config-typescript': 11.0.0_usemwu2orllh6tzptz2hsp6y3e
   '@vue/test-utils': 2.0.2_vue@3.2.40
@@ -98,7 +96,7 @@ devDependencies:
   vite: registry.npmjs.org/vite/3.1.6_less@4.1.3
   vite-plugin-css-injected-by-js: 1.5.1_vite@3.1.6
   vitepress: registry.npmjs.org/vitepress/1.0.0-alpha.21_less@4.1.3
-  vitest: 0.23.1_hg3o2uceb3gh63g53mlavob6ne
+  vitest: registry.npmjs.org/vitest/0.23.4_jsdom@20.0.0+less@4.1.3
   vue: registry.npmjs.org/vue/3.2.40
   vue-tsc: registry.npmjs.org/vue-tsc/1.0.3_typescript@4.7.4
 
@@ -544,10 +542,6 @@ packages:
     resolution: {integrity: sha512-Aq58f5HiWdyDlFffbbSjAlv596h/cOnt2DO1w3DOC7OJ5EHs0hd/nycJfiu9RJbT6Yk6F1knnRRXNSpxoIVZ9Q==}
     dev: true
 
-  /@polka/url/1.0.0-next.21:
-    resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
-    dev: true
-
   /@rollup/pluginutils/4.2.1:
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
     engines: {node: '>= 8.0.0'}
@@ -789,35 +783,6 @@ packages:
       vue: registry.npmjs.org/vue/3.2.40
     dev: true
 
-  /@vitest/coverage-istanbul/0.23.1_hg3o2uceb3gh63g53mlavob6ne:
-    resolution: {integrity: sha512-BkQgy3DFgtJR9986hr7c994M5AaEysUk/Sq1mNlVRBocnzgcCTByrwKiRfvlGFUJHcRq2OQ1x0FV2kRqHkYt1g==}
-    dependencies:
-      istanbul-lib-coverage: 3.2.0
-      istanbul-lib-instrument: 5.2.0
-      istanbul-lib-report: 3.0.0
-      istanbul-lib-source-maps: 4.0.1
-      istanbul-reports: 3.1.5
-      test-exclude: 6.0.0
-      vitest: 0.23.1_hg3o2uceb3gh63g53mlavob6ne
-    transitivePeerDependencies:
-      - '@edge-runtime/vm'
-      - '@vitest/browser'
-      - '@vitest/ui'
-      - happy-dom
-      - jsdom
-      - less
-      - sass
-      - stylus
-      - supports-color
-      - terser
-    dev: true
-
-  /@vitest/ui/0.19.1:
-    resolution: {integrity: sha512-TmbEJmcieK7chFJqdkgni4Lq/2MY6fKoxGPktromnnyabBkQFSGJlAl5vzFMYy8SfCj/zyaZy48FzDdWixziKg==}
-    dependencies:
-      sirv: 2.0.2
-    dev: true
-
   /@vue-macros/common/0.11.1_vue@3.2.40:
     resolution: {integrity: sha512-8RTNAbD7MsEP8G6rYd4t8BWg5U8BtYVxqFSV+Fd+QC1RkoefYoH9LAuD4cJzq2rXUDQkuM2YH2r46SYpC5SiRA==}
     engines: {node: '>=14.19.0'}
@@ -1049,12 +1014,6 @@ packages:
 
   /acorn/8.7.1:
     resolution: {integrity: sha512-Xx54uLJQZ19lKygFXOWsscKUbsBZW0CPykPhVQdhIeIwrbPmJzqeASDInc8nKBnp/JT6igTs82qPXz069H8I/A==}
-    engines: {node: '>=0.4.0'}
-    hasBin: true
-    dev: true
-
-  /acorn/8.8.0:
-    resolution: {integrity: sha512-QOxyigPVrpZ2GXT+PFyZTl6TtOFc5egxHIP9IlQ+RbupQuX4RkT/Bee4/kQuC02Xkzg84JcT7oLYtDIQxp+v7w==}
     engines: {node: '>=0.4.0'}
     hasBin: true
     dev: true
@@ -3033,11 +2992,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /mrmime/1.0.1:
-    resolution: {integrity: sha512-hzzEagAgDyoU1Q6yg5uI+AorQgdvMCur3FcKf7NhMKWsaYg+RnbTyHRa/9IlLF9rf455MOCtcqqrQQ83pPP7Uw==}
-    engines: {node: '>=10'}
-    dev: true
-
   /ms/2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
     dev: true
@@ -3627,15 +3581,6 @@ packages:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
     dev: true
 
-  /sirv/2.0.2:
-    resolution: {integrity: sha512-4Qog6aE29nIjAOKe/wowFTxOdmbEZKb+3tsLljaBRzJwtqto0BChD2zzH0LhgCSXiI+V7X+Y45v14wBZQ1TK3w==}
-    engines: {node: '>= 10'}
-    dependencies:
-      '@polka/url': 1.0.0-next.21
-      mrmime: 1.0.1
-      totalist: 3.0.0
-    dev: true
-
   /slash/3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
@@ -3752,12 +3697,6 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /strip-literal/0.4.0:
-    resolution: {integrity: sha512-ql/sBDoJOybTKSIOWrrh8kgUEMjXMwRAkZTD0EwiwxQH/6tTPkZvMIEjp0CRlpi6V5FMiJyvxeRkEi1KrGISoA==}
-    dependencies:
-      acorn: 8.8.0
-    dev: true
-
   /supports-color/7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
@@ -3825,11 +3764,6 @@ packages:
     resolution: {integrity: sha512-ak+PZZEuH3mw6CCFOgf5S90YH0MARnZNhxjhjguAmoJimEMAJuNip/rJRd6/wyylHItomVpKTzZk9zrhTrQCoQ==}
     dev: true
 
-  /tinypool/0.2.4:
-    resolution: {integrity: sha512-Vs3rhkUH6Qq1t5bqtb816oT+HeJTXfwt2cbPH17sWHIYKTotQIFPk3tf2fgqRrVyMDVOc1EnPgzIxfIulXVzwQ==}
-    engines: {node: '>=14.0.0'}
-    dev: true
-
   /tinyspy/1.0.2:
     resolution: {integrity: sha512-bSGlgwLBYf7PnUsQ6WOc6SJ3pGOcd+d8AA6EUnLDDM0kWEstC1JIlSZA3UNliDXhd9ABoS7hiRBDCu+XP/sf1Q==}
     engines: {node: '>=14.0.0'}
@@ -3852,11 +3786,6 @@ packages:
     engines: {node: '>=8.0'}
     dependencies:
       is-number: 7.0.0
-    dev: true
-
-  /totalist/3.0.0:
-    resolution: {integrity: sha512-eM+pCBxXO/njtF7vdFsHuqb+ElbxqtI4r5EAvk6grfAFyJ6IvWlSkfZ5T9ozC6xWw3Fj1fGoSmrl0gUs46JVIw==}
-    engines: {node: '>=6'}
     dev: true
 
   /tough-cookie/4.0.0:
@@ -4050,7 +3979,7 @@ packages:
       webpack:
         optional: true
     dependencies:
-      acorn: 8.8.0
+      acorn: registry.npmjs.org/acorn/8.8.0
       chokidar: 3.5.3
       vite: registry.npmjs.org/vite/3.1.6_less@4.1.3
       webpack-sources: 3.2.3
@@ -4112,49 +4041,6 @@ packages:
       vite: '>2.0.0-0'
     dependencies:
       vite: registry.npmjs.org/vite/3.1.6_less@4.1.3
-    dev: true
-
-  /vitest/0.23.1_hg3o2uceb3gh63g53mlavob6ne:
-    resolution: {integrity: sha512-kn9pG+h6VA3yj/xRvwgLKEd33rOlzMqJEg3tl5HSm3WUPlkY1Lr1FK8RN1uIqVKvFxmz6HGU3EQW+xW2kazRkQ==}
-    engines: {node: '>=v14.16.0'}
-    hasBin: true
-    peerDependencies:
-      '@edge-runtime/vm': '*'
-      '@vitest/browser': '*'
-      '@vitest/ui': '*'
-      happy-dom: '*'
-      jsdom: '*'
-    peerDependenciesMeta:
-      '@edge-runtime/vm':
-        optional: true
-      '@vitest/browser':
-        optional: true
-      '@vitest/ui':
-        optional: true
-      happy-dom:
-        optional: true
-      jsdom:
-        optional: true
-    dependencies:
-      '@types/chai': 4.3.3
-      '@types/chai-subset': 1.3.3
-      '@types/node': 18.7.15
-      '@vitest/ui': 0.19.1
-      chai: 4.3.6
-      debug: 4.3.4
-      jsdom: 20.0.0
-      local-pkg: 0.4.2
-      strip-literal: 0.4.0
-      tinybench: 2.1.5
-      tinypool: 0.2.4
-      tinyspy: 1.0.2
-      vite: registry.npmjs.org/vite/3.1.6_less@4.1.3
-    transitivePeerDependencies:
-      - less
-      - sass
-      - stylus
-      - supports-color
-      - terser
     dev: true
 
   /vue-demi/0.12.5_vue@3.2.40:
@@ -4665,6 +4551,32 @@ packages:
       vue: registry.npmjs.org/vue/3.2.40
     dev: true
 
+  registry.npmjs.org/@vitest/coverage-istanbul/0.23.4_jsdom@20.0.0+less@4.1.3:
+    resolution: {integrity: sha512-vl+c682jwCkthdOomO7aBRY/H2bXfxjYAo+WZoGktdWEiSBfwhFUOcJJW3+Ery9i8ja+M1Jd19HrqYriLixGPw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@vitest/coverage-istanbul/-/coverage-istanbul-0.23.4.tgz}
+    id: registry.npmjs.org/@vitest/coverage-istanbul/0.23.4
+    name: '@vitest/coverage-istanbul'
+    version: 0.23.4
+    dependencies:
+      istanbul-lib-coverage: 3.2.0
+      istanbul-lib-instrument: 5.2.0
+      istanbul-lib-report: 3.0.0
+      istanbul-lib-source-maps: 4.0.1
+      istanbul-reports: 3.1.5
+      test-exclude: 6.0.0
+      vitest: registry.npmjs.org/vitest/0.23.4_jsdom@20.0.0+less@4.1.3
+    transitivePeerDependencies:
+      - '@edge-runtime/vm'
+      - '@vitest/browser'
+      - '@vitest/ui'
+      - happy-dom
+      - jsdom
+      - less
+      - sass
+      - stylus
+      - supports-color
+      - terser
+    dev: true
+
   registry.npmjs.org/@volar/language-core/1.0.3:
     resolution: {integrity: sha512-eJ3iubJ1EvPTsp+rKoSUQ3EBGsEzblOQG6OVI9EzXIuwNayIqCnNSv9r0rvnYznX7i5F8gpo0Js9nKoAvwfhpQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@volar/language-core/-/language-core-1.0.3.tgz}
     name: '@volar/language-core'
@@ -4898,6 +4810,14 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  registry.npmjs.org/acorn/8.8.0:
+    resolution: {integrity: sha512-QOxyigPVrpZ2GXT+PFyZTl6TtOFc5egxHIP9IlQ+RbupQuX4RkT/Bee4/kQuC02Xkzg84JcT7oLYtDIQxp+v7w==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/acorn/-/acorn-8.8.0.tgz}
+    name: acorn
+    version: 8.8.0
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+    dev: true
 
   registry.npmjs.org/agent-base/4.3.0:
     resolution: {integrity: sha512-salcGninV0nPrwpGNn4VTXBb1SOuXQBiqbrNXoeizJsHrsL6ERFM2Ne3JUSBWRE6aeNJI2ROP/WEEIDUiDe3cg==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/agent-base/-/agent-base-4.3.0.tgz}
@@ -7469,6 +7389,14 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  registry.npmjs.org/strip-literal/0.4.2:
+    resolution: {integrity: sha512-pv48ybn4iE1O9RLgCAN0iU4Xv7RlBTiit6DKmMiErbs9x1wH6vXBs45tWc0H5wUIF6TLTrKweqkmYF/iraQKNw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/strip-literal/-/strip-literal-0.4.2.tgz}
+    name: strip-literal
+    version: 0.4.2
+    dependencies:
+      acorn: registry.npmjs.org/acorn/8.8.0
+    dev: true
+
   registry.npmjs.org/supports-color/5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/supports-color/-/supports-color-5.5.0.tgz}
     name: supports-color
@@ -7556,6 +7484,13 @@ packages:
     name: timed-out
     version: 4.0.1
     engines: {node: '>=0.10.0'}
+    dev: true
+
+  registry.npmjs.org/tinypool/0.3.0:
+    resolution: {integrity: sha512-NX5KeqHOBZU6Bc0xj9Vr5Szbb1j8tUHIeD18s41aDJaPeC5QTdEhK0SpdpUrZlj2nv5cctNcSjaKNanXlfcVEQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/tinypool/-/tinypool-0.3.0.tgz}
+    name: tinypool
+    version: 0.3.0
+    engines: {node: '>=14.0.0'}
     dev: true
 
   registry.npmjs.org/tmp/0.0.33:
@@ -7740,6 +7675,51 @@ packages:
       - react-dom
       - sass
       - stylus
+      - terser
+    dev: true
+
+  registry.npmjs.org/vitest/0.23.4_jsdom@20.0.0+less@4.1.3:
+    resolution: {integrity: sha512-iukBNWqQAv8EKDBUNntspLp9SfpaVFbmzmM0sNcnTxASQZMzRw3PsM6DMlsHiI+I6GeO5/sYDg3ecpC+SNFLrQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/vitest/-/vitest-0.23.4.tgz}
+    id: registry.npmjs.org/vitest/0.23.4
+    name: vitest
+    version: 0.23.4
+    engines: {node: '>=v14.16.0'}
+    hasBin: true
+    peerDependencies:
+      '@edge-runtime/vm': '*'
+      '@vitest/browser': '*'
+      '@vitest/ui': '*'
+      happy-dom: '*'
+      jsdom: '*'
+    peerDependenciesMeta:
+      '@edge-runtime/vm':
+        optional: true
+      '@vitest/browser':
+        optional: true
+      '@vitest/ui':
+        optional: true
+      happy-dom:
+        optional: true
+      jsdom:
+        optional: true
+    dependencies:
+      '@types/chai': 4.3.3
+      '@types/chai-subset': 1.3.3
+      '@types/node': 18.7.15
+      chai: 4.3.6
+      debug: 4.3.4
+      jsdom: 20.0.0
+      local-pkg: 0.4.2
+      strip-literal: registry.npmjs.org/strip-literal/0.4.2
+      tinybench: 2.1.5
+      tinypool: registry.npmjs.org/tinypool/0.3.0
+      tinyspy: 1.0.2
+      vite: registry.npmjs.org/vite/3.1.6_less@4.1.3
+    transitivePeerDependencies:
+      - less
+      - sass
+      - stylus
+      - supports-color
       - terser
     dev: true
 
