@@ -46,12 +46,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Jest Annotations & Coverage
-        uses: mattallty/jest-github-action@v1.0.3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          test-command: 'npm run coverage'
+      - name: Test
+        run: pnpm run test
 
       - name: Coveralls
         uses: coverallsapp/github-action@master
