@@ -46,8 +46,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Test
-        run: pnpm run test
+      - name: Test coverage
+        run: pnpm run coverage
 
       - name: Coveralls
         uses: coverallsapp/github-action@master
@@ -108,9 +108,7 @@ jobs:
         run: pnpm install
 
       - name: Build the code
-        run: |
-          pnpm i
-          pnpm build
+        run: pnpm run build
 
       - name: Publish to NPM
         uses: JS-DevTools/npm-publish@v1
