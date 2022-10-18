@@ -1,7 +1,7 @@
-import { ListviewContainer } from '@/ListviewContainer'
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  base: './',
   themeConfig: {
     siteTitle: 'Vue Listview 3',
     socialLinks: [
