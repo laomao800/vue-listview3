@@ -6,7 +6,8 @@
 import { shallowRef } from 'vue'
 
 const lvConfig = shallowRef({
-  requestUrl: '/mock-list.json',
+  requestUrl: './mock-list.json',
+  requestMethod: 'get',
   autoload: false,
   filterFields: [{ type: 'text', model: 'title', label: '标题' }],
   tableColumns: [

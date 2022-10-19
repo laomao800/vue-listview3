@@ -1,13 +1,5 @@
 <template>
-  <Listview
-    header-title="演示列表1"
-    :header-nav="[{ text: '菜单1', to: '/list' }, '菜单2']"
-    :request-url="requestUrl"
-    :filter-buttons="filterButtons"
-    :filter-fields="filterFields"
-    :filter-model="filterModel"
-    :table-columns="tableColumns"
-  />
+  <Listview v-bind="lvConfig" />
 </template>
 
 <script setup lang="tsx">
@@ -15,9 +7,9 @@ import { shallowRef } from 'vue'
 import { Edit, Check, Message, Star, Delete } from '@element-plus/icons-vue'
 import { ElButton } from 'element-plus'
 
-const requestUrl = '/mock-list.json'
+const filterModel = { hidden: 'hidden', multipleSelect: [] }
 
-const filterButtons = shallowRef([
+const filterButtons = [
   { text: 'default', onClick: () => console.log('click:button-default') },
   {
     type: 'danger',
@@ -40,11 +32,9 @@ const filterButtons = shallowRef([
       },
     ],
   },
-])
+]
 
-const filterModel = shallowRef({ hidden: 'hidden', multipleSelect: [] })
-
-const filterFields = shallowRef([
+const filterFields = [
   { type: 'text', model: 'name', label: '文本字段' },
   { type: 'text', model: 'name2', label: '禁用文本', disabled: true },
   { type: 'number', model: 'number' },
@@ -116,9 +106,9 @@ const filterFields = shallowRef([
     { type: 'text', label: '避免被自动收起拆开' },
   ],
   { type: 'label', label: '文本标签' },
-])
+]
 
-const tableColumns = shallowRef([
+const tableColumns = [
   {
     label: 'id',
     prop: 'id',
@@ -166,5 +156,16 @@ const tableColumns = shallowRef([
   },
   { label: '修改人', prop: 'seller', width: 100 },
   { label: '修改时间', prop: 'date', width: 120 },
-])
+]
+
+const lvConfig = shallowRef({
+  requestUrl: './mock-list.json',
+  requestMethod: 'get',
+  headerTitle: '演示列表1',
+  headerNav: [{ text: '菜单1', to: '/list' }, '菜单2'],
+  filterModel,
+  filterButtons,
+  filterFields,
+  tableColumns,
+})
 </script>

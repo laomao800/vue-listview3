@@ -52,7 +52,8 @@ function handleExport() {
 }
 
 const lvConfig = shallowRef({
-  requestUrl: '/mock-list.json',
+  requestUrl: './mock-list.json',
+  requestMethod: 'get',
   filterButtons,
   filterFields: [{ type: 'text', model: 'name', label: '文本字段' }],
   tableColumns: [

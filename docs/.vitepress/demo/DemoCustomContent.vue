@@ -27,7 +27,8 @@ import { ElSwitch, ElButton } from 'element-plus'
 const viewType = ref('thumb')
 
 const lvConfig = shallowRef({
-  requestUrl: '/mock-list.json',
+  requestUrl: './mock-list.json',
+  requestMethod: 'get',
   filterButtons: [
     () => (
       <ElSwitch

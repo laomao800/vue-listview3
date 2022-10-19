@@ -1,5 +1,5 @@
 <template>
-  <Listview :filterModel="filterModel" :filterFields="filterFields" />
+  <Listview v-bind="lvConfig" />
 </template>
 
 <script setup lang="tsx">
@@ -58,4 +58,9 @@ const filterFields = [
     },
   },
 ]
+
+const lvConfig = shallowRef({
+  filterModel,
+  filterFields,
+})
 </script>

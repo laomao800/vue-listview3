@@ -19,7 +19,8 @@ const OtherComponent = defineComponent({
 })
 
 const lvConfig = shallowRef({
-  requestUrl: '/mock-list.json',
+  requestUrl: './mock-list.json',
+  requestMethod: 'get',
   filterFields: [{ type: 'text', model: 'name', label: '文本字段' }],
   tableColumns: [
     { label: 'id', prop: 'id', width: 100 },

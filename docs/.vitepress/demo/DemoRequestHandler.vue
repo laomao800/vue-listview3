@@ -11,7 +11,6 @@ const lvConfig = shallowRef({
     { label: 'id', prop: 'id', width: 120 },
     { label: 'name', prop: 'name' },
   ],
-
   contentDataMap: {
     items: 'custom_result.items',
     total: 'custom_result.total',
