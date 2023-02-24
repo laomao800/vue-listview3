@@ -56,8 +56,8 @@
 
       <component
         :is="renderTableColumn(column)"
-        v-for="(column, index) in tableColumns"
-        :key="`col${index}`"
+        v-for="column in tableColumns"
+        :key="column.columnKey || column.prop"
       />
     </ElTable>
   </div>
@@ -151,8 +151,8 @@ function handleTableSelectionChange(val: any) {
 /**
  * tableColumns 转换为 el-table-column ，支持 children 属性多级列配置
  */
-function renderTableColumn(tableColumn: any) {
-  const _createColumn = (column: any) => {
+function renderTableColumn(tableColumn: TableColumn) {
+  const _createColumn = (column: TableColumn) => {
     const { render, children, ...restOptions } = column
     const slots: Record<string, any> = {}
     if (render) {

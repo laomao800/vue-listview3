@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  title: 'Vue Listview 3',
   base: process.env.GITHUB_WORKSPACE ? '/vue-listview3' : '/',
   themeConfig: {
     siteTitle: 'Vue Listview 3',
