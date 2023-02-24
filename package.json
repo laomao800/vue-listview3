@@ -1,6 +1,6 @@
 {
   "name": "@laomao800/vue-listview",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./types/index.d.ts",

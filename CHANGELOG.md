@@ -1,3 +1,12 @@
+# [3.0.0](https://github.com/laomao800/vue-listview3/compare/v3.0.0-beta.1...v3.0.0) (2023-02-24)
+
+
+### Bug Fixes
+
+* 修正更新 tableColumns 导致布局渲染错误 ([1954402](https://github.com/laomao800/vue-listview3/commit/19544026752c60e9ff3b5488e190a5425623c07f))
+
+
+
 # [3.0.0-beta.1](https://github.com/laomao800/vue-listview3/compare/v3.0.0-alpha.6...v3.0.0-beta.1) (2022-10-18)
 
 
