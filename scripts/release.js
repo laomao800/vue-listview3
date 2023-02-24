@@ -75,10 +75,6 @@ const release = async () => {
     '--git-tag-version=false',
   ])
 
-  // build all packages with types
-  step('\nBuilding...')
-  await run('npm', ['run', 'build'])
-
   // generate changelog
   await run(`npm`, ['run', 'changelog'])
 
