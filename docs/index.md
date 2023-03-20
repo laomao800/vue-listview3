@@ -11,11 +11,11 @@ Demo： https://laomao800.github.io/vue-listview3/demo/
 ## 安装
 
 ```bash
-yarn add @laomao800/vue-listview@3 element-plus
+yarn add @laomao800/vue-listview@3 axios element-plus
 
 # OR
 
-npm install @laomao800/vue-listview@3 element-plus
+npm install @laomao800/vue-listview@3 axios element-plus
 ```
 
 ## 使用

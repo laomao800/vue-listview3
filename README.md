@@ -18,9 +18,9 @@
 ## 安装
 
 ```bash
-yarn add @laomao800/vue-listview@3
+yarn add @laomao800/vue-listview@3 axios element-plus
 
 # OR
 
-npm install @laomao800/vue-listview@3
+npm install @laomao800/vue-listview@3 axios element-plus
 ```
