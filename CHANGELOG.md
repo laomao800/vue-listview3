@@ -1,3 +1,7 @@
+## [3.0.1](https://github.com/laomao800/vue-listview3/compare/v3.0.0...v3.0.1) (2023-03-20)
+
+
+
 # [3.0.0](https://github.com/laomao800/vue-listview3/compare/v3.0.0-beta.1...v3.0.0) (2023-02-24)
 
 
