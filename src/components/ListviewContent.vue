@@ -67,7 +67,7 @@
 import type { PropType } from 'vue'
 import { computed, ref, unref, watch, h, isVNode } from 'vue'
 import { isPlainObject, isFunction, isString } from 'is-what'
-import parseSize from '@laomao800/parse-size-with-unit'
+import parseSize from '@laomao800/parse-size'
 import { ElTable, ElTableColumn, ElRadio } from 'element-plus'
 import { nodeParents } from '@/utils'
 import { useLvStore } from '@/useLvStore'
