@@ -156,6 +156,13 @@ describe('Filter fields', () => {
     expect(wrapper.findAllComponents({ name: 'FieldDateRange' }).length).toBe(1)
   })
 
+  it('Fields: monthRange', () => {
+    const wrapper = _mount(ListviewFilterbar, {
+      filterFields: [{ type: 'monthRange', model: 'monthRange' }],
+    })
+    expect(wrapper.findAllComponents({ name: 'FieldMonthRange' }).length).toBe(1)
+  })
+
   it('Fields: timeSelect', () => {
     const wrapper = _mount(ListviewFilterbar, {
       filterFields: [{ type: 'timeSelect', model: 'timeSelect' }],
@@ -239,6 +246,7 @@ describe('Filter fields', () => {
         { type: 'number', model: 'number' },
         { type: 'date', model: 'date' },
         { type: 'dateRange', model: 'dateRange' },
+        { type: 'monthRange', model: 'monthRange' },
         { type: 'timeSelect', model: 'timeSelect' },
         { type: 'timePicker', model: 'timePicker' },
         { type: 'timePickerRange', model: 'timePickerRange' },
@@ -254,6 +262,7 @@ describe('Filter fields', () => {
     _findVm('FieldNumber').value = 9527
     _findVm('FieldDate').value = DATE1
     _findVm('FieldDateRange').value = [DATE1, DATE2]
+    _findVm('FieldMonthRange').value = [DATE1, DATE2]
     _findVm('FieldTimeSelect').value = '10:00'
     _findVm('FieldTimePicker').value = DATE1
     _findVm('FieldTimePickerRange').value = [DATE1, DATE2]
@@ -268,6 +277,7 @@ describe('Filter fields', () => {
       number: 9527,
       date: DATE1,
       dateRange: [DATE1, DATE2],
+      monthRange: [DATE1, DATE2],
       timeSelect: '10:00',
       timePicker: DATE1,
       timePickerRange: [DATE1, DATE2],
@@ -343,6 +353,7 @@ describe('Filter fields default value', () => {
         { type: 'number', model: 'number' },
         { type: 'date', model: 'date' },
         { type: 'dateRange', model: 'dateRange' },
+        { type: 'monthRange', model: 'monthRange' },
         { type: 'timeSelect', model: 'timeSelect' },
         { type: 'timePicker', model: 'timePicker' },
         { type: 'timePickerRange', model: 'timePickerRange' },
@@ -358,6 +369,7 @@ describe('Filter fields default value', () => {
         number: 9527,
         date: DATE1,
         dateRange: [DATE1, DATE2],
+        monthRange: [DATE1, DATE2],
         timeSelect: '10:00',
         timePicker: DATE1,
         timePickerRange: [DATE1, DATE2],
@@ -378,6 +390,9 @@ describe('Filter fields default value', () => {
 
   it('dateRange', () =>
     expect(_findVm('FieldDateRange').value).toEqual([DATE1, DATE2]))
+
+  it('monthRange', () =>
+    expect(_findVm('FieldMonthRange').value).toEqual([DATE1, DATE2]))
 
   it('timeSelect', () => expect(_findVm('FieldTimeSelect').value).toBe('10:00'))
 

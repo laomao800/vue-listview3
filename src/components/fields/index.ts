@@ -1,6 +1,7 @@
 import fieldCascader from './FieldCascader.vue'
 import fieldDate from './FieldDate.vue'
 import fieldDateRange from './FieldDateRange.vue'
+import fieldMonthRange from './FieldMonthRange.vue'
 import fieldDateTime from './FieldDateTime.vue'
 import fieldDateTimeRange from './FieldDateTimeRange.vue'
 import fieldLabel from './FieldLabel.vue'
@@ -15,6 +16,7 @@ const fieldComponentsMap = {
   cascader: fieldCascader,
   date: fieldDate,
   dateRange: fieldDateRange,
+  monthRange: fieldMonthRange,
   dateTime: fieldDateTime,
   dateTimeRange: fieldDateTimeRange,
   label: fieldLabel,

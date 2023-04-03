@@ -276,6 +276,11 @@ const filterFields = shallowRef<FilterField[]>([
     label: '日期范围',
   },
   {
+    type: 'monthRange',
+    model: 'monthRange',
+    label: '月份范围',
+  },
+  {
     type: 'timeSelect',
     model: 'timeSelect',
     label: '固定时间',

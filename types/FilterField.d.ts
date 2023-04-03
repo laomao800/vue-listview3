@@ -15,6 +15,7 @@ export type FieldType =
   | 'select'
   | 'date'
   | 'dateRange'
+  | 'monthRange'
   | 'timeSelect'
   | 'timePicker'
   | 'timePickerRange'

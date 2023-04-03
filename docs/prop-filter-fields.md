@@ -19,6 +19,7 @@ interface FilterFieldConfig {
     | 'select'
     | 'date'
     | 'dateRange'
+    | 'monthRange'
     | 'timeSelect'
     | 'timePicker'
     | 'timePickerRange'
@@ -91,6 +92,7 @@ interface SelectOption {
 | select          | 下拉单选     | [Select][select]                       |
 | date            | 日期选择     | [Date][date]                           |
 | dateRange       | 日期范围     | [DateRange][date-range]                |
+| monthRange      | 月份范围     | [MonthRange][month-range]                |
 | timeSelect      | 固定时间选项 | [TimeSelect][time-select]              |
 | timePicker      | 任意时间     | [TimePicker][time-picker]              |
 | timePickerRange | 时间范围     | [TimePickerRange][time-picker-range]   |
@@ -213,6 +215,7 @@ const filterFields = shallowRef([
 [select]: https://element-plus.org/zh-CN/component/select
 [date]: https://element-plus.org/zh-CN/component/date-picker
 [date-range]: https://element-plus.org/zh-CN/component/date-picker#%E9%80%89%E6%8B%A9%E4%B8%80%E6%AE%B5%E6%97%B6%E9%97%B4
+[month-range]: https://element-plus.org/zh-CN/component/date-picker.html#%E9%80%89%E6%8B%A9%E6%9C%88%E4%BB%BD%E8%8C%83%E5%9B%B4
 [time-select]: https://element-plus.org/zh-CN/component/time-select
 [time-picker]: https://element-plus.org/zh-CN/component/time-picker#%E9%99%90%E5%88%B6%E6%97%B6%E9%97%B4%E9%80%89%E6%8B%A9%E8%8C%83%E5%9B%B4
 [time-picker-range]: https://element-plus.org/zh-CN/component/time-picker#%E4%BB%BB%E6%84%8F%E6%97%B6%E9%97%B4%E8%8C%83%E5%9B%B4

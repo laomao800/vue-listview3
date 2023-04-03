@@ -63,6 +63,7 @@ const filterFields = [
   },
   { type: 'date', model: 'date', label: '日期选择' },
   { type: 'dateRange', model: 'dateRange', label: '日期范围' },
+  { type: 'monthRange', model: 'monthRange', label: '月份范围' },
   { type: 'timeSelect', model: 'timeSelect', label: '固定时间' },
   { type: 'timePicker', model: 'timePicker', label: '任意时间' },
   {
