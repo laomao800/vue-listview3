@@ -1,3 +1,12 @@
+# [3.1.0](https://github.com/laomao800/vue-listview3/compare/v3.0.1...v3.1.0) (2023-04-03)
+
+
+### Features
+
+* **filterbar:** filterFields type 增加 `monthRange` ([c2bcd87](https://github.com/laomao800/vue-listview3/commit/c2bcd874511e0d751f507b84533e3be0e3803b10))
+
+
+
 ## [3.0.1](https://github.com/laomao800/vue-listview3/compare/v3.0.0...v3.0.1) (2023-03-20)
 
 
