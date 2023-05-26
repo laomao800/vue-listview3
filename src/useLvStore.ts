@@ -1,4 +1,9 @@
-import { ListviewProps, LvStore, FilterField, FilterFieldConfig } from '~/types'
+import type {
+  ListviewProps,
+  LvStore,
+  FilterField,
+  FilterFieldConfig,
+} from '~/types'
 
 import { reactive, watch } from 'vue'
 import { createInjectionState } from '@vueuse/shared'

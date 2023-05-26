@@ -72,7 +72,7 @@ import { ElTable, ElTableColumn, ElRadio } from 'element-plus'
 import { nodeParents } from '@/utils'
 import { useLvStore } from '@/useLvStore'
 import MessageBlock from '@/components/MessageBlock.vue'
-import { TableColumn } from '~/types'
+import type { TableColumn } from '~/types'
 
 defineOptions({
   inheritAttrs: false,

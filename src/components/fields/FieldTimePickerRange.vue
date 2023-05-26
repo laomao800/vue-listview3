@@ -1,13 +1,9 @@
-<template>
-  <ElTimePicker v-model="value" v-bind="mergedAttrs" />
-</template>
-
-<script lang="ts" setup>
+<script lang="tsx" setup>
 import type { PropType } from 'vue'
 import { computed, unref } from 'vue'
 import { ElTimePicker } from 'element-plus'
 import { useFilterField } from '@/utils'
-import { FilterFieldConfig } from '~/types'
+import type { FilterFieldConfig } from '~/types'
 
 defineOptions({ name: 'FieldTimePickerRange' })
 
@@ -15,7 +11,9 @@ const props = defineProps({
   field: { type: Object as PropType<FilterFieldConfig>, default: () => ({}) },
 })
 
-const { value, componentAttrs } = useFilterField<string>(props.field)
+const { value, componentAttrs, componentSlots } = useFilterField<string>(
+  props.field
+)
 
 const mergedAttrs = computed(() => ({
   clearable: true,
@@ -25,4 +23,10 @@ const mergedAttrs = computed(() => ({
   endPlaceholder: '结束时间',
   ...unref(componentAttrs),
 }))
+
+defineRender(() => (
+  <ElTimePicker v-model={value.value} {...unref(mergedAttrs)}>
+    {{ ...unref(componentSlots) }}
+  </ElTimePicker>
+))
 </script>

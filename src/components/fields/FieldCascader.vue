@@ -1,19 +1,10 @@
-<template>
-  <ElCascader
-    v-model="value"
-    v-bind="mergedAttrs"
-    :options="options"
-    :loading="loading"
-  />
-</template>
-
-<script lang="ts" setup>
+<script lang="tsx" setup>
 import type { CascaderProps } from 'element-plus'
-import { computed, PropType, unref } from 'vue'
-import { ref, watch } from 'vue'
+import type { PropType } from 'vue'
+import { ref, unref, computed, watch } from 'vue'
 import { ElCascader } from 'element-plus'
 import { resolveOptions, useFilterField } from '@/utils'
-import { FilterFieldConfig } from '~/types'
+import type { FilterFieldConfig } from '~/types'
 
 defineOptions({ name: 'FieldCascader' })
 
@@ -21,7 +12,9 @@ const props = defineProps({
   field: { type: Object as PropType<FilterFieldConfig>, default: () => ({}) },
 })
 
-const { value, componentAttrs } = useFilterField<string>(props.field)
+const { value, componentAttrs, componentSlots } = useFilterField<string>(
+  props.field
+)
 
 const isMultiple = !!props.field.multiple
 
@@ -54,4 +47,14 @@ watch(
   },
   { immediate: true }
 )
+
+defineRender(() => (
+  <ElCascader
+    v-model={value.value}
+    {...unref(mergedAttrs)}
+    options={unref(options)}
+  >
+    {{ ...unref(componentSlots) }}
+  </ElCascader>
+))
 </script>

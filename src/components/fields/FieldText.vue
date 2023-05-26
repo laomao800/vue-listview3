@@ -1,18 +1,9 @@
-<template>
-  <ElInput v-model="value" v-bind="mergedAttrs" @blur="onBlur">
-    <template v-for="(slot, key) in componentSlots" #[key]>
-      <component :is="slot" v-if="isVNode(slot)" :key="key" />
-      <template v-else>{{ slot }}</template>
-    </template>
-  </ElInput>
-</template>
-
-<script lang="ts" setup>
+<script lang="tsx" setup>
 import type { PropType } from 'vue'
-import { isVNode, computed } from 'vue'
+import { computed } from 'vue'
 import { ElInput } from 'element-plus'
 import { useFilterField } from '@/utils'
-import { FilterFieldConfig } from '~/types'
+import type { FilterFieldConfig } from '~/types'
 import { unref } from 'vue'
 
 defineOptions({ name: 'FieldText' })
@@ -38,4 +29,10 @@ const mergedAttrs = computed(() => ({
   style: { width: '180px' },
   ...unref(componentAttrs),
 }))
+
+defineRender(() => (
+  <ElInput v-model={value.value} {...unref(mergedAttrs)} onBlur={onBlur}>
+    {{ ...unref(componentSlots) }}
+  </ElInput>
+))
 </script>

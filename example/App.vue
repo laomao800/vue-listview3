@@ -179,8 +179,8 @@ const filterFields = shallowRef<FilterField[]>([
     model: 'name',
     label: '文本字段',
     componentSlots: {
-      prepend: '$',
-      append: '$',
+      prepend: () => '$',
+      append: () => '$',
     },
     componentAttrs: {
       'suffix-icon': 'el-icon-date',

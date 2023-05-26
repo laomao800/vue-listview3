@@ -13,7 +13,7 @@ import {
 import { ArrowDown } from '@element-plus/icons-vue'
 import { isPlainObject, isFunction } from 'is-what'
 import { isObjType, warn } from '@/utils'
-import { FilterButton, FilterButtonConfig } from '~/types'
+import type { FilterButton, FilterButtonConfig } from '~/types'
 
 interface NormalizedButton {
   text: string
