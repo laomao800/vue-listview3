@@ -1,5 +1,6 @@
+import { describe, expect, it } from 'vitest'
 import { unref } from 'vue'
-import { describe, it, expect } from 'vitest'
+
 import { createListviewWrapper, mockDataList, wait } from '../helpers'
 
 describe('Request params', () => {

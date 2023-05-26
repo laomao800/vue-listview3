@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import { mount as _mount, MountingOptions } from '@vue/test-utils'
+import { MountingOptions, mount as _mount } from '@vue/test-utils'
 
 declare module '@vue/test-utils' {
   import { DefineComponent } from 'vue'

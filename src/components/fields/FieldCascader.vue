@@ -1,10 +1,12 @@
 <script lang="tsx" setup>
 import type { CascaderProps } from 'element-plus'
-import type { PropType } from 'vue'
-import { ref, unref, computed, watch } from 'vue'
 import { ElCascader } from 'element-plus'
-import { resolveOptions, useFilterField } from '@/utils'
+import type { PropType } from 'vue'
+import { computed, ref, unref, watch } from 'vue'
+
 import type { FilterFieldConfig } from '~/types'
+
+import { resolveOptions, useFilterField } from '@/utils'
 
 defineOptions({ name: 'FieldCascader' })
 

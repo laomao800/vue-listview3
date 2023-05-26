@@ -4,6 +4,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
+
 import type { FilterFieldConfig } from '~/types'
 
 defineOptions({ name: 'FieldLabel' })

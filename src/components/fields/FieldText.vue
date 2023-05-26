@@ -1,10 +1,11 @@
 <script lang="tsx" setup>
-import type { PropType } from 'vue'
-import { computed } from 'vue'
 import { ElInput } from 'element-plus'
-import { useFilterField } from '@/utils'
+import type { PropType } from 'vue'
+import { computed, unref } from 'vue'
+
 import type { FilterFieldConfig } from '~/types'
-import { unref } from 'vue'
+
+import { useFilterField } from '@/utils'
 
 defineOptions({ name: 'FieldText' })
 

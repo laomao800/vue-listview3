@@ -22,20 +22,21 @@
 </template>
 
 <script lang="tsx" setup>
+import { vLoading } from 'element-plus'
 import {
   computed,
-  onMounted,
-  ref,
   nextTick,
-  unref,
-  onBeforeUnmount,
   onActivated,
+  onBeforeUnmount,
   onDeactivated,
+  onMounted,
   provide,
+  ref,
+  unref,
 } from 'vue'
-import { vLoading } from 'element-plus'
-import { parseSize } from '@/utils'
+
 import { useLvStore } from '@/useLvStore'
+import { parseSize } from '@/utils'
 
 function isDom(item: any): item is Element {
   return item instanceof Element
@@ -57,10 +58,10 @@ function getElBottomOffset(el: Element) {
 
 defineOptions({
   name: 'ListviewLayout',
-  inheritAttrs: false,
   directives: {
     loading: vLoading,
   },
+  inheritAttrs: false,
 })
 
 const props = defineProps({

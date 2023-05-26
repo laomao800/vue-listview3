@@ -1,9 +1,11 @@
 <script lang="tsx" setup>
+import { ElTimePicker } from 'element-plus'
 import type { PropType } from 'vue'
 import { computed, unref } from 'vue'
-import { ElTimePicker } from 'element-plus'
-import { useFilterField } from '@/utils'
+
 import type { FilterFieldConfig } from '~/types'
+
+import { useFilterField } from '@/utils'
 
 defineOptions({ name: 'FieldTimePickerRange' })
 

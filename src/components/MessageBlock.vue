@@ -11,9 +11,9 @@
 
 <script lang="tsx" setup>
 import {
-  WarningFilled,
-  InfoFilled,
   CircleCloseFilled,
+  InfoFilled,
+  WarningFilled,
 } from '@element-plus/icons-vue'
 import { ElIcon } from 'element-plus'
 

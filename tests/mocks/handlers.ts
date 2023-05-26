@@ -1,5 +1,5 @@
+import { mock } from 'mockjs'
 import { rest } from 'msw'
-import Mock from 'mockjs'
 
 function successWrap(data: any) {
   return {
@@ -31,7 +31,7 @@ export const handlers = [
 
     const pageSize = (req.body as any)?.page_size || 20
     // const data = { pageSize }
-    const data = Mock.mock({
+    const data = mock({
       [`items|${pageSize}`]: [
         {
           id: /\d{6}/,

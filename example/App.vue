@@ -19,14 +19,16 @@
 
 <script lang="tsx" setup>
 /* eslint-disable no-console */
+import { CirclePlus, Remove } from '@element-plus/icons-vue'
+import { ElButton, ElMessage, ElOption, ElSelect } from 'element-plus'
+import mitt from 'mitt'
+import { computed, ref, shallowRef, unref } from 'vue'
+
 import type { FilterField, TableColumn } from '~/types'
 
-import mitt from 'mitt'
-import { ref, unref, shallowRef, computed } from 'vue'
-import { ElMessage, ElButton, ElSelect, ElOption } from 'element-plus'
 import 'element-plus/es/components/badge/style/css'
 import 'element-plus/es/components/message/style/css'
-import { CirclePlus, Remove } from '@element-plus/icons-vue'
+
 // @ts-ignore
 import { Listview as ListviewComponent } from '../src'
 

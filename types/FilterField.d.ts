@@ -1,5 +1,5 @@
-import { VNode, Ref } from 'vue'
 import { MaybeRef } from '@vueuse/shared'
+import { Ref, VNode } from 'vue'
 
 interface SelectOption {
   label: string

@@ -1,9 +1,11 @@
 <script lang="tsx" setup>
+import { ElOption, ElSelect } from 'element-plus'
 import type { PropType } from 'vue'
-import { computed, unref, ref, watch } from 'vue'
-import { ElSelect, ElOption } from 'element-plus'
-import { resolveOptions, useFilterField, warn } from '@/utils'
+import { computed, ref, unref, watch } from 'vue'
+
 import type { FilterFieldConfig } from '~/types'
+
+import { resolveOptions, useFilterField, warn } from '@/utils'
 
 defineOptions({ name: 'FieldSelect' })
 
