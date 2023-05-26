@@ -253,17 +253,13 @@ const filterFields = shallowRef<FilterField[]>([
   {
     type: 'select',
     multiple: true,
-    model: 'asyncOptions',
-    label: 'asyncOptions',
-    options: (done) => {
-      setTimeout(() => {
-        done([
-          { label: '多选项 1', value: 1 },
-          { label: '多选项 2', value: 2 },
-          { label: '多选项 3', value: 3 },
-        ])
-      }, 3000)
-    },
+    model: 'funcOptions',
+    label: 'funcOptions',
+    options: () => [
+      { label: '多选项 1', value: 1 },
+      { label: '多选项 2', value: 2 },
+      { label: '多选项 3', value: 3 },
+    ],
   },
   {
     type: 'date',

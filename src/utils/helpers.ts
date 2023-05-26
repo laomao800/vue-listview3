@@ -1,5 +1,10 @@
 import type { Ref } from 'vue'
-import type { FilterField, FilterFieldConfig, LvStore } from '~/types'
+import type {
+  FilterField,
+  FilterFieldConfig,
+  LvStore,
+  SelectOption,
+} from '~/types'
 import { inject, unref } from 'vue'
 import {
   isPlainObject,
@@ -88,21 +93,19 @@ export function ensurePromise<T>(data: T) {
 
 type FilterFieldOptions = FilterFieldConfig['options']
 export function resolveOptions(
-  optionsConfig: FilterFieldOptions | Ref<FilterFieldOptions>,
-  done: (options: any[]) => void
+  optionsConfig: FilterFieldOptions | Ref<FilterFieldOptions>
 ) {
   optionsConfig = unref(optionsConfig)
-  let optionsPromise = null
-  if (optionsConfig) {
-    if (Array.isArray(optionsConfig)) {
-      optionsPromise = Promise.resolve(optionsConfig)
-    } else if (isFunction(optionsConfig)) {
-      optionsPromise = ensurePromise(optionsConfig(done))
-    } else if (isPromise(optionsConfig)) {
-      optionsPromise = optionsConfig
-    }
+  let options = optionsConfig
+  if (Array.isArray(optionsConfig)) {
+    options = optionsConfig
+  } else if (isFunction(optionsConfig)) {
+    options = optionsConfig()
   }
-  return ensurePromise(optionsPromise).then(done)
+  return ensurePromise(options).then((result) => {
+    result = (Array.isArray(result) ? result : []) as SelectOption[]
+    return result
+  })
 }
 
 const objectToString = Object.prototype.toString

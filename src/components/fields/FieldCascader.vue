@@ -27,24 +27,13 @@ const mergedAttrs = computed(() => ({
   ...unref(componentAttrs),
 }))
 const options = ref<any[]>([])
-const loading = ref(false)
 
 watch(
   () => props.field.options,
-  () => {
-    const setOptions = (newOpts: any[]) => {
-      if (Array.isArray(newOpts)) {
-        options.value = newOpts
-      }
-    }
-    const optionsPromise = resolveOptions(props.field.options, setOptions)
-    if (optionsPromise) {
-      loading.value = true
-      optionsPromise.finally(() => {
-        loading.value = false
-      })
-    }
-  },
+  () =>
+    resolveOptions(props.field.options).then(
+      (newOpts) => (options.value = newOpts)
+    ),
   { immediate: true }
 )
 
