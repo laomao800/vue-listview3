@@ -1,9 +1,9 @@
-import { VNode } from 'vue'
 import { ElTableColumn } from 'element-plus'
+import { VNode } from 'vue'
 
 type IElTableColumnProps = InstanceType<typeof ElTableColumn>['$props']
 
-interface TableColumn extends IElTableColumnProps {
+export interface TableColumn extends IElTableColumnProps {
   /* 显示于列头文本 */
   label?: string
 

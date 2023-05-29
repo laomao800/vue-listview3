@@ -1,6 +1,6 @@
-import { Ref, UnwrapNestedRefs } from 'vue'
-import { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Emitter } from 'mitt'
+import { UnwrapNestedRefs } from 'vue'
+
 import { ListviewProps } from './Props'
 
 export interface LvStore {

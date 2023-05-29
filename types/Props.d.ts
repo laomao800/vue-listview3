@@ -1,5 +1,6 @@
-import { App, VNode } from 'vue'
 import { AxiosRequestConfig } from 'axios'
+import { App } from 'vue'
+
 import { FilterButton } from './FilterButton'
 import { FilterField } from './FilterField'
 import { TableColumn } from './TableColumn'

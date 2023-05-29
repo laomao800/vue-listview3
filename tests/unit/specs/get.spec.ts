@@ -1,4 +1,5 @@
-import { expect, describe, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
+
 import { get } from '@/utils'
 
 describe('get and result', function () {

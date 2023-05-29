@@ -19,14 +19,16 @@
 
 <script lang="tsx" setup>
 /* eslint-disable no-console */
+import { CirclePlus, Remove } from '@element-plus/icons-vue'
+import { ElButton, ElMessage, ElOption, ElSelect } from 'element-plus'
+import mitt from 'mitt'
+import { computed, ref, shallowRef, unref } from 'vue'
+
 import type { FilterField, TableColumn } from '~/types'
 
-import mitt from 'mitt'
-import { ref, unref, shallowRef, computed } from 'vue'
-import { ElMessage, ElButton, ElSelect, ElOption } from 'element-plus'
 import 'element-plus/es/components/badge/style/css'
 import 'element-plus/es/components/message/style/css'
-import { CirclePlus, Remove } from '@element-plus/icons-vue'
+
 // @ts-ignore
 import { Listview as ListviewComponent } from '../src'
 
@@ -179,8 +181,8 @@ const filterFields = shallowRef<FilterField[]>([
     model: 'name',
     label: '文本字段',
     componentSlots: {
-      prepend: '$',
-      append: '$',
+      prepend: () => '$',
+      append: () => '$',
     },
     componentAttrs: {
       'suffix-icon': 'el-icon-date',
@@ -253,17 +255,13 @@ const filterFields = shallowRef<FilterField[]>([
   {
     type: 'select',
     multiple: true,
-    model: 'asyncOptions',
-    label: 'asyncOptions',
-    options: (done) => {
-      setTimeout(() => {
-        done([
-          { label: '多选项 1', value: 1 },
-          { label: '多选项 2', value: 2 },
-          { label: '多选项 3', value: 3 },
-        ])
-      }, 3000)
-    },
+    model: 'funcOptions',
+    label: 'funcOptions',
+    options: () => [
+      { label: '多选项 1', value: 1 },
+      { label: '多选项 2', value: 2 },
+      { label: '多选项 3', value: 3 },
+    ],
   },
   {
     type: 'date',

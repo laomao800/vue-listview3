@@ -1,9 +1,11 @@
-import { computed, h } from 'vue'
-import { describe, it, expect, vi } from 'vitest'
+import { type VueWrapper, mount } from '@vue/test-utils'
 import mitt from 'mitt'
-import { mount } from '@vue/test-utils'
+import { describe, expect, it, vi } from 'vitest'
+import { computed, h } from 'vue'
+
 import ListviewFilterbar from '@/components/ListviewFilterbar.vue'
 import { useProvideLvStore } from '@/useLvStore'
+
 import { createListviewWrapper, wait } from '../helpers'
 
 const DATE1 = new Date('2021/01/01 09:30:00')
@@ -12,12 +14,12 @@ const DATE2 = new Date('2021/06/01 09:30:00')
 function _mount(comp: any, props = {}, store = { filterModel: {} }) {
   const wrapper = mount({
     render: () => h(comp, props),
-    setup() {
-      useProvideLvStore(store as any)
-    },
+    setup: () => useProvideLvStore(store as any),
   })
   wrapper.__store = store
-  return wrapper
+  return wrapper as VueWrapper & {
+    __store: { filterModel: Record<string, any> }
+  }
 }
 
 describe('Filterbar layout', () => {
@@ -160,7 +162,9 @@ describe('Filter fields', () => {
     const wrapper = _mount(ListviewFilterbar, {
       filterFields: [{ type: 'monthRange', model: 'monthRange' }],
     })
-    expect(wrapper.findAllComponents({ name: 'FieldMonthRange' }).length).toBe(1)
+    expect(wrapper.findAllComponents({ name: 'FieldMonthRange' }).length).toBe(
+      1
+    )
   })
 
   it('Fields: timeSelect', () => {
@@ -239,55 +243,6 @@ describe('Filter fields', () => {
     expect(wrapper.find('.lv-field-group').exists()).toBe(true)
   })
 
-  it('Filter fields set value', () => {
-    const wrapper = _mount(ListviewFilterbar, {
-      filterFields: [
-        { type: 'text', model: 'text' },
-        { type: 'number', model: 'number' },
-        { type: 'date', model: 'date' },
-        { type: 'dateRange', model: 'dateRange' },
-        { type: 'monthRange', model: 'monthRange' },
-        { type: 'timeSelect', model: 'timeSelect' },
-        { type: 'timePicker', model: 'timePicker' },
-        { type: 'timePickerRange', model: 'timePickerRange' },
-        { type: 'dateTime', model: 'dateTime' },
-        { type: 'dateTimeRange', model: 'dateTimeRange' },
-        { type: 'select', model: 'select' },
-        { type: 'cascader', model: 'cascader' },
-      ],
-    })
-
-    const _findVm = (name: string): any => wrapper.findComponent({ name }).vm
-    _findVm('FieldText').value = 'text'
-    _findVm('FieldNumber').value = 9527
-    _findVm('FieldDate').value = DATE1
-    _findVm('FieldDateRange').value = [DATE1, DATE2]
-    _findVm('FieldMonthRange').value = [DATE1, DATE2]
-    _findVm('FieldTimeSelect').value = '10:00'
-    _findVm('FieldTimePicker').value = DATE1
-    _findVm('FieldTimePickerRange').value = [DATE1, DATE2]
-    _findVm('FieldDateTime').value = DATE1
-    _findVm('FieldDateTimeRange').value = [DATE1, DATE2]
-    _findVm('FieldSelect').value = 'option1'
-    _findVm('FieldCascader').value = [1, 2, 3, 4]
-
-    const fakeStore = wrapper.__store
-    expect(fakeStore.filterModel).toStrictEqual({
-      text: 'text',
-      number: 9527,
-      date: DATE1,
-      dateRange: [DATE1, DATE2],
-      monthRange: [DATE1, DATE2],
-      timeSelect: '10:00',
-      timePicker: DATE1,
-      timePickerRange: [DATE1, DATE2],
-      dateTime: DATE1,
-      dateTimeRange: [DATE1, DATE2],
-      select: 'option1',
-      cascader: [1, 2, 3, 4],
-    })
-  })
-
   it('other fields render type', () => {
     const filterFields = [
       {
@@ -342,74 +297,6 @@ describe('Filter fields', () => {
     expect($options.at(0)?.element.textContent?.trim()).toBe(optionText)
     expect($options.at(0)?.element.classList.contains('selected')).toBeTruthy()
   })
-})
-
-describe('Filter fields default value', () => {
-  const wrapper = _mount(
-    ListviewFilterbar,
-    {
-      filterFields: [
-        { type: 'text', model: 'text' },
-        { type: 'number', model: 'number' },
-        { type: 'date', model: 'date' },
-        { type: 'dateRange', model: 'dateRange' },
-        { type: 'monthRange', model: 'monthRange' },
-        { type: 'timeSelect', model: 'timeSelect' },
-        { type: 'timePicker', model: 'timePicker' },
-        { type: 'timePickerRange', model: 'timePickerRange' },
-        { type: 'dateTime', model: 'dateTime' },
-        { type: 'dateTimeRange', model: 'dateTimeRange' },
-        { type: 'select', model: 'select' },
-        { type: 'cascader', model: 'cascader' },
-      ],
-    },
-    {
-      filterModel: {
-        text: 'text',
-        number: 9527,
-        date: DATE1,
-        dateRange: [DATE1, DATE2],
-        monthRange: [DATE1, DATE2],
-        timeSelect: '10:00',
-        timePicker: DATE1,
-        timePickerRange: [DATE1, DATE2],
-        dateTime: DATE1,
-        dateTimeRange: [DATE1, DATE2],
-        select: 'option1',
-        cascader: [1, 2, 3, 4],
-      },
-    }
-  )
-  const _findVm = (name: string): any => wrapper.findComponent({ name }).vm
-
-  it('text', () => expect(_findVm('FieldText').value).toBe('text'))
-
-  it('number', () => expect(_findVm('FieldNumber').value).toBe(9527))
-
-  it('date', () => expect(_findVm('FieldDate').value).toBe(DATE1))
-
-  it('dateRange', () =>
-    expect(_findVm('FieldDateRange').value).toEqual([DATE1, DATE2]))
-
-  it('monthRange', () =>
-    expect(_findVm('FieldMonthRange').value).toEqual([DATE1, DATE2]))
-
-  it('timeSelect', () => expect(_findVm('FieldTimeSelect').value).toBe('10:00'))
-
-  it('timePicker', () => expect(_findVm('FieldTimePicker').value).toBe(DATE1))
-
-  it('timePickerRange', () =>
-    expect(_findVm('FieldTimePickerRange').value).toEqual([DATE1, DATE2]))
-
-  it('dateTime', () => expect(_findVm('FieldDateTime').value).toBe(DATE1))
-
-  it('dateTimeRange', () =>
-    expect(_findVm('FieldDateTimeRange').value).toEqual([DATE1, DATE2]))
-
-  it('select', () => expect(_findVm('FieldSelect').value).toBe('option1'))
-
-  it('cascader', () =>
-    expect(_findVm('FieldCascader').value).toEqual([1, 2, 3, 4]))
 })
 
 describe('Filter fields options resolve', () => {
@@ -505,4 +392,90 @@ describe('Filter fields options resolve', () => {
     await wait()
     expect(wrapper.findAllComponents({ name: 'ElOption' }).length).toBe(0)
   })
+})
+
+describe('Filter fields default value', () => {
+  const wrapper = _mount(
+    ListviewFilterbar,
+    {
+      filterFields: [
+        { type: 'text', model: 'text' },
+        { type: 'number', model: 'number' },
+        { type: 'date', model: 'date' },
+        { type: 'dateRange', model: 'dateRange' },
+        { type: 'monthRange', model: 'monthRange' },
+        { type: 'timeSelect', model: 'timeSelect' },
+        { type: 'timePicker', model: 'timePicker' },
+        { type: 'timePickerRange', model: 'timePickerRange' },
+        { type: 'dateTime', model: 'dateTime' },
+        { type: 'dateTimeRange', model: 'dateTimeRange' },
+        { type: 'select', model: 'select' },
+        { type: 'cascader', model: 'cascader' },
+      ],
+    },
+    {
+      filterModel: {
+        text: 'text',
+        number: 9527,
+        date: DATE1,
+        dateRange: [DATE1, DATE2],
+        monthRange: [DATE1, DATE2],
+        timeSelect: '10:00',
+        timePicker: DATE1,
+        timePickerRange: [DATE1, DATE2],
+        dateTime: DATE1,
+        dateTimeRange: [DATE1, DATE2],
+        select: 'option1',
+        cascader: [1, 2, 3, 4],
+      },
+    }
+  )
+
+  const getFieldValue = (names: string[]) => {
+    let fieldWrapper: VueWrapper = wrapper
+    names.forEach(
+      (name) => (fieldWrapper = fieldWrapper.findComponent({ name }))
+    )
+    // @ts-ignore
+    return fieldWrapper?.vm?.modelValue
+  }
+
+  it('text', () => expect(getFieldValue(['FieldText', 'ElInput'])).toBe('text'))
+  it('number', () =>
+    expect(getFieldValue(['FieldNumber', 'ElInputNumber'])).toBe(9527))
+  it('date', () =>
+    expect(getFieldValue(['FieldDate', 'ElDatePicker'])).toBe(DATE1))
+  it('dateRange', () =>
+    expect(getFieldValue(['FieldDateRange', 'ElDatePicker'])).toEqual([
+      DATE1,
+      DATE2,
+    ]))
+  it('monthRange', () =>
+    expect(getFieldValue(['FieldMonthRange', 'ElDatePicker'])).toEqual([
+      DATE1,
+      DATE2,
+    ]))
+  it('timeSelect', () =>
+    expect(getFieldValue(['FieldTimeSelect', 'ElTimeSelect'])).toBe('10:00'))
+  it('timePicker', () =>
+    expect(getFieldValue(['FieldTimePicker', 'ElTimePicker'])).toBe(DATE1))
+  it('timePickerRange', () =>
+    expect(getFieldValue(['FieldTimePickerRange', 'ElTimePicker'])).toEqual([
+      DATE1,
+      DATE2,
+    ]))
+  it('dateTime', () =>
+    expect(getFieldValue(['FieldDateTime', 'ElDatePicker'])).toBe(DATE1))
+  it('dateTimeRange', () =>
+    expect(getFieldValue(['FieldDateTimeRange', 'ElDatePicker'])).toEqual([
+      DATE1,
+      DATE2,
+    ]))
+  it('select', () => {
+    expect(getFieldValue(['FieldSelect', 'ElSelect'])).toBe('option1')
+  })
+  it('cascader', () =>
+    expect(getFieldValue(['FieldCascader', 'ElCascader'])).toEqual([
+      1, 2, 3, 4,
+    ]))
 })

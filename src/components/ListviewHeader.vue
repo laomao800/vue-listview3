@@ -18,9 +18,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { isPlainObject } from 'is-what'
 import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { isPlainObject } from 'is-what'
+import { computed } from 'vue'
 
 interface ValidedNavItem {
   text: string

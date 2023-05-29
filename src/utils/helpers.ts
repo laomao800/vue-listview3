@@ -1,16 +1,23 @@
-import type { Ref } from 'vue'
-import type { FilterField, FilterFieldConfig, LvStore } from '~/types'
-import { inject, unref } from 'vue'
 import {
-  isPlainObject,
-  isFunction,
   isEmptyArray,
   isEmptyObject,
   isEmptyString,
+  isFunction,
   isNull,
-  isUndefined,
+  isPlainObject,
   isPromise,
+  isUndefined,
 } from 'is-what'
+import type { Ref } from 'vue'
+import { inject, unref } from 'vue'
+
+import type {
+  FilterField,
+  FilterFieldConfig,
+  LvStore,
+  SelectOption,
+} from '~/types'
+
 import { get } from '@/utils'
 export { default as parseSize } from '@laomao800/parse-size'
 
@@ -88,21 +95,27 @@ export function ensurePromise<T>(data: T) {
 
 type FilterFieldOptions = FilterFieldConfig['options']
 export function resolveOptions(
-  optionsConfig: FilterFieldOptions | Ref<FilterFieldOptions>,
-  done: (options: any[]) => void
-) {
+  optionsConfig: FilterFieldOptions | Ref<FilterFieldOptions>
+): Promise<SelectOption[]> {
   optionsConfig = unref(optionsConfig)
-  let optionsPromise = null
-  if (optionsConfig) {
-    if (Array.isArray(optionsConfig)) {
-      optionsPromise = Promise.resolve(optionsConfig)
-    } else if (isFunction(optionsConfig)) {
-      optionsPromise = ensurePromise(optionsConfig(done))
-    } else if (isPromise(optionsConfig)) {
-      optionsPromise = optionsConfig
-    }
+
+  if (Array.isArray(optionsConfig)) {
+    return Promise.resolve(optionsConfig)
   }
-  return ensurePromise(optionsPromise).then(done)
+
+  if (isPromise(optionsConfig)) {
+    return optionsConfig.then((options) =>
+      Array.isArray(options) ? options : []
+    )
+  }
+
+  if (isFunction(optionsConfig)) {
+    return ensurePromise(optionsConfig()).then((options) =>
+      Array.isArray(options) ? options : []
+    )
+  }
+
+  return Promise.resolve([])
 }
 
 const objectToString = Object.prototype.toString

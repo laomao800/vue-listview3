@@ -1,5 +1,5 @@
-import { VNode, Ref } from 'vue'
 import { MaybeRef } from '@vueuse/shared'
+import { Ref, VNode } from 'vue'
 
 interface SelectOption {
   label: string
@@ -63,7 +63,7 @@ export interface FilterFieldConfig {
   options?:
     | SelectOption[]
     | Promise<SelectOption[]>
-    | ((done: (options: SelectOption[]) => void) => void)
+    | (() => SelectOption[] | Promise<SelectOption[]>)
 
   /** select/cascader 字段类型多选 */
   multiple?: boolean

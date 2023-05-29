@@ -1,10 +1,12 @@
 <script lang="tsx">
 import type { MaybeRef } from '@vueuse/shared'
+import { isFunction, isPlainObject } from 'is-what'
+import { PropType, VNode, defineComponent, isVNode, ref, unref } from 'vue'
+
 import type { FilterField, FilterFieldConfig } from '~/types'
-import { VNode, PropType, ref, unref, defineComponent } from 'vue'
-import { isVNode } from 'vue'
-import { isPlainObject, isFunction } from 'is-what'
+
 import { isObjType } from '@/utils'
+
 import FilterbarField from './FilterbarField.vue'
 
 function isValidFieldConfig(_field: MaybeRef<any>) {

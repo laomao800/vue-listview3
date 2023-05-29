@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
-import { defineComponent, markRaw, h } from 'vue'
-import { pick } from 'lodash-es'
 import axios from 'axios'
+import { pick } from 'lodash-es'
+import { describe, expect, it, vi } from 'vitest'
+import { defineComponent, h, markRaw } from 'vue'
+
 import { Listview, create as createListview } from '@/index'
 
 import { createListviewWrapper } from '../helpers'
