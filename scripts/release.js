@@ -1,9 +1,13 @@
 /* eslint-disable no-console */
-const chalk = require('chalk')
-const semver = require('semver')
-const currentVersion = require('../package.json').version
-const { prompt } = require('enquirer')
-const execa = require('execa')
+import { createRequire } from 'node:module'
+
+import chalk from 'chalk'
+import enquirer from 'enquirer'
+import { execa } from 'execa'
+import semver from 'semver'
+
+const { prompt } = enquirer
+const currentVersion = createRequire(import.meta.url)('../package.json').version
 
 const preId =
   semver.prerelease(currentVersion) && semver.prerelease(currentVersion)[0]
@@ -55,6 +59,7 @@ const release = async () => {
     type: 'confirm',
     name: 'yes',
     message: `Releasing v${targetVersion}. Confirm?`,
+    initial: true,
   })
 
   if (!yes) {
