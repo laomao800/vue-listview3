@@ -1,10 +1,12 @@
 import path, { resolve } from 'path'
-import type { UserConfig } from 'vite'
-import { defineConfig } from 'vite'
+
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import VueMacros from 'unplugin-vue-macros'
+import { defineConfig } from 'vite'
+import type { UserConfig } from 'vite'
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
+
 import pkg from './package.json'
 
 const depNames = Object.keys(pkg.dependencies)

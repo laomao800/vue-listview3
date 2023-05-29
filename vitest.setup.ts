@@ -1,6 +1,7 @@
-import { vi, afterAll, afterEach, beforeAll } from 'vitest'
 import { config } from '@vue/test-utils'
 import ResizeObserver from 'resize-observer-polyfill'
+import { afterAll, afterEach, beforeAll, vi } from 'vitest'
+
 import { server } from './tests/mocks/server'
 
 vi.stubGlobal('ResizeObserver', ResizeObserver)

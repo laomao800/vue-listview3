@@ -1,14 +1,15 @@
 /// <reference types="vitest" />
 
 import path from 'path'
-import { defineConfig } from 'vite'
+
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import VueMacros from 'unplugin-vue-macros/vite'
+import VueMacros from 'unplugin-vue-macros'
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [
-    VueMacros({
+    VueMacros.vite({
       setupSFC: {
         exclude: 'vitest.setup.ts',
       },
@@ -30,7 +31,7 @@ export default defineConfig({
       web: [/\.[jt]sx$/],
     },
     coverage: {
-      provider: 'istanbul',
+      provider: 'c8',
       reporter: ['lcov'],
       reportsDirectory: path.resolve(__dirname, 'tests/unit/coverage'),
     },
