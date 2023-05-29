@@ -1,3 +1,19 @@
+# [3.2.0](https://github.com/laomao800/vue-listview3/compare/v3.1.0...v3.2.0) (2023-05-29)
+
+
+### Bug Fixes
+
+* 取消 done 函数设置异步选项 ([bc3c154](https://github.com/laomao800/vue-listview3/commit/bc3c154dc47f029d96be02dd7d852231aa4c4fd9))
+* 修正 filterFields 未挂载 componentSlots ([a342568](https://github.com/laomao800/vue-listview3/commit/a342568c88722d91ca3b326037f72eab12b59e51))
+* update deps ([ccaf656](https://github.com/laomao800/vue-listview3/commit/ccaf6569c06e540968dd850d4c802ad3cf537cc7))
+
+
+### BREAKING CHANGES
+
+* 取消 filterFields `select` `cascader` 类型 options function 类型 done 函数设置异步选项，异步选项统一通过 Promise 方式使用。
+
+
+
 # [3.1.0](https://github.com/laomao800/vue-listview3/compare/v3.0.1...v3.1.0) (2023-04-03)
 
 
