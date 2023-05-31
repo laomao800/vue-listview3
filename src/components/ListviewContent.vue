@@ -54,11 +54,13 @@
         />
       </template>
 
-      <component
-        :is="renderTableColumn(column)"
-        v-for="column in tableColumns"
-        :key="column.columnKey || column.prop"
-      />
+      <template v-for="column in tableColumns">
+        <component
+          :is="renderTableColumn(column)"
+          v-if="isPlainObject(column)"
+          :key="column.columnKey || column.prop"
+        />
+      </template>
     </ElTable>
   </div>
 </template>
@@ -168,7 +170,7 @@ function renderTableColumn(tableColumn: TableColumn) {
     }
     return h(ElTableColumn, restOptions, slots)
   }
-  return isPlainObject(tableColumn) ? _createColumn(tableColumn) : null
+  return _createColumn(tableColumn)
 }
 
 /**
