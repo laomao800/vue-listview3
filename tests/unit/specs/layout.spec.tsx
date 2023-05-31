@@ -1,9 +1,11 @@
-import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createListviewWrapper, wait } from '../helpers'
-import Listview from '@/Listview'
+import { describe, expect, it } from 'vitest'
+
 import ListviewHeader from '@/components/ListviewHeader.vue'
+import Listview from '@/Listview'
 import ListviewContainer from '@/ListviewContainer'
+
+import { createListviewWrapper, wait } from '../helpers'
 
 describe('height', () => {
   it('full height', async () => {

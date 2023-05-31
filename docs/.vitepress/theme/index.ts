@@ -5,7 +5,7 @@ import 'element-plus/theme-chalk/el-dialog.css'
 import 'element-plus/theme-chalk/el-overlay.css'
 import './custom.css'
 import DemoBox from '../components/DemoBox.vue'
-import { Listview, ListviewContainer } from '../../../'
+import { Listview, ListviewContainer } from '../../../dist'
 
 export default {
   ...DefaultTheme,

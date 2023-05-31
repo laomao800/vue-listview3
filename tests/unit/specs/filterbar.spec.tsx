@@ -252,8 +252,6 @@ describe('Filter fields', () => {
       },
       () => <input class="function-type" />,
       <input class="vnode-type" />,
-      () => computed(() => <input class="ref-function-type" />),
-      computed(() => <input class="ref-vnode-type" />),
     ]
     const wrapper = _mount(ListviewFilterbar, {
       filterFields,
@@ -261,10 +259,6 @@ describe('Filter fields', () => {
     expect(wrapper.find('.lv-field input.object-type').exists()).toBe(true)
     expect(wrapper.find('.lv-field input.function-type').exists()).toBe(true)
     expect(wrapper.find('.lv-field input.vnode-type').exists()).toBe(true)
-    expect(wrapper.find('.lv-field input.ref-function-type').exists()).toBe(
-      true
-    )
-    expect(wrapper.find('.lv-field input.ref-vnode-type').exists()).toBe(true)
   })
 
   it('effect', async () => {

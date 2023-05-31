@@ -70,7 +70,7 @@ export interface FilterFieldConfig {
 
   effect?: (effectPayload: FieldEffectPayload) => void
 
-  render?: () => VNode | Ref<VNode>
+  render?: () => VNode
 }
 
 export type FilterField =

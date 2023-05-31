@@ -54,11 +54,13 @@
         />
       </template>
 
-      <component
-        :is="renderTableColumn(column)"
-        v-for="column in tableColumns"
-        :key="column.columnKey || column.prop"
-      />
+      <template v-for="column in tableColumns">
+        <component
+          :is="renderTableColumn(column)"
+          v-if="isPlainObject(column)"
+          :key="column.columnKey || column.prop"
+        />
+      </template>
     </ElTable>
   </div>
 </template>
@@ -168,13 +170,13 @@ function renderTableColumn(tableColumn: TableColumn) {
     }
     return h(ElTableColumn, restOptions, slots)
   }
-  return isPlainObject(tableColumn) ? _createColumn(tableColumn) : null
+  return _createColumn(tableColumn)
 }
 
 /**
  * el-table 开启表格数据选择功能时表格行点击切换已选选项
  */
-function handleRowClick(row: any, column: any, event: MouseEvent) {
+function handleRowClick(row: any, _column: any, event: MouseEvent) {
   if (unref(selectionColumn)) {
     if (unref(selectionColumn).selectable && event) {
       // 选择列中若有禁用选项则当行数据禁止选中

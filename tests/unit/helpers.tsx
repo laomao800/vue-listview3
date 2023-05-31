@@ -1,6 +1,8 @@
-import type { ListviewProps, LvStore } from '~/types'
+import { MountingOptions, mount } from '@vue/test-utils'
 import { vi } from 'vitest'
-import { mount, MountingOptions } from '@vue/test-utils'
+
+import type { ListviewProps, LvStore } from '~/types'
+
 import { Listview } from '@/index'
 
 export async function createListviewWrapper(
@@ -41,4 +43,4 @@ export const wait = (time = 100) =>
 
 export const mockDataList = Array(10)
   .fill(undefined)
-  .map((row, index) => ({ id: index, name: `row${index}` }))
+  .map((_row, index) => ({ id: index, name: `row${index}` }))

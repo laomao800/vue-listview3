@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "target": "es2018",
-    "module": "esnext",
+    "target": "ES2020",
+    "module": "ESNext",
     "sourceMap": false,
     "moduleResolution": "node",
     "allowJs": false,
@@ -18,7 +18,7 @@
     "jsx": "preserve",
     "jsxImportSource": "vue",
     "isolatedModules": true,
-    "lib": ["esnext", "dom"],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
     "types": [
       "element-plus/global",
@@ -30,7 +30,12 @@
     "paths": {
       "@/*": ["src/*"],
       "~/*": ["*"]
-    }
+    },
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
+  "include": ["src", "example", "tests", "docs"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -16,7 +16,7 @@ function errorWrap(msg: string, code = 500) {
 }
 
 export const handlers = [
-  rest.get('/mock/list', async (req, res, ctx) => {
+  rest.get('/mock/list', async (_req, res, ctx) => {
     return res(ctx.json({}))
   }),
   rest.post('/mock/list', async (req, res, ctx) => {

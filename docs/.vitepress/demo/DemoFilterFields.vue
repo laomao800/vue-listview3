@@ -3,9 +3,7 @@
 </template>
 
 <script setup lang="tsx">
-import { shallowRef, defineComponent, ref, unref, computed } from 'vue'
-import { ElDialog, ElButton } from 'element-plus'
-import { Download } from '@element-plus/icons-vue'
+import { shallowRef } from 'vue'
 import mitt from 'mitt'
 
 const emitter = mitt<any>()
