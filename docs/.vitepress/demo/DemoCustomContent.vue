@@ -10,8 +10,8 @@
           <p class="id">{{ item.id }}</p>
           <p class="name">{{ item.name }}</p>
           <div class="action">
-            <ElButton size="mini" type="success" plain>审核</ElButton>
-            <ElButton size="mini" type="danger" plain>删除</ElButton>
+            <ElButton size="small" type="success" plain>审核</ElButton>
+            <ElButton size="small" type="danger" plain>删除</ElButton>
           </div>
         </li>
       </ul>
@@ -37,7 +37,7 @@ const lvConfig = shallowRef({
         active-text="table"
         inactive-value="thumb"
         inactive-text="thumb"
-        onChange={(val) => (viewType.value = val)}
+        onChange={(val) => (viewType.value = val as string)}
       />
     ),
   ],

@@ -158,6 +158,10 @@ export default defineConfig({ plugins: [vue(), vueJsx()] });
 </script>
 <style lang="less" scoped>
 .db {
+  // 修正按钮被 vitepress 默认主题头部导航栏遮挡
+  position: relative;
+  z-index: 20;
+
   &__header {
     width: 100%;
     height: 48px;
