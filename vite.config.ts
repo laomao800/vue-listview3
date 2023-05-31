@@ -9,8 +9,10 @@ import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 
 import pkg from './package.json'
 
-const depNames = Object.keys(pkg.dependencies)
-depNames.push('vue')
+const depNames = [
+  ...Object.keys(pkg.dependencies),
+  ...Object.keys(pkg.peerDependencies),
+]
 const depNamesReg = new RegExp(`^(${depNames.join('|')})`)
 
 // https://vitejs.dev/config/
