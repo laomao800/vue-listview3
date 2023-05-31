@@ -1,10 +1,3 @@
-<template>
-  <div v-if="InnerContent" class="lv-field">
-    <component :is="InnerContent" />
-    <component :is="InnerLabel" />
-  </div>
-</template>
-
 <script lang="tsx" setup>
 import { ElFormItem } from 'element-plus'
 import hasValues from 'has-values'
@@ -19,11 +12,13 @@ import { error, get, isObjType } from '@/utils'
 
 import { getFieldComponent } from './fields/index'
 
+type InnerVNodeType = VNode | Ref<VNode | null> | null
+
 const lvStore = useLvStore()
 
 const props = defineProps({
   field: {
-    type: [Object, Function] as PropType<FilterField | VNode | (() => VNode)>,
+    type: [Object, Function] as PropType<FilterField>,
     default: () => ({}),
   },
 })
@@ -45,7 +40,7 @@ function _renderField(field: FilterFieldConfig) {
     </Transition>
   ) : null
 
-  let Content: VNode | Ref<VNode> | null = null
+  let Content: InnerVNodeType = null
 
   if (isFunction(field)) {
     Content = field()
@@ -53,7 +48,7 @@ function _renderField(field: FilterFieldConfig) {
     Content = field
   } else if (isPlainObject(field)) {
     if (isFunction(field.render)) {
-      Content = field.render()
+      Content = computed(() => field.render?.() || null)
     } else if (field.type) {
       const FieldComponent = getFieldComponent(field.type) as any
       if (FieldComponent) {
@@ -72,8 +67,8 @@ function _renderField(field: FilterFieldConfig) {
   return [Label, Content]
 }
 
-let InnerLabel: VNode | Ref<VNode> | null = null
-let InnerContent: VNode | Ref<VNode> | null = null
+let InnerLabel: InnerVNodeType = null
+let InnerContent: InnerVNodeType = null
 
 const rawField = unref(props.field)
 
@@ -82,8 +77,21 @@ if (isVNode(rawField)) {
 } else if (isObjType<FilterFieldConfig>(rawField)) {
   ;[InnerLabel, InnerContent] = _renderField(rawField)
 } else if (isFunction(rawField)) {
-  InnerContent = rawField()
+  InnerContent = computed(() => rawField()) as any
 }
+
+defineRender(() => {
+  return (
+    unref(InnerContent) && (
+      <div class="lv-field">
+        {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
+        {h(unref(InnerContent)!)}
+        {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
+        {unref(InnerLabel) && h(unref(InnerLabel)!)}
+      </div>
+    )
+  )
+})
 </script>
 
 <style lang="less">

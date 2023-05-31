@@ -22,7 +22,7 @@
 import { CirclePlus, Remove } from '@element-plus/icons-vue'
 import { ElButton, ElMessage, ElOption, ElSelect } from 'element-plus'
 import mitt from 'mitt'
-import { computed, ref, shallowRef, unref } from 'vue'
+import { ref, shallowRef, unref } from 'vue'
 
 import type { FilterField, TableColumn } from '~/types'
 
@@ -113,13 +113,12 @@ const filterFields = shallowRef<FilterField[]>([
   {
     label: 'Module',
     model: 'module_id',
-    render: () =>
-      computed(() => (
-        <ElSelect v-model={filterModel.value.module_id}>
-          <ElOption label="Module 1" value="1" />
-          <ElOption label="Module 2" value="2" />
-        </ElSelect>
-      )),
+    render: () => (
+      <ElSelect v-model={filterModel.value.module_id}>
+        <ElOption label="Module 1" value="1" />
+        <ElOption label="Module 2" value="2" />
+      </ElSelect>
+    ),
   },
   {
     type: 'select',
