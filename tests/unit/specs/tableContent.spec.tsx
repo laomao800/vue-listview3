@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
+
 import { createListviewWrapper } from '../helpers'
 
 describe('Table content', () => {
@@ -53,10 +54,11 @@ describe('Table content', () => {
       {
         tableColumns,
         tableSelectionColumn: {
-          selectable: (row, index) => index !== 1,
+          selectable: (_row, index) => index !== 1,
         },
       },
       undefined,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       { attachTo: document.getElementById('app')! }
     )
     const rowWrapper = wrapper
@@ -84,6 +86,7 @@ describe('Table content', () => {
         tableSelectionColumn: 'single',
       },
       undefined,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       { attachTo: document.getElementById('app')! }
     )
     const rowWrapper = wrapper

@@ -36,12 +36,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "example/**/*.vue"
-  ],
+  "include": ["src", "example", "tests"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -13,7 +13,7 @@
     :page-props="{ pagerCount: 5 }"
     :content-attrs="contentAttrs"
     :validate-response1="() => true"
-    :table-selection-column="{ selectable: (row: any, index:number) => index !== 1 }"
+    :table-selection-column="{ selectable: (_row: any, index:number) => index !== 1 }"
   />
 </template>
 
