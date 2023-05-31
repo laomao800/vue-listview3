@@ -1,0 +1,1 @@
+import{_ as s,o as t,c as a,R as o}from"./chunks/framework.896e1521.js";const C=JSON.parse('{"title":"Slots","description":"","frontmatter":{},"headers":[],"relativePath":"slots.md","filePath":"slots.md"}'),l={name:"slots.md"},n=o("",7),p=[n];function e(r,c,D,F,d,y){return t(),a("div",null,p)}const A=s(l,[["render",e]]);export{C as __pageData,A as default};

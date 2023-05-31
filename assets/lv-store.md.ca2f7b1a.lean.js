@@ -1,0 +1,1 @@
+import{_ as t,o as e,c as a,R as d}from"./chunks/framework.896e1521.js";const b=JSON.parse('{"title":"lvStore","description":"","frontmatter":{},"headers":[],"relativePath":"lv-store.md","filePath":"lv-store.md"}'),r={name:"lv-store.md"},o=d("",13),s=[o];function n(c,l,i,h,p,m){return e(),a("div",null,s)}const _=t(r,[["render",n]]);export{b as __pageData,_ as default};
