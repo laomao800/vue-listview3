@@ -69,7 +69,7 @@ const props = defineProps({
   fullHeight: { type: Boolean, default: true },
 })
 
-const emit = defineEmits(['update-layout'])
+const emit = defineEmits(['updateLayout'])
 
 const lvStore = useLvStore()
 provide('lvStore', lvStore)
@@ -100,7 +100,7 @@ async function updateLayout() {
   // 非全屏情况下，内部内容高度需等待外部渲染后再执行计算
   await nextTick()
   updateContentHeight()
-  emit('update-layout')
+  emit('updateLayout')
 }
 lvStore.emitter.on('updateLayout', updateLayout)
 
