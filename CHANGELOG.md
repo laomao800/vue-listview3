@@ -1,3 +1,12 @@
+## [3.3.1](https://github.com/laomao800/vue-listview3/compare/v3.3.0...v3.3.1) (2023-05-31)
+
+
+### Bug Fixes
+
+* fix entry file ([6ec4832](https://github.com/laomao800/vue-listview3/commit/6ec483294f2ad1fc76d191e3489a2b572e9504fe))
+
+
+
 # [3.3.0](https://github.com/laomao800/vue-listview3/compare/v3.1.0...v3.3.0) (2023-05-31)
 
 
